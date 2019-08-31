@@ -40,7 +40,7 @@ Also JS files will be bulk-compressed more efficiently when bundled together as 
 The latter should trigger the production build option for all the client and server dependencies. It results in smaller and faster code for many NPM packages.<br/>
 In production build the webserver should offer different bundle compressions for clients to choose from e.g. Brotli for modern clients, gzip for others.<br/>
 Using descriptive and somewhat longer names for components and methods improves maintainability of the code however it shouldn’t increase the download size, so we need bundle minification. We want to debug production builds using the original Typescript source code in spite of minification.
----
+<hr />
 I looked for such a sample and didn’t find one that would have all the features. Hopefully this project could address the above needs and additionally offer:
 
 8. __Several React SPAs under one roof.__<br/>
