@@ -2,8 +2,7 @@
   "name": "crisp-react-server",
   "version": "1.0.0",
   "description": "Server for the crisp-react project. Please see ../package.json for full description.",
-  "author":
-    "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
+  "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
     "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)"
   ],
@@ -12,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/winwiz1/crisp-react.git"
-  },  
+  },
   "keywords": [
     "typescript",
     "nodejs",
@@ -23,8 +22,8 @@
     "jest",
     "starter",
     "debugging",
-	"web-development",
-	"sample"	
+    "web-development",
+    "sample"
   ],
   "scripts": {
     "lint": "tslint -p .",

@@ -2,8 +2,7 @@
   "name": "crisp-react-client",
   "version": "1.0.0",
   "description": "Client for the crisp-react project. Please see ../package.json for full description.",
-  "author":
-    "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
+  "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
     "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)"
   ],
@@ -12,7 +11,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/winwiz1/crisp-react.git"
-  },  
+  },
   "keywords": [
     "react",
     "typescript",
@@ -24,13 +23,13 @@
     "typestyle",
     "react-testing-library",
     "jest",
-	"semantic-ui",
+    "semantic-ui",
     "starter",
     "debugging",
-	"web-development",
-	"front-end-development",
-	"front-end",
-	"sample"	
+    "web-development",
+    "front-end-development",
+    "front-end",
+    "sample"
   ],
   "scripts": {
     "build": "webpack",
