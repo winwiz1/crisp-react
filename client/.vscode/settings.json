@@ -1,0 +1,11 @@
+{
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "typescript.surveys.enabled": false,
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#0a4705",
+    "titleBar.activeForeground": "#ffffff96",
+    "titleBar.inactiveBackground": "#3d3939",
+    "titleBar.inactiveForeground": "#cccccc49"
+  },
+  "editor.tabSize": 2,
+}

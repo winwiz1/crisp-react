@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "server"
+		},
+		{
+			"path": "client"
+		}
+	],
+	"settings": {
+
+	},
+	"launch" : {
+		"configurations": [ ],
+		"compounds": [{
+			"name": "Debug Client and Server",
+			"configurations": [
+			  "Launch Chrome",
+			  "Debug Server Connected To Client"
+			]
+		}]
+	}
+}

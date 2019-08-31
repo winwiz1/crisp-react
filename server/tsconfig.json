@@ -1,0 +1,40 @@
+{
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": [ 
+    "node_modules",
+    "**/*.spec.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "./build/js/",
+    "allowSyntheticDefaultImports": false,           
+    "target": "es2017",
+    "downlevelIteration": true,
+    "importHelpers": true,                           
+    "sourceMap": true,
+    "module": "commonjs",                              
+    "moduleResolution": "node",
+    "esModuleInterop": false,
+    "jsx": "preserve",
+    "allowJs": false,
+    "checkJs": false,
+    "lib": [ 
+      "es2017"
+    ],
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+	  "strictPropertyInitialization": true,
+    "suppressImplicitAnyIndexErrors": false,
+    "removeComments": true,
+    "typeRoots" : ["./node_modules/@types"]         
+  }
+}
