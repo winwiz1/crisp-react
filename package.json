@@ -1,0 +1,54 @@
+{
+  "name": "crisp-react",
+  "version": "1.0.0",
+  "description": 
+    "Starter project with React client and NodeJS/Express server written in Typescript, featuring simultaneous client and server debugging, several React SPAs under one roof and more described in ./README.md",
+  "author":
+    "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
+  "contributors": [
+    "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)"
+  ],
+  "license": "MIT",
+  "homepage": "https://winwiz1.github.io/crisp-react/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/winwiz1/crisp-react.git"
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "nodejs",
+    "express",
+    "client-server",
+    "visual-studio-code",
+    "chrome-devtools",
+    "webpack",
+    "webpack-dev-server",
+    "typestyle",
+    "react-testing-library",
+    "supertest",
+    "jest",
+	"semantic-ui",
+    "starter",
+    "debugging",
+	"web-development",
+	"front-end-development",
+	"front-end",
+	"sample"	
+  ],
+  "files": [
+    "./client/*",
+	"./server/*"
+  ],
+  "scriptsComments": {
+    "note": "The 'scripts' section is limited. Please refer to ./README.md, ./client/package.json, ./server/package.json"
+  },
+  "scripts": {
+    "install": "cd client && yarn",
+	"postinstall": "cd server && yarn",
+    "test": "cd client && yarn test",
+	"posttest": "cd server && yarn test",
+	"compile": "cd client && yarn compile",
+	"postcompile": "cd server && yarn compile"
+  } 
+}

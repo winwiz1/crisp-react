@@ -1,19 +1,30 @@
 {
   "name": "crisp-react-server",
   "version": "1.0.0",
-  "description": "Express server for crisp-react",
+  "description": "Server for the crisp-react project. Please see ../package.json for full description.",
+  "author":
+    "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
+  "contributors": [
+    "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)"
+  ],
   "license": "MIT",
+  "homepage": "https://winwiz1.github.io/crisp-react/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/winwiz1/crisp-react.git"
+  },  
   "keywords": [
-    "NodeJS",
-    "Express",
-    "Typescript",
-    "Jest",
-    "Supertest",
+    "typescript",
+    "nodejs",
+    "express",
     "client-server",
-    "client server",
-    "VS Code",
-    "starter project",
-    "sample"
+    "visual-studio-code",
+    "supertest",
+    "jest",
+    "starter",
+    "debugging",
+	"web-development",
+	"sample"	
   ],
   "scripts": {
     "lint": "tslint -p .",
