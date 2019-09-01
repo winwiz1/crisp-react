@@ -7,6 +7,13 @@
   <h1>Crisp React</h1>
 </div>
 Starter project with React client and NodeJS/Express server, both written in Typescript. Offers seamless client and server-side debugging, advanced features like several React SPAs (Single Page Applications) under one roof and many optimizations explained below. The client works with any webserver.
+<br /><br />
+<div align="center">
+  <img alt="Travis CI" src="https://travis-ci.com/winwiz1/crisp-react.svg?branch=master">
+  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/winwiz1/crisp-react">
+  <img alt="Snyk Vulnerabilities for GitHub Repo" src="https://img.shields.io/snyk/vulnerabilities/github/winwiz1/crisp-react">
+  <img alt="GitHub License" src="https://img.shields.io/github/license/winwiz1/crisp-react">
+</div>
 
 ## Table of Contents
 
