@@ -1,0 +1,13 @@
+branches: 
+  only: 
+    - master
+cache: 
+  directories: 
+    - client/node_modules
+    - server/node_modules
+  yarn: true
+git: 
+  depth: 3
+language: node_js
+node_js: 
+  - "12.8.0"
