@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Server",
+      "name": "Debug Backend",
       "program": "${workspaceFolder}\\src\\main.ts",
       "preLaunchTask": "tsc-watch",
       "postDebugTask": "kill process in terminal",      
@@ -20,7 +20,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Server Connected To Client",
+      "name": "Debug Backend Connected To Devserver",
       "program": "${workspaceFolder}\\src\\main.ts",
       "preLaunchTask": "tsc-watch",
       "postDebugTask": "kill process in terminal",      

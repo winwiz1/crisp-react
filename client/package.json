@@ -37,7 +37,11 @@
     "compile": "tsc -p .",
     "lint": "tslint -p .",
     "dev": "webpack-dev-server --config webpack.config.js",
-    "test": "cross-env NODE_ENV=test jest"
+    "test": "cross-env NODE_ENV=test jest",
+    "build:prod-debug": "webpack --env.prod",
+    "postbuild:prod-debug": "yarn copy",
+    "precopy": "rimraf ../server/build/client && mkdirp ../server/build/client",
+    "copy": "copyfiles -f dist/* ../server/build/client/"
   },
   "dependencies": {
     "react": "16.9.0",
@@ -60,6 +64,7 @@
     "brotli-webpack-plugin": "1.1.0",
     "clean-webpack-plugin": "3.0.0",
     "compression-webpack-plugin": "3.0.0",
+    "copyfiles": "^2.1.1",
     "cross-env": "^5.2.0",
     "css-loader": "3.2.0",
     "fork-ts-checker-webpack-plugin": "1.5.0",
@@ -68,6 +73,8 @@
     "html-webpack-plugin": "3.2.0",
     "html-webpack-template": "6.2.0",
     "jest": "^24.9.0",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^3.0.0",
     "style-loader": "1.0.0",
     "ts-jest": "^24.0.2",
     "ts-loader": "6.0.4",

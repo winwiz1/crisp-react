@@ -9,6 +9,12 @@
       "script": "build",
       "problemMatcher": []
     },
+	{
+      "label": "npm build:prod-debug",
+      "type": "npm",
+      "script": "build:prod-debug",
+      "problemMatcher": []
+    },
     {
       "label": "npm compile",
       "type": "npm",
