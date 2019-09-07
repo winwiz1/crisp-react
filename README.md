@@ -45,8 +45,11 @@ Features simultaneous client and backend debugging. You can launch a debugging c
 #### Script bundle management
 The script bundles for all SPAs are built by webpack in one go and tagged uniquely for the build to make it caching safe. Having a separate bundle for each SPA  improves its loading time. The `vendor` bundle with all dependencies including React library is reused between SPAs so that there is no need to download it again when switching from one SPA to another. The performance is further increased by the production build using bundle minification and offering several compression choices to clients e.g. Brotli, gzip or uncompressed.
 ## Getting Started
+Install `yarn` if it's not already installed: `$ npm install yarn -g`
+
+<details><summary><strong>With VS Code</strong></summary>
+
 Prerequisites: Chrome and VS Code with 'Debugger for Chrome' extension. 
-* Install `yarn` if it's not already installed: `$ npm install yarn -g`
 * Clone or download the `crisp-react` repository and open a command prompt in the directory containing its workspace file `crisp-react.code-workspace` .
 * Install dependencies by executing the command: `$ yarn`. 
 * Open the workspace file `crisp-react.code-workspace` in VS Code.
@@ -56,6 +59,21 @@ Prerequisites: Chrome and VS Code with 'Debugger for Chrome' extension.
 ![Overview page](docs/screenshots/OverviewPage.png)
 
 * Stop the running debugging configuration (use the 'Stop' button on VS Code Debugging toolbar two times or press `Control+F5` twice).
+</details>
+
+<details>
+<summary><strong>Without VS Code</strong></summary>
+  
+After executing the following commands:
+```bash
+git clone https://github.com/winwiz1/crisp-react.git
+cd crisp-react
+yarn install && yarn start:prod  
+```
+you will have a running instance of backend (e.g. Express) serving the newly built React app that can be seen by pointing a browser to `localhost:3000`.<br/>
+Terminate the backend by pressing `Control+C`.
+</details>
+
 ## Project Features
 #### Using Typescript
 Both the client application and the backend are written in Typescript.
@@ -139,17 +157,26 @@ Execute command: `yarn lint`
 Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
 Start the debugging configuration  `Debug Client and Backend (workspace)`.<br/>
 Wait until an instance of Chrome starts. You should see the overview page.<br/>
-In order to set breakpoints in VS Code you will need to choose either client or backend e.g. highlight the client or the backend process on the Debug sidebar inside the Call Stack window. Otherwise you can get "Unverified breakpoint". Once a breakpoint is set, it doesn't matter which process is selected/highlighted.<br/>
 
-Example:<br/>
+<details>
+  <summary>Using VS Code example:</summary>
+
+In order to set breakpoints in VS Code you will need to choose either client or backend e.g. highlight the client or the backend process on the Debug sidebar inside the Call Stack window. Otherwise you can get "Unverified breakpoint". Once a breakpoint is set, it doesn't matter which process is selected/highlighted.<br/>
 Select the backend process and put a breakpoint on the following line:  `server/src/Server.ts:49`.<br/>
 In the browser choose ComponentA from the menu, the breakpoint will be hit. Remove the breakpoint and resume the execution.<br/>
 Select the client process and put a breakpoint on the line `client/src/ComponentB.tsx:13`.<br/> 
 Use the overview page menu to choose the ComponentB, the breakpoint will be hit. Remove the breakpoint and resume the execution. Choose ComponentA.<br/>
+</details>
+
+<details>
+  <summary>Using Chrome DevTools example:</summary>
+
 In the instance of Chrome started, open Chrome DevTools.<br/>
 Use 'Sources -> Filesystem -> Add folder to workspace' to add `client/src` directory. In this directory open the file `src/ComponentB.tsx` and put a breakpoint on line 13.<br/>
 Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.<br/>
 To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  `Control+F5`  twice).
+</details>
+
 #### Use backend to debug the production client build
 Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
 Edit file `client/webpack.config.js` to change the `sourceMap` setting of the TerserPlugin config to `true`.<br/>
