@@ -13,11 +13,19 @@
 	"launch" : {
 		"configurations": [ ],
 		"compounds": [{
-			"name": "Debug Client and Server",
+			"name": "Debug Client and Backend",
 			"configurations": [
-			  "Launch Chrome",
-			  "Debug Server Connected To Client"
+			  "Launch Chrome Connected to Backend",
+			  "Debug Backend Connected To Devserver"
 			]
-		}]
+		},
+		{
+			"name": "Debug Production Client and Backend",
+			"configurations": [
+			  "Launch Chrome in Production",
+			  "Debug Backend"
+			]
+		},
+		]
 	}
 }
