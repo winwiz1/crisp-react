@@ -47,33 +47,57 @@ The script bundles for all SPAs are built by webpack in one go and tagged unique
 ## Getting Started
 Install `yarn` if it's not already installed: `$ npm install yarn -g`
 
-<details><summary><strong>With VS Code</strong></summary>
-
-Prerequisites: Chrome and VS Code with 'Debugger for Chrome' extension. 
-* Clone or download the `crisp-react` repository and open a command prompt in the directory containing its workspace file `crisp-react.code-workspace` .
-* Install dependencies by executing the command: `$ yarn`. 
-* Open the workspace file `crisp-react.code-workspace` in VS Code.
-* Start the debugging configuration `Debug Client and Backend (workspace)`.
-* Wait until an instance of Chrome starts. You should see this page:
-
-![Overview page](docs/screenshots/OverviewPage.png)
-
-* Stop the running debugging configuration (use the 'Stop' button on VS Code Debugging toolbar two times or press `Control+F5` twice).
-</details>
-
-<details>
-<summary><strong>Without VS Code</strong></summary>
+<div>
+  <details>
+    <summary><strong>With VS Code</strong></summary>
+    <br />
+    Prerequisites: Chrome and VS Code with 'Debugger for Chrome' extension.<br />
+    <ul>
+      <li>Clone the <code>crisp-react</code> repository:
+        <p>
+          <code>
+            git clone https://github.com/winwiz1/crisp-react.git<br/>
+            cd crisp-react
+          </code>
+        </p>
+      </li>
+      <li>Install dependencies:
+        <p>
+          <code>yarn</code>
+        </p>
+      </li>
+      <li>Open the workspace file in VS Code:
+        <p>
+          <code>code ./crisp-react.code-workspace</code>
+        </p>
+      </li>
+      <li>Start the debugging configuration <code>'Debug Client and Backend (workspace)'</code>.</li>
+      <br/>
+      <li>Wait until an instance of Chrome starts. You should see this page:
+        <p>
+          <img alt="Overview Page" src="https://winwiz1.github.io/crisp-react/docs/screenshots/OverviewPage.png">
+        </p>
+        <br/>
+      </li>
+      <li>Stop the running debugging configuration (use the 'Stop' button on VS Code Debugging toolbar two times or press <code>Control+F5</code> twice).</li>
+    </ul>
+  </details>
+</div>
+<div>
+  <details>
+    <summary><strong>Without VS Code</strong></summary>
+    <br />
+    After executing the following commands:<br/>
+	<br/>
+    <code>  git clone https://github.com/winwiz1/crisp-react.git</code><br/>
+    <code>  cd crisp-react</code><br/>
+    <code>  yarn install && yarn start:prod</code><br/>
+    <br/>
+    you will have a running instance of backend (e.g. Express) serving the newly built React app that can be seen by pointing a browser to <code>localhost:3000</code>.<br/>
+    Terminate the backend by pressing <code>Control+C</code>.
+  </details>
+</div>
   
-After executing the following commands:
-```bash
-git clone https://github.com/winwiz1/crisp-react.git
-cd crisp-react
-yarn install && yarn start:prod  
-```
-you will have a running instance of backend (e.g. Express) serving the newly built React app that can be seen by pointing a browser to `localhost:3000`.<br/>
-Terminate the backend by pressing `Control+C`.
-</details>
-
 ## Project Features
 #### Using Typescript
 Both the client application and the backend are written in Typescript.
@@ -158,24 +182,28 @@ Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
 Start the debugging configuration  `Debug Client and Backend (workspace)`.<br/>
 Wait until an instance of Chrome starts. You should see the overview page.<br/>
 
-<details>
-  <summary>Using VS Code example:</summary>
-
-In order to set breakpoints in VS Code you will need to choose either client or backend e.g. highlight the client or the backend process on the Debug sidebar inside the Call Stack window. Otherwise you can get "Unverified breakpoint". Once a breakpoint is set, it doesn't matter which process is selected/highlighted.<br/>
-Select the backend process and put a breakpoint on the following line:  `server/src/Server.ts:49`.<br/>
-In the browser choose ComponentA from the menu, the breakpoint will be hit. Remove the breakpoint and resume the execution.<br/>
-Select the client process and put a breakpoint on the line `client/src/ComponentB.tsx:13`.<br/> 
-Use the overview page menu to choose the ComponentB, the breakpoint will be hit. Remove the breakpoint and resume the execution. Choose ComponentA.<br/>
-</details>
-
-<details>
-  <summary>Using Chrome DevTools example:</summary>
-
-In the instance of Chrome started, open Chrome DevTools.<br/>
-Use 'Sources -> Filesystem -> Add folder to workspace' to add `client/src` directory. In this directory open the file `src/ComponentB.tsx` and put a breakpoint on line 13.<br/>
-Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.<br/>
-To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  `Control+F5`  twice).
-</details>
+<div>
+  <details>
+    <summary>Using VS Code example:</summary>
+    <br />
+    In order to set breakpoints in VS Code you will need to choose either client or backend e.g. highlight the client or the backend process on the Debug sidebar inside the Call Stack window. Otherwise you can get "Unverified breakpoint". Once a breakpoint is set, it doesn't matter which process is selected/highlighted.<br/>
+    </br>
+    Select the backend process and put a breakpoint on the following line:  <code>server/src/Server.ts:49</code>.<br/>
+    In the browser choose ComponentA from the menu, the breakpoint will be hit. Remove the breakpoint and resume the execution.<br/>
+    Select the client process and put a breakpoint on the line <code>client/src/ComponentB.tsx:13</code>.<br/> 
+    Use the overview page menu to choose the ComponentB, the breakpoint will be hit. Remove the breakpoint and resume the execution. Choose ComponentA.<br/>
+  </details>
+</div>
+<div>
+  <details>
+    <summary>Using Chrome DevTools example:</summary>
+    <br />
+    In the instance of Chrome started, open Chrome DevTools.<br/>
+    Use 'Sources -> Filesystem -> Add folder to workspace' to add <code>client/src</code> directory. In this directory open the file <code>src/ComponentB.tsx</code> and put a breakpoint on line 13.<br/>
+    Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.<br/>
+    To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
+  </details>
+</div>
 
 #### Use backend to debug the production client build
 Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
