@@ -53,13 +53,11 @@ Install `yarn` if it's not already installed: `$ npm install yarn -g`
     <br />
     Prerequisites: Chrome and VS Code with 'Debugger for Chrome' extension.<br />
     <ul>
-      <li>Clone the <code>crisp-react</code> repository:
-        <p>
-          <code>
-            git clone https://github.com/winwiz1/crisp-react.git<br/>
-            cd crisp-react
-          </code>
-        </p>
+      <li>Clone the <code>crisp-react</code> repository:<br/>
+        <br/>
+        <code>git clone https://github.com/winwiz1/crisp-react.git</code><br/>
+        <code>cd crisp-react</code><br/>
+        <br/>
       </li>
       <li>Install dependencies:
         <p>
@@ -185,9 +183,9 @@ Wait until an instance of Chrome starts. You should see the overview page.<br/>
 <div>
   <details>
     <summary>Using VS Code example:</summary>
-    <br />
+    <br/>
     In order to set breakpoints in VS Code you will need to choose either client or backend e.g. highlight the client or the backend process on the Debug sidebar inside the Call Stack window. Otherwise you can get "Unverified breakpoint". Once a breakpoint is set, it doesn't matter which process is selected/highlighted.<br/>
-    </br>
+    <br/>
     Select the backend process and put a breakpoint on the following line:  <code>server/src/Server.ts:49</code>.<br/>
     In the browser choose ComponentA from the menu, the breakpoint will be hit. Remove the breakpoint and resume the execution.<br/>
     Select the client process and put a breakpoint on the line <code>client/src/ComponentB.tsx:13</code>.<br/> 
