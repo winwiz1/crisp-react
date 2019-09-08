@@ -45,7 +45,7 @@ Features simultaneous client and backend debugging. You can launch a debugging c
 #### Script bundle management
 The script bundles for all SPAs are built by webpack in one go and tagged uniquely for the build to make it caching safe. Having a separate bundle for each SPA  improves its loading time. The `vendor` bundle with all dependencies including React library is reused between SPAs so that there is no need to download it again when switching from one SPA to another. The performance is further increased by the production build using bundle minification and offering several compression choices to clients e.g. Brotli, gzip or uncompressed.
 ## Getting Started
-Install `yarn` if it's not already installed: `$ npm install yarn -g`
+Install `yarn` if it's not already installed: `npm install yarn -g`
 
 <div>
   <details>
@@ -61,7 +61,7 @@ Install `yarn` if it's not already installed: `$ npm install yarn -g`
       </li>
       <li>Install dependencies:
         <p>
-          <code>yarn</code>
+          <code>yarn install</code>
         </p>
       </li>
       <li>Open the workspace file in VS Code:
