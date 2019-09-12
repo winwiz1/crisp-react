@@ -1,0 +1,1 @@
+include: [server/.vscode/, client/.vscode/]
