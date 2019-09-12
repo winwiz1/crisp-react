@@ -1,1 +1,3 @@
-include: [server/.vscode/, client/.vscode/]
+include:
+  - server/.vscode/
+  - client/.vscode/
