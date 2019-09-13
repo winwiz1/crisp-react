@@ -168,7 +168,7 @@ To stop the backend terminate the running command e.g. press `Control+C`.
 Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
 Start the debugging configuration `Debug Client and Backend (workspace)`.<br/>
 Wait until an instance of Chrome starts. You should see the overview page.<br/>
-VS Code: Open `client/src/Overview.tsx` and alter the text on the page. After a few seconds delay the new content should be shown in the browser.<br/>
+VS Code: Open `client/src/components/Overview.tsx` and alter the text on the page. After a few seconds delay the new content should be shown in the browser.<br/>
 To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
 #### Test backend
 Open a command prompt in the `server` subdirectory.<br/>
@@ -194,7 +194,7 @@ Wait until an instance of Chrome starts. You should see the overview page.<br/>
     <br/>
     Select the backend process and put a breakpoint on the following line:  <code>server/src/Server.ts:49</code>.<br/>
     In the browser choose ComponentA from the menu, the breakpoint will be hit. Remove the breakpoint and resume the execution.<br/>
-    Select the client process and put a breakpoint on the line <code>client/src/ComponentB.tsx:13</code>.<br/> 
+    Select the client process and put a breakpoint on the line <code>client/src/components/ComponentB.tsx:13</code>.<br/> 
     Use the overview page menu to choose the ComponentB, the breakpoint will be hit. Remove the breakpoint and resume the execution. Choose ComponentA.<br/>
   </details>
 </div>
@@ -207,6 +207,7 @@ Wait until an instance of Chrome starts. You should see the overview page.<br/>
     Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.
   </details>
 </div>
+
 To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
 #### Use backend to debug the production client build
 Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
