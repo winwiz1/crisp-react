@@ -10,6 +10,7 @@ import * as express from "express";
 import nodeFetch from "node-fetch";
 import { CustomError, handleErrors } from "./utils/error";
 import { logger } from "./utils/logger";
+import proxy = require('http-proxy-middleware');
 
 export enum StaticAssetPath {
   // The path to static assets served by Express needs to be
@@ -82,6 +83,13 @@ class Server {
       }
     });
 
+    if (Server.s_useDevWebserver) {
+      this.m_app.use(
+        '/sockjs-node',
+        proxy({ target: Server.s_urlDevWebserver, changeOrigin: true, ws: true })
+      );
+    }
+
     // Default 404 handler
     this.m_app.use((req, _res, next) => {
       const err = new CustomError(404, "Resourse not found");
@@ -91,7 +99,7 @@ class Server {
   }
 
   private sendDevServerFile(page: string, res: express.Response, next: express.NextFunction) {
-    const devUrl = `http://localhost:8080` + page;
+    const devUrl = Server.s_urlDevWebserver + page;
 
     nodeFetch(devUrl)
       .then(resp => {
@@ -119,6 +127,7 @@ class Server {
   private readonly m_app: express.Application;
   private m_assetPath: StaticAssetPath = StaticAssetPath.TRANSPILED;
   private static readonly s_htmlExtension = ".html";
+  private static readonly s_urlDevWebserver = "http://localhost:8080";
   /* tslint:disable:no-string-literal */
   private static readonly s_useDevWebserver = process.env["USE_DEV_WEBSERVER"] === "true";
   /* tslint:enable:no-string-literal */

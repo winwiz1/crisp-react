@@ -129,20 +129,20 @@ To start with client scenarios open the `client` subdirectory in VS Code. Then o
 #### Run devserver and use Live Reloading
 Execute in Terminal: `yarn dev`. Wait until the command finishes.<br/>
 Start a browser and point it to `localhost:8080`. You should see the First SPA overview page.<br/>
-VS Code: Open `src/Overview.tsx` and alter the text on the page. As you type, note the compilation progress in the Terminal followed by automatic browser refresh. The newly typed content should be shown on the overview page. If instead of starting a browser you used already running instance, then you might need to refresh the browser to get Live Reloading working.<br/>
+VS Code: Open `src/components/Overview.tsx` and alter the text on the page. As you type, note the compilation progress in the Terminal followed by automatic browser refresh. The newly typed content should be shown on the overview page. If instead of starting a browser you used already running instance, then you might need to refresh the browser to get Live Reloading working.<br/>
 To finish press `Control+C` in the Terminal.<br/>
 When to use: Develop the part of UI that doesn't need backend data. 
 #### Debug client using devserver and VS Code
 VS Code: Start the `Launch Chrome Connected to Devserver` debugging configuration.<br/> 
 Wait until an instance of Chrome starts and shows the overview page.<br/>
-VS Code: Put a breakpoint on the following line: `src/ComponentB.tsx:13`.<br/>
+VS Code: Put a breakpoint on the following line: `src/components/ComponentB.tsx:13`.<br/>
 Use the overview page menu to choose the ComponentB. The breakpoint in VS Code will be hit. Press F5 to continue execution. Alternatively use Chrome to continue execution.<br/>
 To finish remove the breakpoint and stop the running debugging configuration (use Debugging toolbar or press `Shift+F5`).<br/>
 When to use: Troubleshoot the client provided backend data is not required.
 #### Debug client using devserver and Chrome DevTools
 Follow the "Debug client using devserver and VS Code" scenario  to see the overview page.<br/>
 In the instance of Chrome started, open Chrome DevTools.<br/>
-Use 'Sources -> Filesystem -> Add folder to workspace' to add `client/src` directory. In this directory open the file `src/ComponentB.tsx` and put a breakpoint on the line 13.<br/>
+Use 'Sources -> Filesystem -> Add folder to workspace' to add `client/src` directory. In this directory open the file `src/components/ComponentB.tsx` and put a breakpoint on the line 13.<br/>
 Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Go to VS Code and note it knows the execution has stopped on this line of code and lets you inspect variables. Use Chrome or VS Code to continue execution.<br/>
 To finish remove the breakpoint and stop the running debugging configuration (use Debugging toolbar or press `Shift+F5`).<br/>
 When to use: Troubleshoot UI, inspect DOM tree, etc. provided backend data is not required.
@@ -164,6 +164,12 @@ Terminal: `yarn lint`
 Open a command prompt in the directory containing the workspace file `crisp-react.code-workspace` .<br/>
 Execute command: `yarn start:prod`.<br/>
 To stop the backend terminate the running command e.g. press `Control+C`.
+#### Run backend with Live Reloading
+Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
+Start the debugging configuration `Debug Client and Backend (workspace)`.<br/>
+Wait until an instance of Chrome starts. You should see the overview page.<br/>
+VS Code: Open `client/src/components/Overview.tsx` and alter the text on the page. After a few seconds delay the new content should be shown in the browser.<br/>
+To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
 #### Test backend
 Open a command prompt in the `server` subdirectory.<br/>
 Execute command: `yarn test`
@@ -188,7 +194,7 @@ Wait until an instance of Chrome starts. You should see the overview page.<br/>
     <br/>
     Select the backend process and put a breakpoint on the following line:  <code>server/src/Server.ts:49</code>.<br/>
     In the browser choose ComponentA from the menu, the breakpoint will be hit. Remove the breakpoint and resume the execution.<br/>
-    Select the client process and put a breakpoint on the line <code>client/src/ComponentB.tsx:13</code>.<br/> 
+    Select the client process and put a breakpoint on the line <code>client/src/components/ComponentB.tsx:13</code>.<br/> 
     Use the overview page menu to choose the ComponentB, the breakpoint will be hit. Remove the breakpoint and resume the execution. Choose ComponentA.<br/>
   </details>
 </div>
@@ -197,12 +203,12 @@ Wait until an instance of Chrome starts. You should see the overview page.<br/>
     <summary>Using Chrome DevTools example:</summary>
     <br />
     In the instance of Chrome started, open Chrome DevTools.<br/>
-    Use 'Sources -> Filesystem -> Add folder to workspace' to add <code>client/src</code> directory. In this directory open the file <code>src/ComponentB.tsx</code> and put a breakpoint on line 13.<br/>
-    Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.<br/>
-    To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
+    Use 'Sources -> Filesystem -> Add folder to workspace' to add <code>client/src</code> directory. In this directory open the file <code>src/components/ComponentB.tsx</code> and put a breakpoint on line 13.<br/>
+    Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.
   </details>
 </div>
 
+To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
 #### Use backend to debug the production client build
 Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
 Edit file `client/webpack.config.js` to change the `sourceMap` setting of the TerserPlugin config to `true`.<br/>
