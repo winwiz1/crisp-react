@@ -164,6 +164,12 @@ Terminal: `yarn lint`
 Open a command prompt in the directory containing the workspace file `crisp-react.code-workspace` .<br/>
 Execute command: `yarn start:prod`.<br/>
 To stop the backend terminate the running command e.g. press `Control+C`.
+#### Run backend with Live Reloading
+Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
+Start the debugging configuration `Debug Client and Backend (workspace)`.<br/>
+Wait until an instance of Chrome starts. You should see the overview page.<br/>
+VS Code: Open `client/src/Overview.tsx` and alter the text on the page. After a few seconds delay the new content should be shown in the browser.<br/>
+To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
 #### Test backend
 Open a command prompt in the `server` subdirectory.<br/>
 Execute command: `yarn test`
@@ -198,11 +204,10 @@ Wait until an instance of Chrome starts. You should see the overview page.<br/>
     <br />
     In the instance of Chrome started, open Chrome DevTools.<br/>
     Use 'Sources -> Filesystem -> Add folder to workspace' to add <code>client/src</code> directory. In this directory open the file <code>src/ComponentB.tsx</code> and put a breakpoint on line 13.<br/>
-    Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.<br/>
-    To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
+    Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.
   </details>
 </div>
-
+To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
 #### Use backend to debug the production client build
 Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
 Edit file `client/webpack.config.js` to change the `sourceMap` setting of the TerserPlugin config to `true`.<br/>

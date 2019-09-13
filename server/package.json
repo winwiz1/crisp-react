@@ -1,6 +1,6 @@
 {
   "name": "crisp-react-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Server for the crisp-react project. Please see ../package.json for full description.",
   "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
@@ -43,11 +43,13 @@
   },
   "dependencies": {
     "express": "4.17.1",
+    "http-proxy-middleware": "^0.20.0",
     "node-fetch": "^2.6.0",
     "winston": "3.2.1"
   },
   "devDependencies": {
     "@types/express": "4.17.1",
+    "@types/http-proxy-middleware": "^0.19.3",
     "@types/jest": "24.0.18",
     "@types/node": "12.7.2",
     "@types/node-fetch": "2.5.0",
