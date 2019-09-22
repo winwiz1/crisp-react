@@ -41,7 +41,7 @@ interface IBaseComponent {
   rightComponent: React.ReactType;
 }
 
-export const BaseComponent: React.FunctionComponent<IBaseComponent> = props => {
+export const BaseComponent: React.FC<IBaseComponent> = props => {
   const LeftComponent = props.leftComponent;
   const RightComponent = props.rightComponent;
 

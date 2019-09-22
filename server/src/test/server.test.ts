@@ -4,13 +4,17 @@
  */
 
 import * as request from "supertest";
-import Server, { StaticAssetPath } from "../server";
+import Server, { StaticAssetPath } from "../srv/server";
+import * as SPAs from "../../config/spa.config";
 
 const server = Server(StaticAssetPath.SOURCE);
-const regexResponse = /Crisp React/;
-const statusCode200path = [
-  "/", "/first", "/second"
-];
+const regexResponse = new RegExp(SPAs.getTitle());
+
+// If there are two SPAs in spa.config.js called 'first and 'second',
+  // then set the array to:  ["/", "/first", "/second"]
+const statusCode200path = SPAs.getNames().map(name => "/" + name);
+statusCode200path.push("/");
+
 const statusCode303path = [
   "/a", "/b", "/ABC"
 ];

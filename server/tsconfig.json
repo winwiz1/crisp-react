@@ -8,7 +8,7 @@
     "**/*.spec.ts"
   ],
   "compilerOptions": {
-    "outDir": "./build/js/",
+    "outDir": "./build/",
     "allowSyntheticDefaultImports": false,           
     "target": "es2017",
     "downlevelIteration": true,

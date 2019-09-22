@@ -5,8 +5,9 @@
 import * as React from "react";
 import { Header, Container, Menu } from "semantic-ui-react";
 import { BaseComponent } from "./BaseComponent";
+import * as SPAs from "../../config/spa.config";
 
-const Description: React.FunctionComponent = _props => {
+const Description: React.FC = _props => {
   return (
     <section>
       <Container text textAlign="justified">
@@ -22,14 +23,14 @@ const Description: React.FunctionComponent = _props => {
   );
 };
 
-const Navigation: React.FunctionComponent = _props => {
+const Navigation: React.FC = _props => {
   return (
     <nav>
       <Menu vertical compact borderless>
         <Menu.Item>
           <Menu.Header>Go back to</Menu.Header>
           <Menu.Menu>
-            <Menu.Item href="first.html">First SPA</Menu.Item>
+            <Menu.Item href={`/${SPAs.getNames()[0]}.html`}>First SPA</Menu.Item>
           </Menu.Menu>
         </Menu.Item>
       </Menu>
@@ -37,7 +38,7 @@ const Navigation: React.FunctionComponent = _props => {
   );
 };
 
-export const ComponentC: React.FunctionComponent = _props => {
+export const ComponentC: React.FC = _props => {
   return (
     <BaseComponent leftComponent={Navigation} rightComponent={Description} />
   );

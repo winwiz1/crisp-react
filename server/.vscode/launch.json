@@ -8,11 +8,11 @@
       "type": "node",
       "request": "launch",
       "name": "Debug Backend",
-      "program": "${workspaceFolder}\\src\\main.ts",
+      "program": "${workspaceFolder}\\src\\srv\\main.ts",
       "preLaunchTask": "tsc-watch",
       "postDebugTask": "kill process in terminal",      
       "outFiles": [
-        "${workspaceFolder}/build/js/**/*.js"
+        "${workspaceFolder}/build/**/*.js"
       ],
       "sourceMaps": true,
       "restart": true,
@@ -21,11 +21,11 @@
       "type": "node",
       "request": "launch",
       "name": "Debug Backend Connected To Devserver",
-      "program": "${workspaceFolder}\\src\\main.ts",
+      "program": "${workspaceFolder}\\src\\srv\\main.ts",
       "preLaunchTask": "tsc-watch",
       "postDebugTask": "kill process in terminal",      
       "outFiles": [
-        "${workspaceFolder}/build/js/**/*.js"
+        "${workspaceFolder}/build/**/*.js"
       ],
       "sourceMaps": true,
       "restart": true,

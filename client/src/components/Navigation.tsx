@@ -5,8 +5,9 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
+import * as SPAs from "../../config/spa.config";
 
-export const Navigation: React.FunctionComponent = _props => {
+export const Navigation: React.FC = _props => {
   return (
     <nav>
       <Menu vertical compact borderless>
@@ -20,7 +21,7 @@ export const Navigation: React.FunctionComponent = _props => {
         <Menu.Item>
           <Menu.Header>Second SPA</Menu.Header>
           <Menu.Menu>
-            <Menu.Item href="second.html">ComponentC</Menu.Item>
+            <Menu.Item href={`/${SPAs.getNames()[1]}.html`}>ComponentC</Menu.Item>
           </Menu.Menu>
         </Menu.Item>
       </Menu>

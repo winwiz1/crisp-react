@@ -5,6 +5,10 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const configuredSPAs = require('./config/spa.config');
+const verifier = require("./config/verifySpaParameters");
+
+configuredSPAs.verifyParameters(verifier);
 
 const getWebpackConfig = (env, argv) => {
   const isProduction = (env && env.prod) ? true : false;
@@ -12,12 +16,7 @@ const getWebpackConfig = (env, argv) => {
   const config = {
     mode: isProduction ? 'production' : 'development',
     devtool: 'source-map',
-    entry: {
-      // Instead of 'first and 'second', the entry points could
-      // have more meaningful names like 'login', 'reporting' etc.
-      first: './src/entrypoints/first.tsx',
-      second: './src/entrypoints/second.tsx',
-    },
+    entry: configuredSPAs.getEntrypoints(),
     module: {
       rules: [
         {
@@ -92,7 +91,7 @@ const getWebpackConfig = (env, argv) => {
       })
     ],
     devServer: {
-      index: '/first.html',
+      index: `/${configuredSPAs.getRedirectName()}.html`,
       publicPath: '/static/',
       contentBase: path.join(__dirname, 'dist'),
       compress: false,
@@ -101,12 +100,8 @@ const getWebpackConfig = (env, argv) => {
       port: 8080,
       writeToDisk: true,
       historyApiFallback: {
-        index: 'first.html',
-        rewrites: [
-          { from: /^\/first(\.html)?$/, to: 'first.html' },
-          { from: /^\/second(\.html)?$/, to: 'second.html' },
-          { from: /^.*$/, to: 'first.html' },
-        ]
+        index: `${configuredSPAs.getRedirectName()}.html`,
+        rewrites: configuredSPAs.getRewriteRules()
       },
       headers: {
         'Cache-Control': 'max-age=31536000'
@@ -115,12 +110,12 @@ const getWebpackConfig = (env, argv) => {
     context: path.resolve(__dirname),
   };
 
-  ['first', 'second'].forEach((entryPoint) => {
+  configuredSPAs.getNames().forEach((entryPoint) => {
     config.plugins.push(
       new HtmlWebpackPlugin({
         template: require('html-webpack-template'),
         inject: false,
-        title: "Crisp React",
+        title: configuredSPAs.getTitle(),
         appMountId: "react-root",
         alwaysWriteToDisk: true,
         filename: `${entryPoint}.html`,
