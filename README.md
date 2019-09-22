@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
   <a href="https://github.com/winwiz1/crisp-react">
     <img alt="crisp-react logo" src="docs/crisp-react.png">
   </a>
@@ -111,12 +111,15 @@ The client subproject:
  * Starts webpack-dev-server listening on port 8080 in the development mode.
  * Creates build artifacts (html files, script bundles and source maps) in the production mode. The artifacts are meant to be copied over to the backend subproject to be served by Express.
  * Additionally can start an instance of Chrome controlled via Inspector protocol (with caching disabled for better debugging) and point it to either webpack-dev-server or the backend server.
+
 > webpack-dev-server can be referred to as 'devserver'.
 
 The backend subproject:
  * In the production mode starts Express listening on port 3000 to serve from disk the build artifacts created by the client subproject .
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
- > Only the requests for build artifacts are proxied. The limited scope of proxying is meant to make it easier to add future API endpoints to Express (API requests won't get proxied) while still preserving the convenience of debugging with Live Reloading facilitated by webpack-dev-server.
+
+> Only the requests for build artifacts are proxied. The limited scope of proxying is meant to make it easier to add future API endpoints to Express (API requests won't get proxied) while still preserving the convenience of debugging with Live Reloading facilitated by webpack-dev-server.
+
 #### SPA configuration
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. The dependencies found under `node_modules/`are bundled into the separate 'vendor' bundle. Now let's see how Crisp React defines the SPAs.
 
@@ -150,8 +153,10 @@ The newly written `app.tsx` should verify the client is logged in (for example b
 * Serve the two HTML pages, namely `/login.html` and `/app.html`, which are the landing pages of our two SPAs.
 * Redirect to `/app.html` (due to the boolean `redirect` flag set) other requests in the form `/<path>` or `/<path>.html` provided the `<path>` doesn't include a subdirectory. It's the standard behavior required by all SPAs and implemented in webpack-dev-server using the `historyApiFallback` setting.
 * Return 404 error for all other requests except for script bundles and source maps.
+
 > Tip: Since any SPA is comprised of the landing page component (entry point), direct and indirect imports, the coding can start by making `login.tsx` render the login page: either directly or preferably with the help of an imported component that will ask for user credentials. Another component could render a page asking for alternative credentials e.g. biometrics or ask for multifactor authentication (MFA). The entry point `app.tsx` would import the component responsible for rendering the page presented to the user after logging in. Express could potentially be modified to ensure only authenticated users can download the bundle for this SPA. <br/><br/>
 > Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can run against a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application with a dependency on backend API endpoints out of the scope.
+
 ### Integration with UI and CSS libraries
 Both libraries ( [Semantic UI](https://react.semantic-ui.com) and [Typestyle](https://typestyle.github.io) respectively ) provide React with the type safety afforded by Typescript.
 #### Testing
