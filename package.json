@@ -1,6 +1,6 @@
 {
   "name": "crisp-react",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Starter project with React client and NodeJS/Express backend",
   "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
@@ -32,7 +32,8 @@
     "web-development",
     "front-end-development",
     "front-end",
-    "sample"
+    "sample",
+	"boilerplate"
   ],
   "files": [
     "./client/*",
@@ -48,6 +49,10 @@
     "posttest": "cd server && yarn test",
     "compile": "cd client && yarn compile",
     "postcompile": "cd server && yarn compile",
+    "build": "cd client && yarn build",
+    "postbuild": "cd server && yarn prestart",
+    "build:prod": "cd client && yarn build:prod",
+    "postbuild:prod": "cd server && yarn prestart",
     "start:prod": "cd client && yarn build:prod",
     "poststart:prod": "cd server && yarn start:prod"
   }

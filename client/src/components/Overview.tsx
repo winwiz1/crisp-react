@@ -8,7 +8,7 @@ import { Header, Container } from "semantic-ui-react";
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
 
-const Description: React.FunctionComponent = _props => {
+const Description: React.FC = _props => {
   return (
     <>
       <Container text textAlign="justified">
@@ -33,7 +33,7 @@ const Description: React.FunctionComponent = _props => {
   );
 };
 
-export const Overview: React.FunctionComponent = _props => {
+export const Overview: React.FC = _props => {
   return (
     <BaseComponent leftComponent={Navigation} rightComponent={Description} />
   );

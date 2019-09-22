@@ -8,7 +8,7 @@ import { Header, Container } from "semantic-ui-react";
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
 
-const Description: React.FunctionComponent = _props => {
+const Description: React.FC = _props => {
   const testLog = "test log";
   // TODO Demo only, use a logger instead or remove
   console.log(testLog);
@@ -30,7 +30,7 @@ const Description: React.FunctionComponent = _props => {
   );
 };
 
-export const ComponentB: React.FunctionComponent = _props => {
+export const ComponentB: React.FC = _props => {
   return (
       <BaseComponent leftComponent={Navigation} rightComponent={Description} />
   );

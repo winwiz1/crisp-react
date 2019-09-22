@@ -1,6 +1,6 @@
 {
   "name": "crisp-react-server",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Server for the crisp-react project. Please see ../package.json for full description.",
   "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
@@ -29,20 +29,21 @@
     "lint": "tslint -p .",
     "compile": "tsc -p .",
     "compile:watch": "tsc -w -p .",
-    "precopy": "rimraf build/client && mkdirp build/client",
-    "copy": "copyfiles -f ../client/dist/* build/client/",
+    "precopy": "rimraf build/client && mkdirp build/client/static",
+    "copy": "copyfiles -f ../client/dist/* build/client/static/ && copyfiles -f ../client/config/* config/",
     "prestart": "yarn copy && yarn compile",
-    "start": "node ./build/js/main.js",
+    "start": "node ./build/srv/main.js",
     "prestart:prod": "yarn prestart",
-    "start:prod": "cross-env NODE_ENV=production node ./build/js/main.js",
+    "start:prod": "cross-env NODE_ENV=production node ./build/srv/main.js",
     "prod": "yarn start:prod",
     "prestart:dev": "yarn prestart",
-    "start:dev": "cross-env USE_DEV_WEBSERVER=true node ./build/js/main.js",
+    "start:dev": "cross-env USE_DEV_WEBSERVER=true node ./build/srv/main.js",
     "dev": "yarn start:dev",
     "test": "cross-env NODE_ENV=test jest"
   },
   "dependencies": {
     "express": "4.17.1",
+    "express-static-gzip": "^2.0.5",
     "http-proxy-middleware": "^0.20.0",
     "node-fetch": "^2.6.0",
     "winston": "3.2.1"
