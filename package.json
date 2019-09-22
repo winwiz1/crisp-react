@@ -46,7 +46,7 @@
     "install": "cd client && yarn",
     "postinstall": "cd server && yarn",
     "test": "cd client && yarn test",
-    "posttest": "cd server && yarn test",
+    "posttest": "cd server && yarn copy && yarn test",
     "compile": "cd client && yarn compile",
     "postcompile": "cd server && yarn compile",
     "build": "cd client && yarn build",
