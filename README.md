@@ -264,10 +264,11 @@ Start the debugging configuration  `Debug Production Client and Backend (workspa
 Wait until an instance of Chrome starts. You should see the overview page. Now you can use VS Code to set breakpoints in both client and backend provided the relevant process is highlighted/selected as explained in the previous scenario. You can also use Chrome DevTools to debug the client application as shown above.<br/>
 To finish stop the running debugging configuration (use the Debugging toolbar or press  `Control+F5`  once).
 ## What's Next
-Add an API endpoint to the backend and consume it by adding some data fetching capability to the client.
+Add an API endpoint to the backend and consume it by adding some data fetching capability to the client. Start with [Client Usage Scenarios](#client-usage-scenarios) to develop and refine UI look and feel in absence of API data. Then implement an API endpoint (for example the login endpoint) in the backend and switch to [Backend Usage Scenarios](#backend-usage-scenarios) .  With the latter the client gets everything (build artifacts including script bundles, API data) from the backend being unaware of the devserver existence. Therefore there is no room for CORS issues. Which arise when the client downloads bundles from devserver and then the code attempts to call API endpoints exposed by another server e.g. backend.
+> Tip: Using [Backend Usage Scenarios](#backend-usage-scenarios) for all API related issues helps avoid running the client (e.g. the devserver) in production. This is never a good idea. The webpack-dev-server, as its name suggests, is meant to be used in development only.
 ## Q & A
 Q: I have changed both SPA names in the SPA Configuration block and kept the rest including the entry points intact. I expect everything to keep working using my new names for the SPA landing pages instead of the old `/first.html` and `second.html`.  However navigation via the menu and Back/Forward browser buttons seems to be broken. How can it be fixed.<br/>
-A: Clear the browser's history and cache. Alternatively use an incognito tab. The client, the backend and the tests should keep working.
+A: Clear the browser's history and cache. Alternatively use an incognito tab. The client, the backend and the tests should work with the new names.
 
 Q: Can I use dynamic imports in addition to multiple SPAs for code splitting?<br/>
 A: Yes, dynamic imports are fully supported. For example, if there is a Reporting bundle and one component is known to be used infrequently, then it's a good candidate to be separated from the bundle using dynamic import:
@@ -296,9 +297,11 @@ Remember to change the settings in `tsconfig.json`:
 "module": "esnext",
 ```
  otherwise the dynamic import will be ignored and webpack 'magic comments' removed.
+ 
+ > Note: `React.lazy` has a restriction, it works with default exports only. The restriction should be lifted in the future. When webpack detects dynamic imports, it emits code that loads the bundle it created asynchronously and `Suspense/lazy` needs to wait for the loading to complete. This technology is less straightforward and probably less mature than building a static bundle and referencing it via the `<sript>` tag  in .html file.
 
 Q: Do dynamic imports negate the need to have multiple SPAs.<br/>
-A: It depends. These two are complimentary techniques. Obviously once a bundle grows larger, it starts affecting performance as its loading time increases. But the reverse is also true, having too many small bundles could result in more network round-trips and the bundle compression will become less efficient. It can also complicate attempts to scrutinize network traffic including requests for bundles.
+A: It depends. These two are complimentary techniques. Obviously once a bundle grows larger, it starts affecting performance as its loading time increases. But the reverse is also true, having too many small bundles could result in more network round-trips and the bundle compression will become less efficient. It can also complicate attempts to scrutinise network traffic including requests for bundles.
 
 Q: I use Apache/IIS/ASP.NET Core, not Express. Can I use the client project and what needs to be changed?<br/>
 A: Yes you can. The client project located in the `client` subdirectory is fully self-contained and can be used without any changes. The client related usage scenarios do not require any modifications.
