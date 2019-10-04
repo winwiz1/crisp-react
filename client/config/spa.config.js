@@ -14,9 +14,10 @@ Each SPA has:
   exclude redirection ambiguity.
 
 You can customize SPAs by modifying the SPA Configuration block below. It will
-reconfigure client, backend and their tests. You'll need to adjust 3 lines in
-./.vscode/launch.json: "http://localhost:<port>/first.html". If the first SPA is
-called 'login' then change these lines to "http://localhost:<port>/login.html".
+reconfigure client, backend and their tests. You'll need to adjust 3 lines
+"http://localhost:<port>/first.html" in the ../.vscode/launch.json file.
+If the first SPA is called 'login' then change these lines to:
+"http://localhost:<port>/login.html".
 
 Note: Page transitions within an SPA are performed as usual using <Link>,
   <NavLink> and other means (like history.push if enabled) customary to all
@@ -56,7 +57,7 @@ var ConfiguredSPAs = function() {
 
     const num = SPAs.reduce((acc, item) => { return item.params.redirect? acc + 1: acc; }, 0);
     if (num !== 1) {
-      throw new RangeError("One and only one SPA must have redirect=true")
+      throw new RangeError("One and only one SPA must have 'redirect: true'")
     }
   }
 
