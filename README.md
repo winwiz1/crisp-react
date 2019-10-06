@@ -118,7 +118,7 @@ The backend subproject:
  * In the production mode starts Express listening on port 3000 to serve from disk the build artifacts created by the client subproject .
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
 
- #### SPA Configuration
+#### SPA Configuration
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. The dependencies found under `node_modules/`are bundled into the separate 'vendor' bundle. Now let's see how Crisp React defines the SPAs.
 
 The client subproject builds an application with SPAs defined by the SPA Configuration block in the `client/config/spa.config.js` file:
@@ -249,7 +249,7 @@ Put a breakpoint on the line <code>client/src/components/ComponentB.tsx:14</code
 Use the menu to go back to the First SPA and then choose the ComponentB. The breakpoint will be hit. Remove the breakpoint and resume the execution. Choose the ComponentA from the menu.<br/>
   </details>
 </div>
-<br/><br/>
+<br/>
 <div>
     <details>
       <summary>Using Chrome DevTools example:</summary>
@@ -259,7 +259,7 @@ Use 'Sources -> Filesystem -> Add folder to workspace' to add <code>client/src</
 Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.
 </details>
 </div>
-<br/><br/>
+<br/>
 
 To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
 #### Use backend to debug the production client build
