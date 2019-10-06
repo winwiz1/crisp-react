@@ -37,7 +37,7 @@ Starter project with React client and NodeJS/Express backend, both written in Ty
 ## Project Highlights
 
 #### React Application Splitting
-[Create React App](https://github.com/facebook/create-react-app) creates a client app that consists of one Single Page Application (SPA). When dealing with a feature-rich application, it's often beneficial to split it into several units. For React, SPA fits the role of such a unit quite naturally. Each SPA can be responsible for its own area of functionality.  For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA. When Crisp React project is built, it creates a client application with two SPAs.  This number can be easily increased or decreased - see [SPA configuration](#spa-configuration).
+[Create React App](https://github.com/facebook/create-react-app) creates a client app that consists of one Single Page Application (SPA). When dealing with a feature-rich application, it's often beneficial to split it into several units. For React, SPA fits the role of such a unit quite naturally. Each SPA can be responsible for its own area of functionality.  For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA. When Crisp React project is built, it creates a client application with two SPAs.  This number can be easily increased or decreased - see [SPA Configuration](#spa-configuration).
 
 #### Debugging Functionality
 Features simultaneous client and backend debugging. You can launch a debugging configuration in VS Code that starts the client and the backend so that breakpoints can be set in both. This is complimented by other debugging scenarios described below including debugging on the production client bundles using Typescript source code in either VS Code or Chrome DevTools.
@@ -238,7 +238,7 @@ Wait until an instance of Chrome starts. You should see the overview page.<br/>
   <details>
     <summary>Using VS Code example:</summary>
     <br/>
-Note that VS Code can mark a breakpoint with a cirle that is grey and hollow rather than red and solid, referring to it as 'Unverified breakpoint'. You can sheck the breakpoint has been set and marked with solid red circle by highlighting the relevant process (client or server) on VS Code Debug sidebar in the CALL STACK view.<br/>
+Note that VS Code can mark a breakpoint with a circle that is grey and hollow rather than red and solid, referring to it as 'Unverified breakpoint'. You can check the breakpoint has been set and marked with solid red circle by highlighting the relevant process (client or server) on VS Code Debug sidebar in the CALL STACK view.<br/>
     <br/>
 Put a breakpoint on the following line:  <code>server/src/Server.ts:59</code>.<br/>
 In the browser choose the ComponentC from the menu, the breakpoint will be hit. Remove the breakpoint and resume the execution.<br/>
@@ -298,7 +298,7 @@ Remember to change the settings in `tsconfig.json`:
 ```
  otherwise the dynamic import will be ignored and webpack 'magic comments' removed.
  
- > Note: `React.lazy` has a restriction, it works with default exports only. The restriction should be lifted in the future. When webpack detects dynamic imports, it emits code that loads the bundle it created asynchronously and `Suspense/lazy` needs to wait for the loading to complete. This technology is less straightforward and probably less mature than building a static bundle and referencing it via the `<sript>` tag  in .html file.
+ > Note: `React.lazy` has a restriction, it works with default exports only. The restriction should be lifted in the future. When webpack detects dynamic imports, it emits code that loads the bundle it created asynchronously and `Suspense/lazy` needs to wait for the loading to complete. This technology is less straightforward and probably less mature than building a static bundle and referencing it via the `<script>` tag  in .html file.
 
 Q: Do dynamic imports negate the need to have multiple SPAs.<br/>
 A: It depends. These two are complimentary techniques. Obviously once a bundle grows larger, it starts affecting performance as its loading time increases. But the reverse is also true, having too many small bundles could result in more network round-trips and the bundle compression will become less efficient. It can also complicate attempts to scrutinise network traffic including requests for bundles.
