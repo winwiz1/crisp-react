@@ -18,14 +18,14 @@ Starter project with React client and NodeJS/Express backend, both written in Ty
 ## Table of Contents
 
 - [Project Highlights](#project-highlights)
-  - [React application splitting](#react-application-splitting)
-  - [Debugging functionality](#debugging-functionality)
-  - [Script bundle management](#script-bundle-management)
+  - [React Application Splitting](#react-application-splitting)
+  - [Debugging Functionality](#debugging-functionality)
+  - [Script Bundle Management](#script-bundle-management)
 - [Getting Started](#getting-started) 
 - [Project Features](#project-features)
-  - [Client and backend subprojects](#client-and-backend-subprojects)
-  - [SPA configuration](#spa-configuration)
-  - [Integration with UI and CSS libraries](#integration-with-ui-and-css-libraries)
+  - [Client and Backend Subprojects](#client-and-backend-subprojects)
+  - [SPA Configuration](#spa-configuration)
+  - [Integration with UI and CSS Libraries](#integration-with-ui-and-css-libraries)
   - [Testing](#testing)
 - [Usage](#usage)
   - [Client Usage Scenarios](#client-usage-scenarios)
@@ -36,13 +36,13 @@ Starter project with React client and NodeJS/Express backend, both written in Ty
 
 ## Project Highlights
 
-#### React application splitting
+#### React Application Splitting
 [Create React App](https://github.com/facebook/create-react-app) creates a client app that consists of one Single Page Application (SPA). When dealing with a feature-rich application, it's often beneficial to split it into several units. For React, SPA fits the role of such a unit quite naturally. Each SPA can be responsible for its own area of functionality.  For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA. When Crisp React project is built, it creates a client application with two SPAs.  This number can be easily increased or decreased - see [SPA configuration](#spa-configuration).
 
-#### Debugging functionality
+#### Debugging Functionality
 Features simultaneous client and backend debugging. You can launch a debugging configuration in VS Code that starts the client and the backend so that breakpoints can be set in both. This is complimented by other debugging scenarios described below including debugging on the production client bundles using Typescript source code in either VS Code or Chrome DevTools.
 
-#### Script bundle management
+#### Script Bundle Management
 The script bundles for all SPAs are tagged uniquely for the given build making the bundles safe for caching by the client. Having a separate bundle for each SPA  improves its loading time for large React applications. The `vendor` bundle contains `node_modules/` dependencies and is reused between SPAs so that there is no need to download it again when switching from one SPA to another. The performance is further increased by bundle minification performed during production builds. Yet another performance improvement is achieved by bundle compression. Clients can indicate compression preferences using the standard `Accept-Encoding` header. Depending on client capabilities, the backend will respond having the following compression choices for the bundle: uncompressed, gzip or Brotli. Bundle compression is done during builds so the backend doesn't have to use any computational resources to support it.
 ## Getting Started
 Install `yarn` if it's not already installed: `npm install yarn -g`
@@ -97,7 +97,7 @@ Install `yarn` if it's not already installed: `npm install yarn -g`
 </div>
 
 ## Project Features
-#### Client and backend subprojects
+#### Client and Backend Subprojects
 Each subproject supports execution of the following commands/scripts:
 ```
 yarn compile
@@ -117,10 +117,14 @@ The client subproject:
 The backend subproject:
  * In the production mode starts Express listening on port 3000 to serve from disk the build artifacts created by the client subproject .
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
+<<<<<<< HEAD
 
 > Only the requests for build artifacts are proxied. The limited scope of proxying is meant to make it easier to add future API endpoints to Express (API requests won't get proxied) while still preserving the convenience of debugging with Live Reloading facilitated by webpack-dev-server.
 
 #### SPA configuration
+=======
+#### SPA Configuration
+>>>>>>> origin/master
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. The dependencies found under `node_modules/`are bundled into the separate 'vendor' bundle. Now let's see how Crisp React defines the SPAs.
 
 The client subproject builds an application with SPAs defined by the SPA Configuration block in the `client/config/spa.config.js` file:
@@ -154,21 +158,21 @@ The newly written `app.tsx` should verify the client is logged in (for example b
 * Redirect to `/app.html` (due to the boolean `redirect` flag set) other requests in the form `/<path>` or `/<path>.html` provided the `<path>` doesn't include a subdirectory. It's the standard behavior required by all SPAs and implemented in webpack-dev-server using the `historyApiFallback` setting.
 * Return 404 error for all other requests except for script bundles and source maps.
 
-> Tip: Since any SPA is comprised of the landing page component (entry point), direct and indirect imports, the coding can start by making `login.tsx` render the login page: either directly or preferably with the help of an imported component that will ask for user credentials. Another component could render a page asking for alternative credentials e.g. biometrics or ask for multifactor authentication (MFA). The entry point `app.tsx` would import the component responsible for rendering the page presented to the user after logging in. Express could potentially be modified to ensure only authenticated users can download the bundle for this SPA. <br/><br/>
-> Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can run against a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application with a dependency on backend API endpoints out of the scope.
+> Tip: Since any SPA is comprised of the landing page component (entry point) and its imports, the coding can start by making `login.tsx` render the login page: either directly or maybe with the help of an imported component that will ask for user credentials. Another component could render a page asking for alternative credentials e.g. biometrics or ask for multifactor authentication (MFA). The entry point `app.tsx` would import the component responsible for rendering the page presented to the user after logging in. Express could potentially be modified to ensure only authenticated users can download the bundle for this SPA.
 
-### Integration with UI and CSS libraries
-Both libraries ( [Semantic UI](https://react.semantic-ui.com) and [Typestyle](https://typestyle.github.io) respectively ) provide React with the type safety afforded by Typescript.
+> Tip: Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can focus on a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application (with dependencies on backend API endpoints) out of the testing scope.
+
+#### Integration with UI and CSS Libraries
+Both libraries ([Semantic UI](https://react.semantic-ui.com) and [Typestyle](https://typestyle.github.io) respectively) provide React with the type safety afforded by Typescript.
 #### Testing
 Debuggable test cases written in Typescript. Integration with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) on the client and [Supertest](https://github.com/visionmedia/supertest) on the backend. Both using [Jest](https://jestjs.io/) as an engine.<br/>
 The client and backend can be tested independently by executing the `yarn test` command. Alternatively the same command can be executed at the workspace level.
 
 The repository is integrated with Travis CI and the test outcome is reflected by the test badge.
-
 ## Usage
 The Usage Scenarios below are grouped depending on whether  the client or the backend subproject is used. 
 
-The expression "backend data" that is "required" in some scenarios below and "not needed" in others refers to the data supplied via future backend API endpoint - see What’s Next. In other words this data is some 'extra' that Express will provide but webpack-dev-server won't. For example, data retrieved from a cloud service which the client cannot touch directly. 
+The expression "backend data" that is "required" in some scenarios below and "not needed" in others refers to the data supplied via future backend API endpoint - see [What's Next](#whats-next). In other words this data is some 'extra' that Express will provide but webpack-dev-server won't. For example, data retrieved from a cloud service which the client cannot touch directly.
 
 > Tip: The commands executed in VS Code Terminal can also be executed from a command or shell prompt in the relevant directory and vice versa.
 
@@ -185,14 +189,14 @@ When to use: Develop the part of UI that doesn't need backend data.
 #### Debug client using devserver and VS Code
 VS Code: Start the `Launch Chrome Connected to Devserver` debugging configuration.<br/> 
 Wait until an instance of Chrome starts and shows the overview page.<br/>
-VS Code: Put a breakpoint on the following line: `src/components/ComponentB.tsx:13`.<br/>
+VS Code: Put a breakpoint on the following line: `src/components/ComponentB.tsx:14`.<br/>
 Use the overview page menu to choose the ComponentB. The breakpoint in VS Code will be hit. Press F5 to continue execution. Alternatively use Chrome to continue execution. Note Live Reloading is supported.<br/>
 To finish remove the breakpoint and stop the running debugging configuration (use Debugging toolbar or press `Shift+F5`).<br/>
 When to use: Troubleshoot the client provided backend data is not required.
 #### Debug client using devserver and Chrome DevTools
 Follow the "Debug client using devserver and VS Code" scenario  to see the overview page.<br/>
 In the instance of Chrome started, open Chrome DevTools.<br/>
-Use 'Sources -> Filesystem -> Add folder to workspace' to add `client/src` directory. In this directory open the file `src/components/ComponentB.tsx` and put a breakpoint on the line 13.<br/>
+Use 'Sources -> Filesystem -> Add folder to workspace' to add `client/src` directory. In this directory open the file `src/components/ComponentB.tsx` and put a breakpoint on the line 14.<br/>
 Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Go to VS Code and note it knows the execution has stopped on this line of code and lets you inspect variables. Use Chrome or VS Code to continue execution. Note Live Reloading is supported.<br/>
 To finish remove the breakpoint and stop the running debugging configuration (use Debugging toolbar or press `Shift+F5`).<br/>
 When to use: Troubleshoot UI, inspect DOM tree, etc. provided backend data is not required.
@@ -243,12 +247,12 @@ Wait until an instance of Chrome starts. You should see the overview page.<br/>
   <details>
     <summary>Using VS Code example:</summary>
     <br/>
-    In order to set breakpoints in VS Code you will need to choose either client or backend e.g. highlight the client or the backend process on the Debug sidebar inside the Call Stack window. Otherwise you can get "Unverified breakpoint". Once a breakpoint is set, it doesn't matter which process is selected/highlighted.<br/>
+Note that VS Code can mark a breakpoint with a cirle that is grey and hollow rather than red and solid, referring to it as 'Unverified breakpoint'. You can sheck the breakpoint has been set and marked with solid red circle by highlighting the relevant process (client or server) on VS Code Debug sidebar in the CALL STACK view.<br/>
     <br/>
-Select the backend process and put a breakpoint on the following line:  <code>server/src/Server.ts:49</code>.<br/>
-In the browser choose ComponentA from the menu, the breakpoint will be hit. Remove the breakpoint and resume the execution.<br/>
-Select the client process and put a breakpoint on the line <code>client/src/components/ComponentB.tsx:13</code>.<br/>
-Use the overview page menu to choose the ComponentB, the breakpoint will be hit. Remove the breakpoint and resume the execution. Choose ComponentA.<br/>
+Put a breakpoint on the following line:  <code>server/src/Server.ts:59</code>.<br/>
+In the browser choose the ComponentC from the menu, the breakpoint will be hit. Remove the breakpoint and resume the execution.<br/>
+Put a breakpoint on the line <code>client/src/components/ComponentB.tsx:14</code>.<br/>
+Use the menu to go back to the First SPA and then choose the ComponentB. The breakpoint will be hit. Remove the breakpoint and resume the execution. Choose the ComponentA from the menu.<br/>
   </details>
 </div>
 <div>
@@ -256,7 +260,7 @@ Use the overview page menu to choose the ComponentB, the breakpoint will be hit.
       <summary>Using Chrome DevTools example:</summary>
       <br />
       In the instance of Chrome started, open Chrome DevTools.<br/>
-Use 'Sources -> Filesystem -> Add folder to workspace' to add <code>client/src</code> directory. In this directory open the file <code>src/components/ComponentB.tsx</code> and put a breakpoint on line 13.<br/>
+Use 'Sources -> Filesystem -> Add folder to workspace' to add <code>client/src</code> directory. In this directory open the file <code>src/components/ComponentB.tsx</code> and put a breakpoint on line 14.<br/>
 Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.
 </details>
 </div>
@@ -270,7 +274,7 @@ Wait until an instance of Chrome starts. You should see the overview page. Now y
 To finish stop the running debugging configuration (use the Debugging toolbar or press  `Control+F5`  once).
 ## What's Next
 Add an API endpoint to the backend and consume it by adding some data fetching capability to the client. Start with [Client Usage Scenarios](#client-usage-scenarios) to develop and refine UI look and feel in absence of API data. Then implement an API endpoint (for example the login endpoint) in the backend and switch to [Backend Usage Scenarios](#backend-usage-scenarios) .  With the latter the client gets everything (build artifacts including script bundles, API data) from the backend being unaware of the devserver existence. Therefore there is no room for CORS issues. Which arise when the client downloads bundles from devserver and then the code attempts to call API endpoints exposed by another server e.g. backend.
-> Tip: Using [Backend Usage Scenarios](#backend-usage-scenarios) for all API related issues helps avoid running the client (e.g. the devserver) in production. This is never a good idea. The webpack-dev-server, as its name suggests, is meant to be used in development only.
+> Tip: Using [Backend Usage Scenarios](#backend-usage-scenarios) for all API related issues helps to avoid running the devserver in production. This is never a good idea. The webpack-dev-server, as its name suggests, is meant to be used in development only.
 ## Q & A
 Q: I have changed both SPA names in the SPA Configuration block and kept the rest including the entry points intact. I expect everything to keep working using my new names for the SPA landing pages instead of the old `/first.html` and `second.html`.  However navigation via the menu and Back/Forward browser buttons seems to be broken. How can it be fixed.<br/>
 A: Clear the browser's history and cache. Alternatively use an incognito tab. The client, the backend and the tests should work with the new names.
