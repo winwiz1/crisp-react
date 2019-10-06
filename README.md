@@ -37,7 +37,7 @@ Starter project with React client and NodeJS/Express backend, both written in Ty
 ## Project Highlights
 
 #### React Application Splitting
-[Create React App](https://github.com/facebook/create-react-app) creates a client app that consists of one Single Page Application (SPA). When dealing with a feature-rich application, it's often beneficial to split it into several units. For React, SPA fits the role of such a unit quite naturally. Each SPA can be responsible for its own area of functionality.  For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA. When Crisp React project is built, it creates a client application with two SPAs.  This number can be easily increased or decreased - see [SPA configuration](#spa-configuration).
+[Create React App](https://github.com/facebook/create-react-app) creates a client app that consists of one Single Page Application (SPA). When dealing with a feature-rich application, it's often beneficial to split it into several units. For React, SPA fits the role of such a unit quite naturally. Each SPA can be responsible for its own area of functionality.  For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA. When Crisp React project is built, it creates a client application with two SPAs.  This number can be easily increased or decreased - see [SPA Configuration](#spa-configuration).
 
 #### Debugging Functionality
 Features simultaneous client and backend debugging. You can launch a debugging configuration in VS Code that starts the client and the backend so that breakpoints can be set in both. This is complimented by other debugging scenarios described below including debugging on the production client bundles using Typescript source code in either VS Code or Chrome DevTools.
@@ -117,7 +117,8 @@ The client subproject:
 The backend subproject:
  * In the production mode starts Express listening on port 3000 to serve from disk the build artifacts created by the client subproject .
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
-#### SPA Configuration
+
+ #### SPA Configuration
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. The dependencies found under `node_modules/`are bundled into the separate 'vendor' bundle. Now let's see how Crisp React defines the SPAs.
 
 The client subproject builds an application with SPAs defined by the SPA Configuration block in the `client/config/spa.config.js` file:
@@ -248,6 +249,7 @@ Put a breakpoint on the line <code>client/src/components/ComponentB.tsx:14</code
 Use the menu to go back to the First SPA and then choose the ComponentB. The breakpoint will be hit. Remove the breakpoint and resume the execution. Choose the ComponentA from the menu.<br/>
   </details>
 </div>
+<br/><br/>
 <div>
     <details>
       <summary>Using Chrome DevTools example:</summary>
@@ -257,6 +259,7 @@ Use 'Sources -> Filesystem -> Add folder to workspace' to add <code>client/src</
 Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.
 </details>
 </div>
+<br/><br/>
 
 To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
 #### Use backend to debug the production client build
