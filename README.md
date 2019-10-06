@@ -241,7 +241,7 @@ Wait until an instance of Chrome starts. You should see the overview page.<br/>
   <details>
     <summary>Using VS Code example:</summary>
     <br/>
-Note that VS Code can mark a breakpoint with a cirle that is grey and hollow rather than red and solid, referring to it as 'Unverified breakpoint'. You can sheck the breakpoint has been set and marked with solid red circle by highlighting the relevant process (client or server) on VS Code Debug sidebar in the CALL STACK view.<br/>
+Note that VS Code can mark a breakpoint with a circle that is grey and hollow rather than red and solid, referring to it as 'Unverified breakpoint'. You can check the breakpoint has been set and marked with solid red circle by highlighting the relevant process (client or server) on VS Code Debug sidebar in the CALL STACK view.<br/>
     <br/>
 Put a breakpoint on the following line:  <code>server/src/Server.ts:59</code>.<br/>
 In the browser choose the ComponentC from the menu, the breakpoint will be hit. Remove the breakpoint and resume the execution.<br/>
@@ -305,7 +305,7 @@ Remember to change the settings in `tsconfig.json`:
 ```
  otherwise the dynamic import will be ignored and webpack 'magic comments' removed.
  
- > Note: `React.lazy` has a restriction, it works with default exports only. The restriction should be lifted in the future. When webpack detects dynamic imports, it emits code that loads the bundle it created asynchronously and `Suspense/lazy` needs to wait for the loading to complete. This technology is less straightforward and probably less mature than building a static bundle and referencing it via the `<sript>` tag  in .html file.
+ > Note: `React.lazy` has a restriction, it works with default exports only. The restriction should be lifted in the future. When webpack detects dynamic imports, it emits code that loads the bundle it created asynchronously and `Suspense/lazy` needs to wait for the loading to complete. This technology is less straightforward and probably less mature than building a static bundle and referencing it via the `<script>` tag  in .html file.
 
 Q: Do dynamic imports negate the need to have multiple SPAs.<br/>
 A: It depends. These two are complimentary techniques. Obviously once a bundle grows larger, it starts affecting performance as its loading time increases. But the reverse is also true, having too many small bundles could result in more network round-trips and the bundle compression will become less efficient. It can also complicate attempts to scrutinise network traffic including requests for bundles.
