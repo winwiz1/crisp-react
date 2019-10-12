@@ -14,7 +14,7 @@ Each SPA has:
   exclude redirection ambiguity.
 
 You can customize SPAs by modifying the SPA Configuration block below. It will
-reconfigure client, backend and their tests. You'll need to adjust 3 lines
+reconfigure client, backend and the tests. You'll need to adjust 3 lines
 "http://localhost:<port>/first.html" in the ../.vscode/launch.json file.
 If the first SPA is called 'login' then change these lines to:
 "http://localhost:<port>/login.html".
@@ -31,64 +31,76 @@ SPA Configuration block.
 */
 
 var ConfiguredSPAs = function() {
-
   function SPA(params) {
     this.params = params;
   }
 
   /****************** Start SPA Configuration ******************/
-  let SPAs = [
-    new SPA({ name: "first", entryPoint: './src/entrypoints/first.tsx', redirect: true }),
-    new SPA({ name: "second", entryPoint: './src/entrypoints/second.tsx', redirect: false }),
+  var SPAs = [
+    new SPA({
+      name: "first",
+      entryPoint: "./src/entrypoints/first.tsx",
+      redirect: true
+    }),
+    new SPA({
+      name: "second",
+      entryPoint: "./src/entrypoints/second.tsx",
+      redirect: false
+    })
   ];
 
-  SPAs.getTitle = () => "Crisp React";
+  SPAs.appTitle = "Crisp React";
   /****************** End SPA Configuration ******************/
 
-  SPAs.verifyParameters = (verifier) => {
-
+  SPAs.verifyParameters = function(verifier) {
     if (SPAs.length === 0) {
-      throw new RangeError("At least one SPA needs to be configured")
+      throw new RangeError("At least one SPA needs to be configured");
     }
 
-    SPAs.forEach((spa,idx) => {
+    SPAs.forEach(function(spa, idx) {
       spa.params = verifier(spa.params, idx);
     });
 
-    const num = SPAs.reduce((acc, item) => { return item.params.redirect? acc + 1: acc; }, 0);
+    var num = SPAs.reduce(function(acc, item) {
+      return item.params.redirect ? acc + 1 : acc;
+    }, 0);
+
     if (num !== 1) {
-      throw new RangeError("One and only one SPA must have 'redirect: true'")
+      throw new RangeError("One and only one SPA must have 'redirect: true'");
     }
-  }
+  };
 
-  SPAs.getEntrypoints = () => {
-    let ret = new Object();
-    SPAs.forEach(spa => ret[spa.params.name] = spa.params.entryPoint);
-    return ret;
-  }
+  SPAs.getEntrypoints = function() {
+    var entryPoints = new Object();
+    SPAs.forEach(spa => (entryPoints[spa.params.name] = spa.params.entryPoint));
+    return entryPoints;
+  };
 
-  SPAs.getRedirectName = () => {
+  SPAs.getRedirectName = function() {
     return SPAs.find(spa => spa.params.redirect).params.name;
-  }
+  };
 
-  SPAs.getNames = () => {
-    let ret = new Array();
-    SPAs.forEach(spa => ret.push(spa.params.name));
-    return ret;
-  }
+  SPAs.getNames = function() {
+    var spaNames = new Array();
+    SPAs.forEach(spa => spaNames.push(spa.params.name));
+    return spaNames;
+  };
 
-  SPAs.getRewriteRules = () => {
-    let ret = new Array();
+  SPAs.getRewriteRules = function() {
+    var ret = new Array();
     SPAs.forEach(spa => {
-      let rule = new Object();
+      var rule = new Object();
       rule.from = new RegExp(`^/${spa.params.name}` + "(\\.html)?$");
       rule.to = `${spa.params.name}.html`;
       ret.push(rule);
     });
-    ret.push({ from: new RegExp("^.*$"), to: `/${SPAs.getRedirectName()}.html` });
+    ret.push({
+      from: new RegExp("^.*$"),
+      to: `/${SPAs.getRedirectName()}.html`
+    });
     return ret;
-  }
-  
+  };
+
   return SPAs;
 };
 

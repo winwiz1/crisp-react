@@ -102,9 +102,6 @@ const getWebpackConfig = (env, argv) => {
       historyApiFallback: {
         index: `${configuredSPAs.getRedirectName()}.html`,
         rewrites: configuredSPAs.getRewriteRules()
-      },
-      headers: {
-        'Cache-Control': 'max-age=31536000'
       }
     },
     context: path.resolve(__dirname),
@@ -115,7 +112,7 @@ const getWebpackConfig = (env, argv) => {
       new HtmlWebpackPlugin({
         template: require('html-webpack-template'),
         inject: false,
-        title: configuredSPAs.getTitle(),
+        title: configuredSPAs.appTitle,
         appMountId: "react-root",
         alwaysWriteToDisk: true,
         filename: `${entryPoint}.html`,

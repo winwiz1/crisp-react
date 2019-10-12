@@ -6,7 +6,7 @@
   <br />
   <h1>Crisp React</h1>
 </div>
-Starter project with React client and NodeJS/Express backend, both written in Typescript. Offers extended functionality highlighted below. The client works with any webserver.
+Boilerplate project with React client and NodeJS/Express backend, both written in Typescript. Offers extended functionality highlighted below. The client works with any webserver. Helps to avoid frequent React-Express pitfalls.
 <br /><br />
 <div align="center">
   <img alt="Travis CI badge" src="https://travis-ci.com/winwiz1/crisp-react.svg?branch=master">
@@ -30,7 +30,7 @@ Starter project with React client and NodeJS/Express backend, both written in Ty
 - [Usage](#usage)
   - [Client Usage Scenarios](#client-usage-scenarios)
   - [Backend Usage Scenarios](#backend-usage-scenarios)
-- [What's Next](#whats-next)
+- [What's Next and Pitfall Avoidance](#whats-next-and-pitfall-avoidance)
 - [Q & A](#q--a)
 - [License](#license)
 
@@ -117,6 +117,7 @@ The client subproject:
 The backend subproject:
  * In the production mode starts Express listening on port 3000 to serve from disk the build artifacts created by the client subproject .
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
+ * Implements HTTP caching arrangement which disables the caching for .html files and enables it for script bundles. A typical React application comes with .html files that are rather small whereas the bundles can be significantly larger. On the other hand the build process keeps the names of .html files static and embeds a hash into the names of script bundles. As a result, the caching arrangement ensures smooth deployment of versioning changes without any perceptible performance penalty.
 
 #### SPA Configuration
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. The dependencies found under `node_modules/`are bundled into the separate 'vendor' bundle. Now let's see how Crisp React defines the SPAs.
@@ -124,25 +125,41 @@ Every SPA has a landing page displayed during initial rendering by the component
 The client subproject builds an application with SPAs defined by the SPA Configuration block in the `client/config/spa.config.js` file:
 ```js
 /****************** Start SPA Configuration ******************/
-  let SPAs = [
-    new SPA({ name: "first", entryPoint: './src/entrypoints/first.tsx', redirect: true }),
-    new SPA({ name: "second", entryPoint: './src/entrypoints/second.tsx', redirect: false }),
+  var SPAs = [
+    new SPA({
+      name: "first",
+      entryPoint: "./src/entrypoints/first.tsx",
+      redirect: true
+    }),
+    new SPA({
+      name: "second",
+      entryPoint: "./src/entrypoints/second.tsx",
+      redirect: false
+    })
   ];
-  SPAs.getTitle = () => "Crisp React";
+  SPAs.appTitle = "Crisp React";
 /****************** End SPA Configuration ******************/
 ```
-As you can see the configuration is simple: each SPA is defined using 3 pieces of data: name, entry point (e.g. the landing page component) and a boolean flag. Ignore the flag for a moment. There is also a title returned by `getTitle()` function, it provides the application-wide default setting for the `<title>` tag in the `<head>` section of all pages. The title can be easily overwritten as needed.
+As you can see the configuration is simple: each SPA is defined using 3 pieces of data: name, entry point (e.g. the landing page component) and a boolean flag. Ignore the flag for a moment. There is also an `appTitle`, it provides the application-wide default setting for the `<title>` tag in the `<head>` section of all pages. The title can be easily overwritten as needed.
 
 SPA's name "first" is used to define the SPA's landing page e.g. `/first.html` and name the bundle that renders the SPA: `first<hash>.js`. More information about all the data pieces shown above is provided in the configuration file. The file is copied during the backend build from one subproject to another and used to configure the client, the backend and the unit tests.
 
-To reconfigure the application to have a separate SPA for login and another one for the rest of the application, change the SPA Configuration block:
+To reconfigure the application to have a separate SPA for login and another one for the rest of the application, change the SPA Configuration block as follows:
 ```js
 /****************** Start SPA Configuration ******************/
-  let SPAs = [
-    new SPA({ name: "login", entryPoint: './src/entrypoints/login.tsx', redirect: false }),
-    new SPA({ name: "app", entryPoint: './src/entrypoints/app.tsx', redirect: true }),
+  var SPAs = [
+    new SPA({
+      name: "login",
+      entryPoint: "./src/entrypoints/login.tsx",
+      redirect: false
+    }),
+    new SPA({
+      name: "app",
+      entryPoint: "./src/entrypoints/app.tsx",
+      redirect: true
+    })
   ];
-  SPAs.getTitle = () => "DemoApp";
+  SPAs.appTitle = "DemoApp";
 /****************** End SPA Configuration ******************/
 ```
 and then follow the instructions provided in the configuration file comments.
@@ -268,8 +285,9 @@ Edit file `client/webpack.config.js` to change the `sourceMap` setting of the Te
 Start the debugging configuration  `Debug Production Client and Backend (workspace)`.<br/>
 Wait until an instance of Chrome starts. You should see the overview page. Now you can use VS Code to set breakpoints in both client and backend provided the relevant process is highlighted/selected as explained in the previous scenario. You can also use Chrome DevTools to debug the client application as shown above.<br/>
 To finish stop the running debugging configuration (use the Debugging toolbar or press  `Control+F5`  once).
-## What's Next
-Add an API endpoint to the backend and consume it by adding some data fetching capability to the client. Start with [Client Usage Scenarios](#client-usage-scenarios) to develop and refine UI look and feel in absence of API data. Then implement an API endpoint (for example the login endpoint) in the backend and switch to [Backend Usage Scenarios](#backend-usage-scenarios) .  With the latter the client gets everything (build artifacts including script bundles, API data) from the backend being unaware of the devserver existence. Therefore there is no room for CORS issues. Which arise when the client downloads bundles from devserver and then the code attempts to call API endpoints exposed by another server e.g. backend.
+
+## What's Next and Pitfall Avoidance
+Add an API endpoint to the backend and consume it by adding some data fetching capability to the client. Start with [Client Usage Scenarios](#client-usage-scenarios) to develop and refine UI look and feel in absence of API data. Then implement an API endpoint (for example the login endpoint) in the backend and switch to [Backend Usage Scenarios](#backend-usage-scenarios). With the latter the client gets everything (build artifacts including script bundles, API data) from the backend being unaware of the devserver existence. Therefore there is no room for CORS issues. Which arise when the client downloads bundles from devserver and then the downloaded code attempts to call API endpoints exposed by another server.
 
 > Tip: Using [Backend Usage Scenarios](#backend-usage-scenarios) for all API related issues helps to avoid running the devserver in production. This is never a good idea. The webpack-dev-server, as its name suggests, is meant to be used in development only.
 

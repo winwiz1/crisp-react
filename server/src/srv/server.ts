@@ -8,6 +8,7 @@
 import * as path from "path";
 import * as express from "express";
 import nodeFetch from "node-fetch";
+import * as helmet from 'helmet';
 import * as expressStaticGzip from "express-static-gzip";
 import { CustomError, handleErrors } from "../utils/error";
 import { logger } from "../utils/logger";
@@ -28,7 +29,10 @@ export enum StaticAssetPath {
 class Server {
   constructor() {
     this.m_app = express();
-    this.m_app.disable("x-powered-by");
+    this.m_app.use(helmet({
+       noCache: true,
+    }));
+    this.m_app.disable("etag");
     this.addRoutes();
     handleErrors(this.m_app);
   }
@@ -41,13 +45,15 @@ class Server {
   }
 
   private addRoutes(): void {
+    // Redirect to the landing page of SPA that has 'redirect: true'
     this.m_app.get("/", (_req, res, next) => {
       if (Server.s_useDevWebserver) {
         // Get the resourse from dev server
         this.sendDevServerAsset(`/${SPAs.getRedirectName()}${Server.s_htmlExtension}`, res, next);
       } else {
         // Serve the static asset from disk
-        res.sendFile(path.resolve(this.getAssetPath(), `${SPAs.getRedirectName()}${Server.s_htmlExtension}`));
+        res.sendFile(path.resolve(this.getAssetPath(), `${SPAs.getRedirectName()}${Server.s_htmlExtension}`),
+                     { etag: false });
       }
     });
 
@@ -56,13 +62,15 @@ class Server {
       const match = Server.s_regexEntrypoint.test(entryPoint || "");
 
       if (match) {
+        // Serve SPA landing page
         entryPoint!.endsWith(Server.s_htmlExtension) || (entryPoint! += Server.s_htmlExtension);
         if (Server.s_useDevWebserver) {
           // Get the requested resourse from dev server
           this.sendDevServerAsset(`/${entryPoint}`, res, next);
         } else {
           // Serve the static asset from disk
-          res.sendFile(path.resolve(this.getAssetPath(), entryPoint!));
+          res.sendFile(path.resolve(this.getAssetPath(), entryPoint!),
+                       { etag: false });
         }
       } else {
         // Emulate historyApiFallback in webpack-dev-server
@@ -70,8 +78,10 @@ class Server {
       }
     });
 
+    // Serve script bundles and source maps
     this.m_app.get("/static/:bundleFile", this.bundleMiddleware);
 
+    // Proxy to devserver ws:// protocol
     if (Server.s_useDevWebserver) {
       this.m_app.use("/sockjs-node",
         proxy({ target: Server.s_urlDevWebserver, changeOrigin: true, ws: true })
@@ -169,9 +179,19 @@ class Server {
     index: false,
     orderPreference: ["br"],
     serveStatic: {
+      cacheControl: true,
       maxAge: "7d",
       lastModified: false,
-      etag: false
+      etag: true,
+      index: false,
+      immutable: true,
+      redirect: false,
+      setHeaders: (res: express.Response, _path: string, _stat: any): void => {
+        res.removeHeader("Surrogate-Control");
+        res.removeHeader("Pragma");
+        res.removeHeader("Expires");
+        res.setHeader("Cache-Control", "public,max-age=604800,immutable");
+      }
     }
   };
 }

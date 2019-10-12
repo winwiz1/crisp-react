@@ -14,9 +14,9 @@ import * as SPAs from "../../config/spa.config";
 ReactDOM.render(
   <Router>
     <div>
-      <Helmet title={SPAs.getTitle()} />
+      <Helmet title={SPAs.appTitle} />
         <div style={{ textAlign: "center", marginTop: "2rem", marginBottom: "3rem" }}>
-          <h2>Welcome to {SPAs.getTitle()}</h2>
+          <h2>Welcome to {SPAs.appTitle}</h2>
         </div>
         <Switch>
           <Route exact path="/" component={Overview} />

@@ -8,7 +8,7 @@ import Server, { StaticAssetPath } from "../srv/server";
 import * as SPAs from "../../config/spa.config";
 
 const server = Server(StaticAssetPath.SOURCE);
-const regexResponse = new RegExp(SPAs.getTitle());
+const regexResponse = new RegExp(SPAs.appTitle);
 
 // If there are two SPAs in spa.config.js called 'first and 'second',
   // then set the array to:  ["/", "/first", "/second"]
