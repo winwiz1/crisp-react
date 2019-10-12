@@ -115,7 +115,7 @@ const getWebpackConfig = (env, argv) => {
       new HtmlWebpackPlugin({
         template: require('html-webpack-template'),
         inject: false,
-        title: configuredSPAs.getTitle(),
+        title: configuredSPAs.appTitle,
         appMountId: "react-root",
         alwaysWriteToDisk: true,
         filename: `${entryPoint}.html`,
