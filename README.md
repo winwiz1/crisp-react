@@ -1,4 +1,10 @@
-﻿<div align="center">
+﻿<!--
+  Title: Crisp React
+  Description: Boilerplate project to build a full stack solution in Typescript using React client and Express backend. Offers advanced functionality and helps to avoid React-Express pitfalls.
+  Author: winwiz1
+  <meta name='keywords' content='react, typescript, express, boilerplate, sample'>
+  -->
+<div align="center">
   <a href="https://github.com/winwiz1/crisp-react">
     <img alt="crisp-react logo" src="docs/crisp-react.png">
   </a>
@@ -116,7 +122,7 @@ The client subproject:
 The backend subproject:
  * In the production mode starts Express listening on port 3000 to serve from disk the build artifacts created by the client subproject .
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
- * Implements HTTP caching arrangement which disables the caching for .html files and enables it for script bundles. A typical React application comes with .html files that are rather small whereas the bundles can be significantly larger. On the other hand the building process keeps the names of .html files static and embeds a hash into the names of script bundles. As a result, the caching arrangement ensures smooth deployment of versioning changes without any perceptible performance penalty.
+ * Implements HTTP caching arrangement which disables the caching for .html files and enables it for script bundles. A typical React application comes with .html files that are rather small whereas the bundles can be significantly larger. On the other hand, the build process keeps the names of .html files static and embeds a hash into the names of script bundles. As a result, the caching arrangement ensures smooth deployment of versioning changes without any perceptible performance penalty.
 #### SPA Configuration
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. The dependencies found under `node_modules/`are bundled into the separate 'vendor' bundle. Now let's see how Crisp React defines the SPAs.
 
@@ -281,8 +287,8 @@ Start the debugging configuration  `Debug Production Client and Backend (workspa
 Wait until an instance of Chrome starts. You should see the overview page. Now you can use VS Code to set breakpoints in both client and backend provided the relevant process is highlighted/selected as explained in the previous scenario. You can also use Chrome DevTools to debug the client application as shown above.<br/>
 To finish stop the running debugging configuration (use the Debugging toolbar or press  `Control+F5`  once).
 ## What's Next and Pitfall Avoidance
-Add an API endpoint to the backend and consume it by adding some data fetching capability to the client. Start with [Client Usage Scenarios](#client-usage-scenarios) to develop and refine UI look and feel in absence of API data. Then implement an API endpoint (for example the login endpoint) in the backend and switch to [Backend Usage Scenarios](#backend-usage-scenarios) .  With the latter the client gets everything (build artifacts including script bundles, API data) from the backend being unaware of the devserver existence. Therefore there is no room for CORS issues. Which arise when the client downloads bundles from devserver and then the downloaded code attempts to call API endpoints exposed by another server.
-> Tip: Using [Backend Usage Scenarios](#backend-usage-scenarios) for all API related issues helps to avoid running the devserver in production. This is never a good idea. The webpack-dev-server, as its name suggests, is meant to be used in development only.
+Add an API endpoint to the backend and consume it by adding some data fetching capability to the client. Start with [Client Usage Scenarios](#client-usage-scenarios) to develop and refine UI look and feel in absence of API data. Then implement an API endpoint (for example the login endpoint) in the backend and switch to [Backend Usage Scenarios](#backend-usage-scenarios). With the latter the client gets everything (build artifacts including script bundles, API data) from the backend being unaware of the devserver existence. Therefore there is no room for CORS issues. Which arise when the client downloads bundles from devserver and then the downloaded code attempts to call API endpoints exposed by another server.
+> Tip: Using [Backend Usage Scenarios](#backend-usage-scenarios) for all API related issues helps to avoid running the devserver in production. This is hardly a good idea. The webpack-dev-server, as its name suggests, is meant to be used in development only.
 ## Q & A
 Q: I have changed both SPA names in the SPA Configuration block and kept the rest including the entry points intact. I expect everything to keep working using my new names for the SPA landing pages instead of the old `/first.html` and `second.html`.  However navigation via the menu and Back/Forward browser buttons seems to be broken. How can it be fixed.<br/>
 A: Clear the browser's history and cache. Alternatively use an incognito tab. The client, the backend and the tests should work with the new names.
