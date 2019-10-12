@@ -6,7 +6,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
-theme: minimal
+theme: jekyll-theme-minimal
 
 include:
   - server/.vscode
