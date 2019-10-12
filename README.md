@@ -87,6 +87,7 @@ Install `yarn` if it's not already installed: `npm install yarn -g`
     </ul>
   </details>
 </div>
+<br/>
 <div>
   <details>
     <summary><strong>Without VS Code</strong></summary>
@@ -101,6 +102,7 @@ Install `yarn` if it's not already installed: `npm install yarn -g`
     Terminate the backend by pressing <code>Control+C</code>.
   </details>
 </div>
+<br/>
 
 ## Project Features
 #### Client and Backend Subprojects
@@ -123,7 +125,7 @@ The client subproject:
 The backend subproject:
  * In the production mode starts Express listening on port 3000 to serve from disk the build artifacts created by the client subproject .
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
- * Implements HTTP caching arrangement which disables the caching for .html files and enables it for script bundles. A typical React application comes with .html files that are rather small whereas the bundles can be significantly larger. On the other hand the build process keeps the names of .html files static and embeds a hash into the names of script bundles. As a result, the caching arrangement ensures smooth deployment of versioning changes without any perceptible performance penalty.
+ * Implements HTTP caching arrangement which disables the caching for .html files and enables it for script bundles. A typical React application comes with .html files that are rather small whereas the bundles can be significantly larger. On the other hand, the build process keeps the names of .html files static and embeds a hash into the names of script bundles. As a result, the caching arrangement ensures smooth deployment of versioning changes without any perceptible performance penalty.
 
 #### SPA Configuration
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. The dependencies found under `node_modules/`are bundled into the separate 'vendor' bundle. Now let's see how Crisp React defines the SPAs.
