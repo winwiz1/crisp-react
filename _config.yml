@@ -1,3 +1,13 @@
+title: Crisp React
+description: Boilerplate project to build a full stack solution in Typescript using React client and Express backend. Offers advanced functionality and helps to avoid React-Express pitfalls.
+author: winwiz1
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+theme: minimal
+
 include:
   - server/.vscode
   - client/.vscode
