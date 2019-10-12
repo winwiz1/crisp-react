@@ -1,3 +1,8 @@
+<!--
+  Title: Crisp React
+  Description: Boilerplate project to build a full stack solution in Typescript using React client and Express backend. Offers advanced functionality and helps to avoid React-Express pitfalls.
+  Author: winwiz1
+  -->
 <div align="center">
   <a href="https://github.com/winwiz1/crisp-react">
     <img alt="crisp-react logo" src="docs/crisp-react.png">
@@ -289,7 +294,7 @@ To finish stop the running debugging configuration (use the Debugging toolbar or
 ## What's Next and Pitfall Avoidance
 Add an API endpoint to the backend and consume it by adding some data fetching capability to the client. Start with [Client Usage Scenarios](#client-usage-scenarios) to develop and refine UI look and feel in absence of API data. Then implement an API endpoint (for example the login endpoint) in the backend and switch to [Backend Usage Scenarios](#backend-usage-scenarios). With the latter the client gets everything (build artifacts including script bundles, API data) from the backend being unaware of the devserver existence. Therefore there is no room for CORS issues. Which arise when the client downloads bundles from devserver and then the downloaded code attempts to call API endpoints exposed by another server.
 
-> Tip: Using [Backend Usage Scenarios](#backend-usage-scenarios) for all API related issues helps to avoid running the devserver in production. This is never a good idea. The webpack-dev-server, as its name suggests, is meant to be used in development only.
+> Tip: Using [Backend Usage Scenarios](#backend-usage-scenarios) for all API related issues helps to avoid running the devserver in production. This is hardly a good idea. The webpack-dev-server, as its name suggests, is meant to be used in development only.
 
 ## Q & A
 Q: I have changed both SPA names in the SPA Configuration block and kept the rest including the entry points intact. I expect everything to keep working using my new names for the SPA landing pages instead of the old `/first.html` and `second.html`.  However navigation via the menu and Back/Forward browser buttons seems to be broken. How can it be fixed.<br/>
