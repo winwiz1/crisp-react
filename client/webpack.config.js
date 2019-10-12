@@ -102,9 +102,6 @@ const getWebpackConfig = (env, argv) => {
       historyApiFallback: {
         index: `${configuredSPAs.getRedirectName()}.html`,
         rewrites: configuredSPAs.getRewriteRules()
-      },
-      headers: {
-        'Cache-Control': 'max-age=31536000'
       }
     },
     context: path.resolve(__dirname),
