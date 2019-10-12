@@ -2,6 +2,7 @@
   Title: Crisp React
   Description: Boilerplate project to build a full stack solution in Typescript using React client and Express backend. Offers advanced functionality and helps to avoid React-Express pitfalls.
   Author: winwiz1
+  <meta name='keywords' content='react, typescript, express, boilerplate, sample'>
   -->
 <div align="center">
   <a href="https://github.com/winwiz1/crisp-react">
