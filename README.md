@@ -1,10 +1,4 @@
-﻿<!--
-  Title: Crisp React
-  Description: Boilerplate project to build a full stack solution in Typescript using React client and Express backend. Offers advanced functionality and helps to avoid React-Express pitfalls.
-  Author: winwiz1
-  <meta name='keywords' content='react, typescript, express, boilerplate, sample'>
-  -->
-<div align="center">
+﻿<div align="center">
   <a href="https://github.com/winwiz1/crisp-react">
     <img alt="crisp-react logo" src="docs/crisp-react.png">
   </a>
@@ -12,7 +6,7 @@
   <br />
   <h1>Crisp React</h1>
 </div>
-Boilerplate project with React client and NodeJS/Express backend, both written in Typescript. Offers extended functionality highlighted below. The client works with any webserver. Helps to avoid frequent React-Express pitfalls.
+Boilerplate project with React client and NodeJS/Express backend, both written in Typescript. Offers extended functionality highlighted below. Helps to avoid frequent React-Express pitfalls.
 <br /><br />
 <div align="center">
   <img alt="Travis CI badge" src="https://travis-ci.com/winwiz1/crisp-react.svg?branch=master">
@@ -26,7 +20,7 @@ Boilerplate project with React client and NodeJS/Express backend, both written i
 - [Project Highlights](#project-highlights)
   - [React Application Splitting](#react-application-splitting)
   - [Debugging Functionality](#debugging-functionality)
-  - [Script Bundle Management](#script-bundle-management)
+  - [Performance](#performance)
 - [Getting Started](#getting-started) 
 - [Project Features](#project-features)
   - [Client and Backend Subprojects](#client-and-backend-subprojects)
@@ -48,7 +42,7 @@ Boilerplate project with React client and NodeJS/Express backend, both written i
 #### Debugging Functionality
 Features simultaneous client and backend debugging. You can launch a debugging configuration in VS Code that starts the client and the backend so that breakpoints can be set in both. This is complimented by other debugging scenarios described below including debugging on the production client bundles using Typescript source code in either VS Code or Chrome DevTools.
 
-#### Script Bundle Management
+#### Performance
 The script bundles for all SPAs are tagged uniquely for the given build making the bundles safe for caching by the client. Having a separate bundle for each SPA  improves its loading time for large React applications. The `vendor` bundle contains `node_modules/` dependencies and is reused between SPAs so that there is no need to download it again when switching from one SPA to another. The performance is further increased by bundle minification performed during production builds. Yet another performance improvement is achieved by bundle compression. Clients can indicate compression preferences using the standard `Accept-Encoding` header. Depending on client capabilities, the backend will respond having the following compression choices for the bundle: uncompressed, gzip or Brotli. Bundle compression is done during builds so the backend doesn't have to use any computational resources to support it.
 ## Getting Started
 Install `yarn` if it's not already installed: `npm install yarn -g`
@@ -103,7 +97,7 @@ Install `yarn` if it's not already installed: `npm install yarn -g`
 </div>
 
 ## Project Features
-#### Client and Backend Subprojects
+### Client and Backend Subprojects
 Each subproject supports execution of the following commands/scripts:
 ```
 yarn compile
@@ -123,7 +117,7 @@ The backend subproject:
  * In the production mode starts Express listening on port 3000 to serve from disk the build artifacts created by the client subproject .
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
  * Implements HTTP caching arrangement which disables the caching for .html files and enables it for script bundles. A typical React application comes with .html files that are rather small whereas the bundles can be significantly larger. On the other hand, the build process keeps the names of .html files static and embeds a hash into the names of script bundles. As a result, the caching arrangement ensures smooth deployment of versioning changes without any perceptible performance penalty.
-#### SPA Configuration
+### SPA Configuration
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. The dependencies found under `node_modules/`are bundled into the separate 'vendor' bundle. Now let's see how Crisp React defines the SPAs.
 
 The client subproject builds an application with SPAs defined by the SPA Configuration block in the `client/config/spa.config.js` file:
@@ -175,9 +169,9 @@ The newly written `app.tsx` should verify the client is logged in (for example b
 > Tip: Since any SPA is comprised of the landing page component (entry point) and its imports, the coding can start by making `login.tsx` render the login page: either directly or maybe with the help of an imported component that will ask for user credentials. Another component could render a page asking for alternative credentials e.g. biometrics or ask for multifactor authentication (MFA). The entry point `app.tsx` would import the component responsible for rendering the page presented to the user after logging in. Express could potentially be modified to ensure only authenticated users can download the bundle for this SPA.
 
 > Tip: Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can focus on a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application (with dependencies on backend API endpoints) out of the testing scope.
-#### Integration with UI and CSS Libraries
+### Integration with UI and CSS Libraries
 Both libraries ([Semantic UI](https://react.semantic-ui.com) and [Typestyle](https://typestyle.github.io) respectively) provide React with the type safety afforded by Typescript.
-#### Testing
+### Testing
 Debuggable test cases written in Typescript. Integration with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) on the client and [Supertest](https://github.com/visionmedia/supertest) on the backend. Both using [Jest](https://jestjs.io/) as an engine.<br/>
 The client and backend can be tested independently by executing the `yarn test` command. Alternatively the same command can be executed at the workspace level.
 
