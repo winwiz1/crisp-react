@@ -3,8 +3,6 @@
     <img alt="crisp-react logo" src="docs/crisp-react.png">
   </a>
   <br />
-  <br />
-  <h1>Crisp React</h1>
 </div>
 Boilerplate [project](https://github.com/winwiz1/crisp-react) with React client and Express backend, both written in Typescript. Offers extended functionality highlighted below. Helps to avoid frequent React-Express pitfalls.
 <br /><br />
