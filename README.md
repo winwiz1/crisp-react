@@ -14,13 +14,13 @@ Boilerplate [project](https://github.com/winwiz1/crisp-react) with React client 
   <img alt="Snyk Vulnerabilities badge" src="https://img.shields.io/snyk/vulnerabilities/github/winwiz1/crisp-react">
   <img alt="License badge" src="https://img.shields.io/github/license/winwiz1/crisp-react">
 </div>
-
+<br/>
 ## Table of Contents
 
 - [Project Highlights](#project-highlights)
   - [React Application Splitting](#react-application-splitting)
   - [Debugging Functionality](#debugging-functionality)
-  - [Script Bundle Management](#script-bundle-management)
+  - [Performance](#performance)
 - [Getting Started](#getting-started) 
 - [Project Features](#project-features)
   - [Client and Backend Subprojects](#client-and-backend-subprojects)
@@ -42,7 +42,7 @@ Boilerplate [project](https://github.com/winwiz1/crisp-react) with React client 
 #### Debugging Functionality
 Features simultaneous client and backend debugging. You can launch a debugging configuration in VS Code that starts the client and the backend so that breakpoints can be set in both. This is complimented by other debugging scenarios described below including debugging on the production client bundles using Typescript source code in either VS Code or Chrome DevTools.
 
-#### Script Bundle Management
+#### Performance
 The script bundles for all SPAs are tagged uniquely for the given build making the bundles safe for caching by the client. Having a separate bundle for each SPA  improves its loading time for large React applications. The `vendor` bundle contains `node_modules/` dependencies and is reused between SPAs so that there is no need to download it again when switching from one SPA to another. The performance is further increased by bundle minification performed during production builds. Yet another performance improvement is achieved by bundle compression. Clients can indicate compression preferences using the standard `Accept-Encoding` header. Depending on client capabilities, the backend will respond having the following compression choices for the bundle: uncompressed, gzip or Brotli. Bundle compression is done during builds so the backend doesn't have to use any computational resources to support it.
 ## Getting Started
 Install `yarn` if it's not already installed: `npm install yarn -g`
