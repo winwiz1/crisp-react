@@ -6,8 +6,6 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
 
-theme: minima
-
 include:
   - server/.vscode
   - client/.vscode
