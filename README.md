@@ -97,7 +97,7 @@ Install `yarn` if it's not already installed: `npm install yarn -g`
 <br/>
 
 ## Project Features
-#### Client and Backend Subprojects
+### Client and Backend Subprojects
 Each subproject supports execution of the following commands/scripts:
 ```
 yarn compile
@@ -119,7 +119,7 @@ The backend subproject:
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
  * Implements HTTP caching arrangement which disables the caching for .html files and enables it for script bundles. A typical React application comes with .html files that are rather small whereas the bundles can be significantly larger. On the other hand, the build process keeps the names of .html files static and embeds a hash into the names of script bundles. As a result, the caching arrangement ensures smooth deployment of versioning changes without any perceptible performance penalty.
 
-#### SPA Configuration
+### SPA Configuration
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. The dependencies found under `node_modules/`are bundled into the separate 'vendor' bundle. Now let's see how Crisp React defines the SPAs.
 
 The client subproject builds an application with SPAs defined by the SPA Configuration block in the `client/config/spa.config.js` file:
@@ -173,9 +173,9 @@ The newly written `app.tsx` should verify the client is logged in (for example b
 
 > Tip: Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can focus on a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application (with dependencies on backend API endpoints) out of the testing scope.
 
-#### Integration with UI and CSS Libraries
+### Integration with UI and CSS Libraries
 Both libraries ([Semantic UI](https://react.semantic-ui.com) and [Typestyle](https://typestyle.github.io) respectively) provide React with the type safety afforded by Typescript.
-#### Testing
+### Testing
 Debuggable test cases written in Typescript. Integration with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) on the client and [Supertest](https://github.com/visionmedia/supertest) on the backend. Both using [Jest](https://jestjs.io/) as an engine.<br/>
 The client and backend can be tested independently by executing the `yarn test` command. Alternatively the same command can be executed at the workspace level.
 
