@@ -13,9 +13,6 @@ A clear and concise description of what the problem is. Ex. I'm always frustrate
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen.
 
-**Have you considered the need to keep this project simple with little code, minimalistic UI and bare-bone functionality?**
-[Yes/No]
-
 **Describe alternatives you've considered**
 A clear and concise description of any alternative solutions or features you've considered.
 
