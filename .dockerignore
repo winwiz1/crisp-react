@@ -1,0 +1,10 @@
+.git/
+.github/
+.vscode/
+docs/
+node_modules/
+README.md
+.gitignore
+.travis.yml
+crisp-react.code-workspace
+start-container-windows.cmd

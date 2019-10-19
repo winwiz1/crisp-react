@@ -13,12 +13,16 @@ Boilerplate [project](https://github.com/winwiz1/crisp-react) with React client 
   <img alt="License badge" src="https://img.shields.io/github/license/winwiz1/crisp-react">
 </div>
 <br/>
-## Table of Contents
 
-- [Project Highlights](#project-highlights)
-  - [React Application Splitting](#react-application-splitting)
-  - [Debugging Functionality](#debugging-functionality)
-  - [Performance](#performance)
+## Preface
+#### Project Highlights
+* Performance. A script bundle with size 3.5 MB in development cut to ~70 KB in production.
+* Backend implements HTTP caching that further enhances performance yet supports smooth deployment of versioning changes in production.
+* Ability to optionally split your React Application into multiple Single Page Applications (SPA). For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA.
+* Seamless debugging. Debug a minified/obfuscated, compressed production bundle and put breakpoints in its TypeScript code using both VS Code and Chrome DevTools. Development build debugging: put breakpoints in the client and backend code and debug both simultaneously using a single instance of VS Code.
+* Containerisation. Docker multi-staged build is used to ensure backend run-time environment is not polluted by client build-time dependencies. It improves security and reduces container storage footprint.
+
+## Table of Contents
 - [Getting Started](#getting-started) 
 - [Project Features](#project-features)
   - [Client and Backend Subprojects](#client-and-backend-subprojects)
@@ -28,20 +32,11 @@ Boilerplate [project](https://github.com/winwiz1/crisp-react) with React client 
 - [Usage](#usage)
   - [Client Usage Scenarios](#client-usage-scenarios)
   - [Backend Usage Scenarios](#backend-usage-scenarios)
+- [Containerisation](#containerisation)
 - [What's Next and Pitfall Avoidance](#whats-next-and-pitfall-avoidance)
 - [Q & A](#q--a)
 - [License](#license)
 
-## Project Highlights
-
-#### React Application Splitting
-[Create React App](https://github.com/facebook/create-react-app) creates a client app that consists of one Single Page Application (SPA). When dealing with a feature-rich application, it's often beneficial to split it into several units. For React, SPA fits the role of such a unit quite naturally. Each SPA can be responsible for its own area of functionality.  For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA. When Crisp React project is built, it creates a client application with two SPAs.  This number can be easily increased or decreased - see [SPA Configuration](#spa-configuration).
-
-#### Debugging Functionality
-Features simultaneous client and backend debugging. You can launch a debugging configuration in VS Code that starts the client and the backend so that breakpoints can be set in both. This is complimented by other debugging scenarios described below including debugging on the production client bundles using Typescript source code in either VS Code or Chrome DevTools.
-
-#### Performance
-The script bundles for all SPAs are tagged uniquely for the given build making the bundles safe for caching by the client. Having a separate bundle for each SPA  improves its loading time for large React applications. The `vendor` bundle contains `node_modules/` dependencies and is reused between SPAs so that there is no need to download it again when switching from one SPA to another. The performance is further increased by bundle minification performed during production builds. Yet another performance improvement is achieved by bundle compression. Clients can indicate compression preferences using the standard `Accept-Encoding` header. Depending on client capabilities, the backend will respond having the following compression choices for the bundle: uncompressed, gzip or Brotli. Bundle compression is done during builds so the backend doesn't have to use any computational resources to support it.
 ## Getting Started
 Install `yarn` if it's not already installed: `npm install yarn -g`
 
@@ -71,7 +66,7 @@ Install `yarn` if it's not already installed: `npm install yarn -g`
       <br/>
       <li>Wait until an instance of Chrome starts. You should see this page:
         <p>
-          <img alt="Overview Page" src="https://winwiz1.github.io/crisp-react/docs/screenshots/OverviewPage.png">
+          <img alt="Overview Page" src="docs/screenshots/OverviewPage.png">
         </p>
         <br/>
       </li>
@@ -117,10 +112,12 @@ The client subproject:
 The backend subproject:
  * In the production mode starts Express listening on port 3000 to serve from disk the build artifacts created by the client subproject .
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
- * Implements HTTP caching arrangement which disables the caching for .html files and enables it for script bundles. A typical React application comes with .html files that are rather small whereas the bundles can be significantly larger. On the other hand, the build process keeps the names of .html files static and embeds a hash into the names of script bundles. As a result, the caching arrangement ensures smooth deployment of versioning changes without any perceptible performance penalty.
+ * Implements HTTP caching arrangement which disables the caching for .html files and enables it for script bundles. A typical React application comes with .html files that are rather small whereas the bundles can be significantly larger. On the other hand, the build process keeps the names of .html files static and embeds a hash into the names of script bundles. As a result the caching arrangement ensures smooth deployment of versioning changes.
 
 ### SPA Configuration
-Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. The dependencies found under `node_modules/`are bundled into the separate 'vendor' bundle. Now let's see how Crisp React defines the SPAs.
+The optional splitting of a React application into multiple SPAs (each rendered by its own bundle) improves the application  loading time. It also brings development/testing benefits for medium to large applications. The `vendor` bundle contains `node_modules/` dependencies and is reused between SPAs so that there is no need to download it again when switching from one SPA to another.
+
+Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. Let's see how Crisp React defines the SPAs.
 
 The client subproject builds an application with SPAs defined by the SPA Configuration block in the `client/config/spa.config.js` file:
 ```js
@@ -140,7 +137,7 @@ The client subproject builds an application with SPAs defined by the SPA Configu
   SPAs.appTitle = "Crisp React";
 /****************** End SPA Configuration ******************/
 ```
-As you can see the configuration is simple: each SPA is defined using 3 pieces of data: name, entry point (e.g. the landing page component) and a boolean flag. Ignore the flag for a moment. There is also an `appTitle`, it provides the application-wide default setting for the `<title>` tag in the `<head>` section of all pages. The title can be easily overwritten as needed.
+Each SPA is defined using 3 pieces of data: name, entry point (e.g. the landing page component) and a boolean flag. Ignore the flag for a moment. There is also an `appTitle`, it provides the application-wide default setting for the `<title>` tag in the `<head>` section of all pages. The title can be easily overwritten as needed.
 
 SPA's name "first" is used to define the SPA's landing page e.g. `/first.html` and name the bundle that renders the SPA: `first<hash>.js`. More information about all the data pieces shown above is provided in the configuration file. The file is copied during the backend build from one subproject to another and used to configure the client, the backend and the unit tests.
 
@@ -164,12 +161,18 @@ To reconfigure the application to have a separate SPA for login and another one 
 ```
 and then follow the instructions provided in the configuration file comments.
 
-The newly written `app.tsx` should verify the client is logged in (for example by checking the cookie set by backend after successful login) and if not redirect to the landing page of the 'login' SPA: `/login.html`. In the same manner `login.tsx` should check if the client has been authenticated and if so redirect to `/app.html`. No modifications are required for the backend which will be reconfigured to:
+Since any SPA is comprised of the landing page component (entry point) and its imports, the coding to support the SPA reconfiguration above can start by making `login.tsx` render the login page: either directly or maybe with the help of an imported component that will ask for user credentials. Another component could render a page asking for alternative credentials e.g. biometrics or ask for multifactor authentication (MFA). 
+
+The entry point `app.tsx` would import the component responsible for rendering the page presented to the user after logging in. Express could potentially be modified to ensure only authenticated users can download the bundle for this SPA.
+
+The newly written `app.tsx` should verify the client is logged in (for example by checking the cookie set by backend after successful login) and if not redirect to the landing page of the 'login' SPA: `/login.html`. In the same manner `login.tsx` should check if the client has been authenticated and if so redirect to `/app.html`. 
+
+No modifications are required for the backend which will be reconfigured to:
 * Serve the two HTML pages, namely `/login.html` and `/app.html`, which are the landing pages of our two SPAs.
 * Redirect to `/app.html` (due to the boolean `redirect` flag set) other requests in the form `/<path>` or `/<path>.html` provided the `<path>` doesn't include a subdirectory. It's the standard behavior required by all SPAs and implemented in webpack-dev-server using the `historyApiFallback` setting.
 * Return 404 error for all other requests except for script bundles and source maps.
 
-> Tip: Since any SPA is comprised of the landing page component (entry point) and its imports, the coding can start by making `login.tsx` render the login page: either directly or maybe with the help of an imported component that will ask for user credentials. Another component could render a page asking for alternative credentials e.g. biometrics or ask for multifactor authentication (MFA). The entry point `app.tsx` would import the component responsible for rendering the page presented to the user after logging in. Express could potentially be modified to ensure only authenticated users can download the bundle for this SPA.
+To turn off code splitting using multiple SPAs simply leave one SPA in the SPA Configuration block.
 
 > Tip: Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can focus on a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application (with dependencies on backend API endpoints) out of the testing scope.
 
@@ -285,7 +288,10 @@ Edit file `client/webpack.config.js` to change the `sourceMap` setting of the Te
 Start the debugging configuration  `Debug Production Client and Backend (workspace)`.<br/>
 Wait until an instance of Chrome starts. You should see the overview page. Now you can use VS Code to set breakpoints in both client and backend provided the relevant process is highlighted/selected as explained in the previous scenario. You can also use Chrome DevTools to debug the client application as shown above.<br/>
 To finish stop the running debugging configuration (use the Debugging toolbar or press  `Control+F5`  once).
+## Containerisation
+To build and run a Docker container execute [`start-container.cmd`](https://github.com/winwiz1/crisp-react/blob/master/start-container.cmd) or [`start-container.sh`](https://github.com/winwiz1/crisp-react/blob/master/start-container.sh). The file can also be executed from an empty directory in which case uncomment the two lines at the top.
 
+Moreover, it can be copied to a computer or VM that doesn't have NodeJS installed. The only prerequisites are Docker and Git.
 ## What's Next and Pitfall Avoidance
 Add an API endpoint to the backend and consume it by adding some data fetching capability to the client. Start with [Client Usage Scenarios](#client-usage-scenarios) to develop and refine UI look and feel in absence of API data. Then implement an API endpoint (for example the login endpoint) in the backend and switch to [Backend Usage Scenarios](#backend-usage-scenarios). With the latter the client gets everything (build artifacts including script bundles, API data) from the backend being unaware of the devserver existence. Therefore there is no room for CORS issues. Which arise when the client downloads bundles from devserver and then the downloaded code attempts to call API endpoints exposed by another server.
 
