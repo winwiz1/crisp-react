@@ -4,9 +4,7 @@
   </a>
   <br />
   <br />
-  <h1>Crisp React</h1>
 </div>
-Boilerplate project with React client and NodeJS/Express backend, both written in Typescript. Offers extended functionality highlighted below. Helps to avoid frequent React-Express pitfalls.
 <br /><br />
 <div align="center">
   <img alt="Travis CI badge" src="https://travis-ci.com/winwiz1/crisp-react.svg?branch=master">
@@ -15,8 +13,7 @@ Boilerplate project with React client and NodeJS/Express backend, both written i
   <img alt="License badge" src="https://img.shields.io/github/license/winwiz1/crisp-react">
 </div>
 
-## Preface
-#### Project Highlights
+## Project Highlights
 * Performance. A script bundle with size 3.5 MB in development cut to ~70 KB in production.
 * Backend implements HTTP caching that further enhances performance yet supports smooth deployment of versioning changes in production.
 * Ability to optionally split your React Application into multiple Single Page Applications (SPA). For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA.
@@ -25,7 +22,7 @@ Boilerplate project with React client and NodeJS/Express backend, both written i
 
 ## Table of Contents
 - [Getting Started](#getting-started) 
-- [Project Features](#project-features)
+- [Features](#features)
   - [Client and Backend Subprojects](#client-and-backend-subprojects)
   - [SPA Configuration](#spa-configuration)
   - [Integration with UI and CSS Libraries](#integration-with-ui-and-css-libraries)
@@ -90,7 +87,7 @@ Install `yarn` if it's not already installed: `npm install yarn -g`
   </details>
 </div>
 
-## Project Features
+## Features
 ### Client and Backend Subprojects
 Each subproject supports execution of the following commands/scripts:
 ```
