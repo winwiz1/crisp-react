@@ -14,8 +14,7 @@ Boilerplate [project](https://github.com/winwiz1/crisp-react) with React client 
 </div>
 <br/>
 
-## Preface
-#### Project Highlights
+## Project Highlights
 * Performance. A script bundle with size 3.5 MB in development cut to ~70 KB in production.
 * Backend implements HTTP caching that further enhances performance yet supports smooth deployment of versioning changes in production.
 * Ability to optionally split your React Application into multiple Single Page Applications (SPA). For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA.
@@ -186,7 +185,7 @@ The repository is integrated with Travis CI and the test outcome is reflected by
 ## Usage
 The Usage Scenarios below are grouped depending on whether  the client or the backend subproject is used.
 
->Tip: This section can be skipped at first reading. In which case go to the [next](#containerisation) section.
+>Tip: This section can be skipped at first reading. You can proceed to the [next](#containerisation) section.
 
 The expression "backend data" that is "required" in some scenarios below and "not needed" in others refers to the data supplied via future backend API endpoint - see [What's Next](#whats-next). In other words this data is some 'extra' that Express will provide but webpack-dev-server won't. For example, data retrieved from a cloud service which the client cannot touch directly.
 
