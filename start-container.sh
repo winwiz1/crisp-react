@@ -5,7 +5,7 @@
 HOST_PORT=3000
 HOST_ADDRESS=127.0.0.1
 docker rmi crisp-react:localbuild 2>/dev/null
-docker build -t crisp-react:localbuild -f ./DOCKERFILE . || { echo 'Failed to build image' ; exit 2; }
+docker build -t crisp-react:localbuild . || { echo 'Failed to build image' ; exit 2; }
 docker stop crisp-react 2>/dev/null
 docker rm crisp-react 2>/dev/null
 docker run -d --name=crisp-react -p ${HOST_PORT}:3000 crisp-react:localbuild || { echo 'Failed to run container' ; exit 1; }

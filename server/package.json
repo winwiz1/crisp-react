@@ -1,6 +1,6 @@
 {
   "name": "crisp-react-server",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "Server for the crisp-react project. Please see ../package.json for full description.",
   "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
@@ -16,14 +16,12 @@
     "typescript",
     "nodejs",
     "express",
-    "client-server",
     "visual-studio-code",
     "supertest",
     "jest",
-    "starter",
-    "debugging",
-    "web-development",
-    "sample"
+    "winston",
+    "helmet",
+    "boilerplate"
   ],
   "scripts": {
     "lint": "tslint -p .",
