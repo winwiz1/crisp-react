@@ -1,7 +1,7 @@
 {
   "name": "crisp-react",
-  "version": "1.1.0",
-  "description": "Starter project with React client and NodeJS/Express backend",
+  "version": "1.1.2",
+  "description": "Boilerplate project with React client and Express backend, both written in Typescript.",
   "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
     "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)"
@@ -17,7 +17,6 @@
     "typescript",
     "nodejs",
     "express",
-    "client-server",
     "visual-studio-code",
     "chrome-devtools",
     "webpack",
@@ -27,13 +26,7 @@
     "supertest",
     "jest",
     "semantic-ui",
-    "starter",
-    "debugging",
-    "web-development",
-    "front-end-development",
-    "front-end",
-    "sample",
-	"boilerplate"
+    "boilerplate"
   ],
   "files": [
     "./client/*",

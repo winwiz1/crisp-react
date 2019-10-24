@@ -18,7 +18,7 @@
 * Backend implements HTTP caching that further enhances performance yet supports smooth deployment of versioning changes in production.
 * Ability to optionally split your React Application into multiple Single Page Applications (SPA). For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA.
 * Seamless debugging. Debug a minified/obfuscated, compressed production bundle and put breakpoints in its TypeScript code using both VS Code and Chrome DevTools. Development build debugging: put breakpoints in the client and backend code and debug both simultaneously using a single instance of VS Code.
-* Containerisation. Docker multi-staged build is used to ensure backend run-time environment is not polluted by client build-time dependencies. It improves security and reduces container storage footprint.
+* Containerisation. Docker multi-staged build is used to ensure the backend run-time environment doesn't contain the client build-time dependencies e.g. `client/node_modules/`. It improves security and reduces container's storage footprint.
 
 ## Table of Contents
 - [Getting Started](#getting-started) 
@@ -179,8 +179,9 @@ The repository is integrated with Travis CI and the test outcome is reflected by
 
 ## Usage
 The Usage Scenarios below are grouped depending on whether  the client or the backend subproject is used. 
+>Tip: This section can be skipped at first reading. In which case go to the [next](#containerisation) section.
 
-The expression "backend data" that is "required" in some scenarios below and "not needed" in others refers to the data supplied via future backend API endpoint - see [What's Next](#whats-next). In other words this data is some 'extra' that Express will provide but webpack-dev-server won't. For example, data retrieved from a cloud service which the client cannot touch directly.
+The expression "backend data" that is "required" in some scenarios below and "not needed" in others refers to the data supplied via future backend API endpoint. In other words this data is some 'extra' that Express will provide but webpack-dev-server won't. For example, data retrieved from a cloud service which the client cannot touch directly.
 
 > Tip: The commands executed in VS Code Terminal can also be executed from a command or shell prompt in the relevant directory and vice versa.
 
@@ -285,8 +286,17 @@ To build and run a Docker container execute [`start-container.cmd`](https://gith
 
 Moreover, it can be copied to a computer or VM that doesn't have NodeJS installed. The only prerequisites are Docker and Git.
 ## What's Next and Pitfall Avoidance
-Add an API endpoint to the backend and consume it by adding some data fetching capability to the client. Start with [Client Usage Scenarios](#client-usage-scenarios) to develop and refine UI look and feel in absence of API data. Then implement an API endpoint (for example the login endpoint) in the backend and switch to [Backend Usage Scenarios](#backend-usage-scenarios). With the latter the client gets everything (build artifacts including script bundles, API data) from the backend being unaware of the devserver existence. Therefore there is no room for CORS issues. Which arise when the client downloads bundles from devserver and then the downloaded code attempts to call API endpoints exposed by another server.
-> Tip: Using [Backend Usage Scenarios](#backend-usage-scenarios) for all API related issues helps to avoid running the devserver in production. This is hardly a good idea. The webpack-dev-server, as its name suggests, is meant to be used in development only.
+* Start with [Client Usage Scenarios](#client-usage-scenarios) to develop UI in absence of API data. For example, develop the initial look and feel of the login page. Take advantage of the Live Reloading to speed up the development. The client scenarios ensure the backend is not started needlessly.
+*  Implement an API endpoint in the backend. For example, a login endpoint.
+*  Switch to [Backend Usage Scenarios](#backend-usage-scenarios) to consume the API endpoint in the client. Keep taking advantage of the Live Reloading that is supported for client and backend code.
+
+One of the goals pursued by the backend scenarios is to avoid the following common pitfalls:
+- Running the webpack-dev-server in production,
+- Getting CORS security violations triggered by the browser which detects that script bundles were downloaded from one server and then the code from the bundles attempts to call API endpoints provided by another server.
+
+ The backend scenarios ensure the client gets everything (build artifacts including script bundles, API responses) from the backend only. This leaves no room for CORS issues.
+
+The webpack-dev-server is never started in production. This is hardly a good idea. The server, as its name suggests, is meant to be used in development only.
 ## Q & A
 Q: I have changed both SPA names in the SPA Configuration block and kept the rest including the entry points intact. I expect everything to keep working using my new names for the SPA landing pages instead of the old `/first.html` and `second.html`.  However navigation via the menu and Back/Forward browser buttons seems to be broken. How can it be fixed.<br/>
 A: Clear the browser's history and cache. Alternatively use an incognito tab. The client, the backend and the tests should work with the new names.
