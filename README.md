@@ -5,7 +5,7 @@
   <br />
   <br />
 </div>
-<br /><br />
+<br />
 <div align="center">
   <img alt="Travis CI badge" src="https://travis-ci.com/winwiz1/crisp-react.svg?branch=master">
   <img alt="Language badge. Sometimes timeouts - please reload." src="https://img.shields.io/github/languages/top/winwiz1/crisp-react">
@@ -179,7 +179,7 @@ The repository is integrated with Travis CI and the test outcome is reflected by
 
 ## Usage
 The Usage Scenarios below are grouped depending on whether  the client or the backend subproject is used. 
->Tip: This section can be skipped at first reading. In which case go to the [next](#containerisation) section.
+>Tip: This section can be skipped at first reading. You can proceed to the [next](#containerisation) section.
 
 The expression "backend data" that is "required" in some scenarios below and "not needed" in others refers to the data supplied via future backend API endpoint. In other words this data is some 'extra' that Express will provide but webpack-dev-server won't. For example, data retrieved from a cloud service which the client cannot touch directly.
 
