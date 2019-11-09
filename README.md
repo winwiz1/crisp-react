@@ -187,7 +187,7 @@ The Usage Scenarios below are grouped depending on whether  the client or the ba
 
 >Tip: This section can be skipped at first reading. You can proceed to the [next](#containerisation) section.
 
-The expression "backend data" that is "required" in some scenarios below and "not needed" in others refers to the data supplied via future backend API endpoint - see [What's Next](#whats-next). In other words this data is some 'extra' that Express will provide but webpack-dev-server won't. For example, data retrieved from a cloud service which the client cannot touch directly.
+The expression "backend data" that is "required" in some scenarios below and "not needed" in others refers to the data supplied via future backend API endpoint. In other words this data is some 'extra' that Express will provide but webpack-dev-server won't. For example, data retrieved from a cloud service which the client cannot touch directly.
 
 > Tip: The commands executed in VS Code Terminal can also be executed from a command or shell prompt in the relevant directory and vice versa.
 
@@ -301,6 +301,7 @@ Moreover, it can be copied to a computer or VM that doesn't have NodeJS installe
 One of the goals pursued by the backend scenarios is to avoid the following common pitfalls:
 - Running the webpack-dev-server in production,
 - Getting CORS security violations triggered by the browser which detects that script bundles were downloaded from one server and then the code from the bundles attempts to call API endpoints provided by another server.
+- Not implementing SPA related fallback in the backend. It should redirect requests for unknown pages to the SPA landing page. For example, this behavior is enabled in webpack-dev-server using the `historyApiFallback` setting which exists specifically to support SPAs. The fallback behavior is required for any SPA because a user can see the path to any internal page in the navigation bar and can either retype it manually and press Enter or refresh the browser. In both cases the backend gets hit with a request for an internal SPA page it is not aware of and responding with the 404 Not Found error doesn't look good for the user. Due to security considerations the fallback tolerance should have its limits and clearly invalid requests should still trigger an error.
 
 The backend scenarios ensure the client gets everything (build artifacts including script bundles, API responses) from the backend only. This leaves no room for CORS issues.
 

@@ -8,7 +8,7 @@
 import * as path from "path";
 import * as express from "express";
 import nodeFetch from "node-fetch";
-import * as helmet from 'helmet';
+import * as helmet from "helmet";
 import * as expressStaticGzip from "express-static-gzip";
 import { CustomError, handleErrors } from "../utils/error";
 import { logger } from "../utils/logger";
@@ -44,6 +44,8 @@ class Server {
     return this.m_app;
   }
 
+  /********************** private methods and data ************************/
+
   private addRoutes(): void {
     // Redirect to the landing page of SPA that has 'redirect: true'
     this.m_app.get("/", (_req, res, next) => {
@@ -59,7 +61,7 @@ class Server {
 
     this.m_app.get("/:entryPoint([\\w.]+)", (req, res, next) => {
       let entryPoint: string|undefined = req.params.entryPoint;
-      const match = Server.s_regexEntrypoint.test(entryPoint || "");
+      const match = Server.s_regexLandingPages.test(entryPoint || "");
 
       if (match) {
         // Serve SPA landing page
@@ -78,8 +80,8 @@ class Server {
       }
     });
 
-    // Serve script bundles and source maps
-    this.m_app.get("/static/:bundleFile", this.bundleMiddleware);
+    // Serve client's build artifacts e.g. script bundles, source maps, .html files
+    this.m_app.get("/static/:artifactFile", this.artifactsMiddleware);
 
     // Proxy to devserver ws:// protocol
     if (Server.s_useDevWebserver) {
@@ -122,26 +124,27 @@ class Server {
         "../client/static/" : "../../build/client/static/");
   }
 
-  private bundleMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const bundleFile: string | undefined = (req.params as any).bundleFile;
-    const match = Server.s_regexBundle.test(bundleFile || "");
+  // middleware responsible for serving client's build artifacts
+  private artifactsMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const artifactFile: string|undefined = (req.params as any).artifactFile;
+    const match = Server.s_regexArtifacts.test(artifactFile || "");
 
     if (match) {
       if (Server.s_useDevWebserver) {
-        this.sendDevServerAsset(`/static/${bundleFile}`, res, next);
+        this.sendDevServerAsset(`/static/${artifactFile}`, res, next);
       } else {
         this.m_expressStaticMiddleware!(req, res, next);
       }
     } else {
       const err = new CustomError(404, "Resourse not found");
-      logger.info(`Invalid static resourse "${bundleFile}" requested from ${req.ips} using path ${req.originalUrl}`);
+      logger.info(`Invalid static resourse "${artifactFile}" requested from ${req.ips} using path ${req.originalUrl}`);
       return next(err);
     }
   }
 
   // If there are two SPAs in spa.config.js called 'first and 'second',
   // then returns string:  "(first)|(second)"
-  private static getEntrypointsForRegex(): string {
+  private static getLandingPages(): string {
     const entryPoints = SPAs.getNames();
     let ret: string = "";
     entryPoints.forEach(spaName => {
@@ -151,17 +154,19 @@ class Server {
     return ret;
   }
 
+  // Returns regex to match the landing pages.
   // If there are two SPAs in spa.config.js called 'first and 'second',
   // then returns RegExp similar to:  /^((first)|(second))(\.html)?$/;
-  private static getRegexEntrypoint(): RegExp {
-    return new RegExp(`^(${Server.getEntrypointsForRegex()})(\.html)?$`);
+  private static getLandingPagesRegex(): RegExp {
+    return new RegExp(`^(${Server.getLandingPages()})(\.html)?$`);
   }
 
+  // Returns regex to match the requests for the client's build artifacts.
   // If there are two SPAs in spa.config.js called 'first and 'second',
   // then returns RegExp similar to:
   //   /^((first)|(second)|(runtime)|(vendor))\.\w{16,32}\.bundle\.js((\.map)|(\.gz)|(\.br))?$/
-  private static getRegexBundle(): RegExp {
-    return new RegExp(`^(${Server.getEntrypointsForRegex()}|(runtime)|(vendor))\\.\\w{16,32}\\.bundle\\.js((\\.map)|(\\.gz)|(\\.br))?$`);
+  private static getClientBuildArtifactsRegex(): RegExp {
+    return new RegExp(`^(${Server.getLandingPages()}|(runtime)|(vendor))\\.\\w{16,32}\\.bundle\\.js((\\.map)|(\\.gz)|(\\.br))?$`);
   }
 
   private readonly m_app: express.Application;
@@ -172,19 +177,19 @@ class Server {
   /* tslint:disable:no-string-literal */
   private static readonly s_useDevWebserver = process.env["USE_DEV_WEBSERVER"] === "true";
   /* tslint:enable:no-string-literal */
-  private static readonly s_regexEntrypoint = Server.getRegexEntrypoint();
-  private static readonly s_regexBundle = Server.getRegexBundle();
+  private static readonly s_regexLandingPages = Server.getLandingPagesRegex();
+  private static readonly s_regexArtifacts = Server.getClientBuildArtifactsRegex();
   private static readonly s_expressStaticConfig: expressStaticGzip.ExpressStaticGzipOptions = {
     enableBrotli: true,
     index: false,
     orderPreference: ["br"],
     serveStatic: {
       cacheControl: true,
-      maxAge: "7d",
-      lastModified: false,
       etag: true,
-      index: false,
       immutable: true,
+      index: false,
+      lastModified: false,
+      maxAge: "7d",
       redirect: false,
       setHeaders: (res: express.Response, _path: string, _stat: any): void => {
         res.removeHeader("Surrogate-Control");
