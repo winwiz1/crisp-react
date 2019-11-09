@@ -14,4 +14,4 @@ docker run -d --name=crisp-react -p %HOST_PORT%:3000 crisp-react:localbuild
 if ERRORLEVEL 1 echo Failed to run container && exit /b 1
 echo Finished && docker ps -f name=crisp-react
 rem Uncomment the next line if Chrome is installed
-start chrome http://%HOST_ADDRESS%:%HOST_PORT%
+rem start chrome http://%HOST_ADDRESS%:%HOST_PORT%
