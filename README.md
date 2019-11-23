@@ -235,6 +235,7 @@ When to use: Prior to backend deployment, for example before copying the backend
 #### Run backend in production mode
 Open a command prompt in the directory containing the workspace file `crisp-react.code-workspace` .<br/>
 Execute command: `yarn start:prod`. It will build both the client application and the backend.<br/>
+To run without build execute: `yarn run:prod`.<br/>
 To stop the backend terminate the running command e.g. press `Control+C`.
 #### Run backend with Live Reloading
 Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
