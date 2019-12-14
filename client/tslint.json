@@ -11,7 +11,8 @@
         "no-unused-expression": [true, "allow-fast-null-checks"],
         "arrow-parens": false,
         "member-ordering": false,
-        "jsx-boolean-value": false
+        "jsx-boolean-value": false,
+        "jsx-wrap-multiline": false
     },
     "rulesDirectory": []
 }
