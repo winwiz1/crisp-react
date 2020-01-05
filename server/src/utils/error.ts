@@ -6,9 +6,9 @@ import * as Express from "express";
 import { logger } from "./logger";
 
 export class CustomError extends Error {
-  constructor(readonly status: number, readonly message: string) {
+  constructor(readonly status: number, message: string) {
     super(message);
-    // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-2.html
+    // http://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-2.html#support-for-newtarget
     Object.setPrototypeOf(this, new.target.prototype);
     if (status <= 200) {
       throw new RangeError(`Invalid CustomError.status: ${status}`);
@@ -17,11 +17,11 @@ export class CustomError extends Error {
 }
 
 function isError(err: any): err is Error {
-  return !!err && err instanceof Error;
+  return !!err && err instanceof Error && err.constructor !== CustomError;
 }
 
 function isCustomError(err: any): err is CustomError {
-  return !!err && err instanceof CustomError && !!(err as CustomError).status;
+  return !!err && err.constructor === CustomError;
 }
 
 function errorMiddleware(

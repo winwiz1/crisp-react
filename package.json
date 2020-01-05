@@ -1,6 +1,6 @@
 {
   "name": "crisp-react",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "Boilerplate project with React client and Express backend, both written in Typescript.",
   "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
@@ -32,9 +32,6 @@
     "./client/*",
     "./server/*"
   ],
-  "scriptsComments": {
-    "note": "The 'scripts' section is limited. Please refer to ./README.md, ./client/package.json, ./server/package.json"
-  },
   "scripts": {
     "install": "cd client && yarn",
     "postinstall": "cd server && yarn",
