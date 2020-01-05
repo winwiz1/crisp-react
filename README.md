@@ -312,7 +312,7 @@ Q: I have changed both SPA names in the SPA Configuration block and kept the res
 A: Clear the browser's history and cache. Alternatively use an incognito tab. The client, the backend and the tests should work with the new names.
 
 Q: Can I use dynamic imports in addition to multiple SPAs for code splitting?<br/>
-A: Yes, dynamic imports are fully supported. For example, if there is a Reporting bundle and one component is known to be used infrequently, then it's a good candidate to be separated from the bundle using dynamic import:
+A: Yes, dynamic imports are fully supported. For example, if there is a Reporting bundle and one component is known to be used infrequently, then it's a good candidate to be separated from the bundle using a dynamic import:
 ```js
 const ReportingWrapperXXX = React.lazy(() => import(
   /* webpackChunkName: "reporting-xxx" */
@@ -341,6 +341,8 @@ Remember to change the settings in `tsconfig.json`:
  
  > Note: `React.lazy` has a restriction, it works with default exports only. The restriction should be lifted in the future. When webpack detects dynamic imports, it emits code that loads the bundle it created asynchronously and `Suspense/lazy` needs to wait for the loading to complete. This technology is less straightforward and probably less mature than building a static bundle and referencing it via the `<script>` tag  in .html file.
 
+In case you have a utility class used infrequently, it can also be imported dynamically. This can be done using `await import` and without `Suspense/lazy`. The sibling [Crisp BigQuery](https://github.com/winwiz1/crisp-bigquery) repository (derived from Crisp React)  [provides](https://github.com/winwiz1/crisp-bigquery/search?q=%22await+import%22) a working example.
+
 Q: Do dynamic imports negate the need to have multiple SPAs.<br/>
 A: It depends. These two are complimentary techniques. Obviously once a bundle grows larger, it starts affecting performance as its loading time increases. But the reverse is also true, having too many small bundles could result in more network round-trips and the bundle compression will become less efficient. It can also complicate attempts to scrutinise network traffic including requests for bundles.
 
@@ -363,3 +365,4 @@ Q: Linting the client and the backend yields a couple of errors. How do I fix it
 A: The linting errors left unfixed are either erroneous or are considered to be harmless and not worth fixing until the planned transition from tslint to eslint is completed.
 ## License
 Crisp React project with its 'server' and 'client' subprojects is open source software [licensed as MIT](./LICENSE).
+

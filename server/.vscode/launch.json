@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Debug Backend",
-      "program": "${workspaceFolder}\\src\\srv\\main.ts",
+      "program": "${workspaceFolder}/src/srv/main.ts",
       "preLaunchTask": "tsc-watch",
       "postDebugTask": "kill process in terminal",      
       "outFiles": [
@@ -21,7 +21,7 @@
       "type": "node",
       "request": "launch",
       "name": "Debug Backend Connected To Devserver",
-      "program": "${workspaceFolder}\\src\\srv\\main.ts",
+      "program": "${workspaceFolder}/src/srv/main.ts",
       "preLaunchTask": "tsc-watch",
       "postDebugTask": "kill process in terminal",      
       "outFiles": [

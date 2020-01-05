@@ -53,8 +53,8 @@
     "@types/helmet": "^0.0.45",
     "@types/http-proxy-middleware": "^0.19.3",
     "@types/jest": "24.0.23",
-    "@types/node": "12.12.11",
-    "@types/node-fetch": "2.5.3",
+    "@types/node": "12.12.17",
+    "@types/node-fetch": "2.5.4",
     "@types/supertest": "^2.0.8",
     "copyfiles": "^2.1.1",
     "cross-env": "^6.0.3",
@@ -63,9 +63,9 @@
     "mkdirp": "^0.5.1",
     "rimraf": "^3.0.0",
     "supertest": "^4.0.2",
-    "ts-jest": "24.1.0",
+    "ts-jest": "24.2.0",
     "tslib": "1.10.0",
     "tslint": "5.20.1",
-    "typescript": "3.7.2"
+    "typescript": "3.7.3"
   }
 }
