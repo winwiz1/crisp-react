@@ -56,6 +56,9 @@ const statusCode404path = [
 ];
 
 describe("Test Express routes", () => {
+  const config = TestConfig.getModelConfig();
+  SampleModel.Config = config;
+
   it("test URLs returning HTTP status 200", () => {
     statusCode200path.forEach(async path => {
       const response = await request(server).get(path);
