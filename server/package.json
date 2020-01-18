@@ -1,7 +1,7 @@
 {
-  "name": "crisp-react-server",
-  "version": "1.1.2",
-  "description": "Server for the crisp-react project. Please see ../package.json for full description.",
+  "name": "crisp-react-backend",
+  "version": "1.2.0",
+  "description": "Backend for the Crisp React project",
   "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
     "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)"
@@ -45,6 +45,7 @@
     "express-static-gzip": "^2.0.5",
     "helmet": "^3.21.2",
     "http-proxy-middleware": "^0.20.0",
+    "node-cache": "^5.1.0",
     "node-fetch": "^2.6.0",
     "winston": "3.2.1"
   },
@@ -52,10 +53,12 @@
     "@types/express": "4.17.2",
     "@types/helmet": "^0.0.45",
     "@types/http-proxy-middleware": "^0.19.3",
-    "@types/jest": "24.0.23",
-    "@types/node": "12.12.17",
+    "@types/jest": "24.0.25",
+    "@types/node": "13.1.6",
+    "@types/node-cache": "^4.2.5",
     "@types/node-fetch": "2.5.4",
     "@types/supertest": "^2.0.8",
+    "@types/winston": "^2.4.4",
     "copyfiles": "^2.1.1",
     "cross-env": "^6.0.3",
     "echo-cli": "^1.0.8",
@@ -63,9 +66,9 @@
     "mkdirp": "^0.5.1",
     "rimraf": "^3.0.0",
     "supertest": "^4.0.2",
-    "ts-jest": "24.2.0",
+    "ts-jest": "24.3.0",
     "tslib": "1.10.0",
     "tslint": "5.20.1",
-    "typescript": "3.7.3"
+    "typescript": "3.7.4"
   }
 }

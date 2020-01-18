@@ -1,7 +1,7 @@
 /**
  * The class Server is responsible for Express configuration.
  * Express is configured to serve the build artefacts produced
- * by the sibling 'client' project (script bundles, HTML files,
+ * by the sibling 'client' sub-project (script bundles, HTML files,
  * source maps) either from disk or from webpack-dev-server
  * acting as a reverse proxy for the latter.
  */
@@ -10,10 +10,11 @@ import * as express from "express";
 import nodeFetch from "node-fetch";
 import * as helmet from "helmet";
 import * as expressStaticGzip from "express-static-gzip";
-import { CustomError, handleErrors } from "../utils/error";
-import { logger } from "../utils/logger";
 import proxy = require("http-proxy-middleware");
 import * as SPAs from "../../config/spa.config";
+import { CustomError, handleErrors } from "../utils/error";
+import { logger } from "../utils/logger";
+import { SampleController } from "../api/controllers/SampleController";
 
 export enum StaticAssetPath {
   // The path to static assets served by Express needs to be
@@ -29,10 +30,7 @@ export enum StaticAssetPath {
 class Server {
   constructor() {
     this.m_app = express();
-    this.m_app.use(helmet({
-       noCache: true,
-    }));
-    this.m_app.disable("etag");
+    this.config();
     this.addRoutes();
     handleErrors(this.m_app);
   }
@@ -46,6 +44,15 @@ class Server {
 
   /********************** private methods and data ************************/
 
+  private config(): void {
+    this.m_app.use(helmet({
+      noCache: true,
+    }));
+
+    this.m_app.disable("etag");
+    this.m_app.set("trust proxy", true);
+  }
+
   private addRoutes(): void {
     // Redirect to the landing page of SPA that has 'redirect: true'
     this.m_app.get("/", (_req, res, next) => {
@@ -55,7 +62,7 @@ class Server {
       } else {
         // Serve the static asset from disk
         res.sendFile(path.resolve(this.getAssetPath(), `${SPAs.getRedirectName()}${Server.s_htmlExtension}`),
-                     { etag: false });
+          { etag: false });
       }
     });
 
@@ -89,6 +96,8 @@ class Server {
         proxy({ target: Server.s_urlDevWebserver, changeOrigin: true, ws: true })
       );
     }
+
+    SampleController.addRoute(this.m_app);
 
     // Default 404 handler
     this.m_app.use((req, _res, next) => {
