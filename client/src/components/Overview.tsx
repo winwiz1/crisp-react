@@ -17,9 +17,10 @@ const Description: React.FC = _props => {
         </Header>
         <p>
           The First SPA is rendered by the 'first' JS bundle called <code>
-          first.&lt;hash&gt;.js</code>. The SPA consists of this overview
-          page and the two pages rendered by <code>ComponentA</code> and <code>
-          ComponentB</code>. Please use the menu to go to either page.
+          first.&lt;hash&gt;.js</code>. The SPA consists of this overview page
+          and the three pages rendered by <code>ComponentA</code>, <code>
+          ComponentB</code> and <code>NameLookup</code>. Use the menu to go to
+          either page.
         </p>
         <p>
           Alternatively choose <code>ComponentC</code> belonging to the Second

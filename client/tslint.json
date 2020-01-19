@@ -1,18 +1,31 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended", "tslint-react"
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-react"
+  ],
+  "jsRules": {},
+  "rules": {
+    "trailing-comma": [
+      false
     ],
-    "jsRules": {},
-    "rules": {
-        "trailing-comma": [ false ],
-        "ordered-imports": false,
-        "variable-name": false,
-        "no-unused-expression": [true, "allow-fast-null-checks"],
-        "arrow-parens": false,
-        "member-ordering": false,
-        "jsx-boolean-value": false,
-        "jsx-wrap-multiline": false
-    },
-    "rulesDirectory": []
+    "jsx-no-multiline-js": false,
+    "ordered-imports": false,
+    "variable-name": false,
+    "no-unused-expression": [
+      true,
+      "allow-fast-null-checks"
+    ],
+    "arrow-parens": false,
+    "array-type": [false, "array-simple"],
+    "class-name": false,
+    "member-ordering": false,
+    "no-empty-interface": false,
+    "jsx-boolean-value": false,
+    "interface-name" : false,
+    "interface-over-type-literal": false,
+    "max-classes-per-file": [true, 2],
+    "jsx-wrap-multiline": false
+  },
+  "rulesDirectory": []
 }

@@ -10,6 +10,8 @@
   ],
   "compilerOptions": {
     "outDir": "./dist/js/",
+    "baseUrl": ".",
+    "paths": { "@backend/*": ["../server/src/api/*"], },
     "allowSyntheticDefaultImports": false,           
     "target": "es5",
     "downlevelIteration": true,

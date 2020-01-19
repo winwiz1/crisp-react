@@ -7,6 +7,7 @@ const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const configuredSPAs = require('./config/spa.config');
 const verifier = require("./config/verifySpaParameters");
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 configuredSPAs.verifyParameters(verifier);
 
@@ -40,7 +41,10 @@ const getWebpackConfig = (env, argv) => {
       ]
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js']
+      extensions: ['.tsx', '.ts', '.js'],
+      plugins: [
+        new TsconfigPathsPlugin()
+      ]
     },
     output: {
       filename: '[name].[hash].bundle.js',
