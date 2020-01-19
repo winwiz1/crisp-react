@@ -14,9 +14,10 @@ const Description: React.FC = _props => {
         <Header as="h3">Hello from ComponentC</Header>
         <p>
         <code>ComponentC</code> is used by <code>second.tsx</code> which has been
-        set as an 'entry point' of the 'second' JS bundle responsible for the
-        Second SPA rendering. The SPA doesn't have an overview page and this page
-        is the only one that the Second SPA consists of.
+        set as an 'entry point' of the 'second' script bundle responsible for the
+        Second SPA rendering. The bundle can be seen by right-clicking on the page
+        and choosing "View Page Source" menu. The Second SPA doesn't have an overview
+        page and this page is the only one that the Second SPA consists of.
       </p>
       </Container>
     </section>

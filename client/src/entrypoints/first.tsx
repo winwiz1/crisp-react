@@ -9,11 +9,13 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ComponentA } from "../components/ComponentA";
 import { ComponentB } from "../components/ComponentB";
 import { Overview } from "../components/Overview";
+import { NameLookup } from "../components/NameLookup";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 import * as SPAs from "../../config/spa.config";
 
 ReactDOM.render(
   <Router>
-    <div>
+    <ErrorBoundary>
       <Helmet title={SPAs.appTitle} />
         <div style={{ textAlign: "center", marginTop: "2rem", marginBottom: "3rem" }}>
           <h2>Welcome to {SPAs.appTitle}</h2>
@@ -22,9 +24,10 @@ ReactDOM.render(
           <Route exact path="/" component={Overview} />
           <Route path="/a" component={ComponentA} />
           <Route path="/b" component={ComponentB} />
+          <Route path="/namelookup" component={NameLookup} />
           <Route component={Overview} />
         </Switch>
-    </div>
+    </ErrorBoundary>
   </Router>,
   document.getElementById("react-root")
 );

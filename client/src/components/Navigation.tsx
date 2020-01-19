@@ -16,6 +16,7 @@ export const Navigation: React.FC = _props => {
           <Menu.Menu>
             <Menu.Item as={Link} to="/a">ComponentA</Menu.Item>
             <Menu.Item as={Link} to="/b">ComponentB</Menu.Item>
+            <Menu.Item as={Link} to="/namelookup">NameLookup</Menu.Item>
           </Menu.Menu>
         </Menu.Item>
         <Menu.Item>

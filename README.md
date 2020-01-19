@@ -1,29 +1,29 @@
-<div align="center">
+﻿<div align="center">
   <a href="https://github.com/winwiz1/crisp-react">
     <img alt="crisp-react logo" src="docs/crisp-react.png">
   </a>
   <br />
+  <br />
 </div>
-Boilerplate [project](https://github.com/winwiz1/crisp-react) with React client and Express backend, both written in Typescript. Offers extended functionality highlighted below. Helps to avoid frequent React-Express pitfalls.
-<br /><br />
+<br />
 <div align="center">
   <img alt="Travis CI badge" src="https://travis-ci.com/winwiz1/crisp-react.svg?branch=master">
   <img alt="Language badge. Sometimes timeouts - please reload." src="https://img.shields.io/github/languages/top/winwiz1/crisp-react">
   <img alt="Snyk Vulnerabilities badge" src="https://img.shields.io/snyk/vulnerabilities/github/winwiz1/crisp-react">
   <img alt="License badge" src="https://img.shields.io/github/license/winwiz1/crisp-react">
 </div>
-<br/>
 
 ## Project Highlights
-* Performance. A script bundle with size 3.5 MB in development cut to ~70 KB in production.
-* Backend implements HTTP caching that further enhances performance yet supports smooth deployment of versioning changes in production.
+* Performance. A script bundle with size 3.5 MB in development cut to ~70 KB in production for fast loading.
+* The backend implements HTTP caching and allows long term storage of script bundles in browser's cache that further enhances performance yet supports smooth deployment of versioning changes in production (eliminating the risk of stale bundles getting stuck in the cache).
 * Ability to optionally split your React Application into multiple Single Page Applications (SPA). For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA.
 * Seamless debugging. Debug a minified/obfuscated, compressed production bundle and put breakpoints in its TypeScript code using both VS Code and Chrome DevTools. Development build debugging: put breakpoints in the client and backend code and debug both simultaneously using a single instance of VS Code.
+* API. The backend communicates with a cloud service on behalf of clients and makes data available via an API endpoint. It's consumed by the clients. The Name lookup and gender discovery API is used as a sample, see a screenshot in the [Getting Started](#getting-started) section. The implementation provides reusable code, both client-side and backend, making it easier to switch to another API. In fact this approach has been taken by the sibling Crisp BigQuery repository created by cloning and renaming this solution - it uses Google BigQuery API instead.
 * Containerisation. Docker multi-staged build is used to ensure the backend run-time environment doesn't contain the client build-time dependencies e.g. `client/node_modules/`. It improves security and reduces container's storage footprint.
 
 ## Table of Contents
 - [Getting Started](#getting-started) 
-- [Project Features](#project-features)
+- [Features](#features)
   - [Client and Backend Subprojects](#client-and-backend-subprojects)
   - [SPA Configuration](#spa-configuration)
   - [Integration with UI and CSS Libraries](#integration-with-ui-and-css-libraries)
@@ -32,12 +32,13 @@ Boilerplate [project](https://github.com/winwiz1/crisp-react) with React client 
   - [Client Usage Scenarios](#client-usage-scenarios)
   - [Backend Usage Scenarios](#backend-usage-scenarios)
 - [Containerisation](#containerisation)
-- [What's Next and Pitfall Avoidance](#whats-next-and-pitfall-avoidance)
+- [What's Next](#whats-next)
+- [Pitfall Avoidance](#pitfall-avoidance)
 - [Q & A](#q--a)
 - [License](#license)
 
 ## Getting Started
-Install `yarn` if it's not already installed: `npm install yarn -g`
+Install `yarn` if not already installed: `npm install yarn -g`
 
 <div>
   <details>
@@ -63,9 +64,15 @@ Install `yarn` if it's not already installed: `npm install yarn -g`
       </li>
       <li>Start the debugging configuration <code>'Debug Client and Backend (workspace)'</code>.</li>
       <br/>
-      <li>Wait until an instance of Chrome starts. You should see this page:
+      <li>Wait until an instance of Chrome starts. You should see the Overview page:
         <p>
           <img alt="Overview Page" src="docs/screenshots/OverviewPage.png">
+        </p>
+        <br/>
+      </li>
+      <li>Choose the <code>NameLookup</code> component from the menu. You should see its page:
+        <p>
+          <img alt="NameLookup Page" src="docs/screenshots/NameLookupPage.png">
         </p>
         <br/>
       </li>
@@ -73,7 +80,6 @@ Install `yarn` if it's not already installed: `npm install yarn -g`
     </ul>
   </details>
 </div>
-<br/>
 <div>
   <details>
     <summary><strong>Without VS Code</strong></summary>
@@ -88,9 +94,8 @@ Install `yarn` if it's not already installed: `npm install yarn -g`
     Terminate the backend by pressing <code>Control+C</code>.
   </details>
 </div>
-<br/>
 
-## Project Features
+## Features
 ### Client and Backend Subprojects
 Each subproject supports execution of the following commands/scripts:
 ```
@@ -105,14 +110,12 @@ The client subproject:
  * Starts webpack-dev-server listening on port 8080 in the development mode.
  * Creates build artifacts (html files, script bundles and source maps) in the production mode. The artifacts are meant to be copied over to the backend subproject to be served by Express.
  * Additionally can start an instance of Chrome controlled via Inspector protocol (with caching disabled for better debugging) and point it to either webpack-dev-server or the backend server.
-
 > webpack-dev-server can be referred to as 'devserver'.
 
 The backend subproject:
  * In the production mode starts Express listening on port 3000 to serve from disk the build artifacts created by the client subproject .
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
  * Implements HTTP caching arrangement which disables the caching for .html files and enables it for script bundles. A typical React application comes with .html files that are rather small whereas the bundles can be significantly larger. On the other hand, the build process keeps the names of .html files static and embeds a hash into the names of script bundles. As a result the caching arrangement ensures smooth deployment of versioning changes.
-
 ### SPA Configuration
 The optional splitting of a React application into multiple SPAs (each rendered by its own bundle) improves the application  loading time. It also brings development/testing benefits for medium to large applications. The `vendor` bundle contains `node_modules/` dependencies and is reused between SPAs so that there is no need to download it again when switching from one SPA to another.
 
@@ -173,8 +176,7 @@ No modifications are required for the backend which will be reconfigured to:
 
 To turn off code splitting using multiple SPAs simply leave one SPA in the SPA Configuration block.
 
-> Tip: Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can focus on a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application (with dependencies on backend API endpoints) out of the testing scope.
-
+> Tip: Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can focus on a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application out of the testing scope.
 ### Integration with UI and CSS Libraries
 Both libraries ([Semantic UI](https://react.semantic-ui.com) and [Typestyle](https://typestyle.github.io) respectively) provide React with the type safety afforded by Typescript.
 ### Testing
@@ -182,16 +184,13 @@ Debuggable test cases written in Typescript. Integration with [React Testing Lib
 The client and backend can be tested independently by executing the `yarn test` command. Alternatively the same command can be executed at the workspace level.
 
 The repository is integrated with Travis CI and the test outcome is reflected by the test badge.
+
 ## Usage
-The Usage Scenarios below are grouped depending on whether  the client or the backend subproject is used.
-
->Tip: This section can be skipped at first reading. You can proceed to the [next](#containerisation) section.
-
-The expression "backend data" that is "required" in some scenarios below and "not needed" in others refers to the data supplied via future backend API endpoint. In other words this data is some 'extra' that Express will provide but webpack-dev-server won't. For example, data retrieved from a cloud service which the client cannot touch directly.
-
-> Tip: The commands executed in VS Code Terminal can also be executed from a command or shell prompt in the relevant directory and vice versa.
+The Usage Scenarios below are grouped depending on whether  the client or the backend subproject is used. 
+>:bulb: This section can be skipped at first reading. You can proceed to the [next](#containerisation) section.
 
 In case there are any changes made to the SPA Configuration block and the changes are recent (e.g. no client and backend builds have been performed since then), execute the `yarn build` command at the workspace level before starting the debugging configurations described below in the Client and Server Usage sections.
+> Tip: The commands executed in VS Code Terminal can also be executed from a command or shell prompt in the relevant directory and vice versa.
 
 ### Client Usage Scenarios
 To start with client scenarios open the `client` subdirectory in VS Code. Then open the Terminal. 
@@ -271,7 +270,6 @@ Put a breakpoint on the line <code>client/src/components/ComponentB.tsx:14</code
 Use the menu to go back to the First SPA and then choose the ComponentB. The breakpoint will be hit. Remove the breakpoint and resume the execution. Choose the ComponentA from the menu.<br/>
   </details>
 </div>
-<br/>
 <div>
     <details>
       <summary>Using Chrome DevTools example:</summary>
@@ -281,7 +279,6 @@ Use 'Sources -> Filesystem -> Add folder to workspace' to add <code>client/src</
 Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Remove the breakpoint and use Chrome or VS Code to continue execution.
 </details>
 </div>
-<br/>
 
 To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
 #### Use backend to debug the production client build
@@ -294,17 +291,18 @@ To finish stop the running debugging configuration (use the Debugging toolbar or
 To build and run a Docker container execute [`start-container.cmd`](https://github.com/winwiz1/crisp-react/blob/master/start-container.cmd) or [`start-container.sh`](https://github.com/winwiz1/crisp-react/blob/master/start-container.sh). The file can also be executed from an empty directory in which case uncomment the two lines at the top.
 
 Moreover, it can be copied to a computer or VM that doesn't have NodeJS installed. The only prerequisites are Docker and Git.
-## What's Next and Pitfall Avoidance
+## What's Next
+Consider the following steps to add the desired functionality:
 * Start with [Client Usage Scenarios](#client-usage-scenarios) to develop UI in absence of API data. For example, develop the initial look and feel of the login page. Take advantage of the Live Reloading to speed up the development. The client scenarios ensure the backend is not started needlessly.
-*  Implement an API endpoint in the backend. For example, a login endpoint.
-*  Switch to [Backend Usage Scenarios](#backend-usage-scenarios) to consume the API endpoint in the client. Keep taking advantage of the Live Reloading that is supported for client and backend code.
+*  Implement an API endpoint in the backend, in addition or instead the existing sample API endpoint. For example, a login endpoint. Technically it can be done by renaming the `SampleXxx` pattern in the names of source files and classes with `LoginXxx`, then modifying the classes as needed. This approach can be observed in the sibling [Crisp BigQuery](https://github.com/winwiz1/crisp-bigquery) repository, the `SampleXxx` pattern was replaced with `BigQueryXxx`.
+*  Switch to [Backend Usage Scenarios](#backend-usage-scenarios) to consume the API endpoint in the client.  Modify the API related classes `BackendManager` and `BackendRequest` as needed. Keep taking advantage of the Live Reloading that is supported for client and backend code.
+## Pitfall Avoidance
+One of the goals pursued by the [Backend Usage Scenarios](#backend-usage-scenarios) is to avoid the following common pitfalls:
+- :fire: Running the webpack-dev-server in production.
+- :warning: Getting CORS security violations triggered by the browser which detects that script bundles were downloaded from one server (frontend) and then the code from the bundles attempts to call API endpoints provided by another server (backend). There are CORS related HTTP headers that exist to water down or cancel completely the security which browsers implement for a reason. In some cases using such headers is unavoidable, for example the code from some Google SDKs is embedded into clients at the build time and not downloaded from Google at run-time, so many Google APIs wouldn't work without CORS headers. But its usage is best to be kept to the minimum because it raises the requirements for backend hardening.
+- :thumbsdown: Not implementing SPA related fallback in the backend. It should redirect requests for unknown pages to the SPA landing page. For example, this behaviour is enabled in webpack-dev-server using the `historyApiFallback` setting which exists specifically to support SPAs. The fallback behavior is required for any SPA because a user can see the path to an internal page (e.g. `/a` or `/b` or  `/namelookup`) in the navigation bar and can either retype it manually and press Enter or refresh the browser. In both cases the backend gets hit with a request for an internal SPA page it is not aware of and responding with the 404 Not Found error doesn't look good for the user. Due to security considerations the fallback tolerance should have its limits and clearly invalid requests should still trigger an error.
 
-One of the goals pursued by the backend scenarios is to avoid the following common pitfalls:
-- Running the webpack-dev-server in production,
-- Getting CORS security violations triggered by the browser which detects that script bundles were downloaded from one server and then the code from the bundles attempts to call API endpoints provided by another server.
-- Not implementing SPA related fallback in the backend. It should redirect requests for unknown pages to the SPA landing page. For example, this behavior is enabled in webpack-dev-server using the `historyApiFallback` setting which exists specifically to support SPAs. The fallback behavior is required for any SPA because a user can see the path to any internal page in the navigation bar and can either retype it manually and press Enter or refresh the browser. In both cases the backend gets hit with a request for an internal SPA page it is not aware of and responding with the 404 Not Found error doesn't look good for the user. Due to security considerations the fallback tolerance should have its limits and clearly invalid requests should still trigger an error.
-
-The backend scenarios ensure the client gets everything (build artifacts including script bundles, API responses) from the backend only. This leaves no room for CORS issues.
+ The backend scenarios ensure the client gets everything (build artifacts including script bundles, API responses) from the backend only. This leaves no room for CORS issues. The SPA related fallback is implemented in development and production automatically and in accordance with SPA configuration.
 
 The webpack-dev-server is never started in production. This is hardly a good idea. The server, as its name suggests, is meant to be used in development only.
 ## Q & A
