@@ -35,6 +35,7 @@
   "scripts": {
     "install": "cd client && yarn",
     "postinstall": "cd server && yarn",
+    "pretest": "cd client && yarn build",
     "test": "cd client && yarn test",
     "posttest": "cd server && yarn copy && yarn test",
     "compile": "cd client && yarn compile",

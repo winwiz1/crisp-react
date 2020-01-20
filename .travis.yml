@@ -6,6 +6,7 @@ cache:
     - client/node_modules
     - server/node_modules
   yarn: true
+dist: bionic
 git: 
   depth: 3
 language: node_js
