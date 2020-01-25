@@ -15,11 +15,27 @@
 
 ## Project Highlights
 * Performance. A script bundle with size 3.5 MB in development cut to ~70 KB in production for fast loading.
-* The backend implements HTTP caching and allows long term storage of script bundles in browser's cache that further enhances performance yet supports smooth deployment of versioning changes in production (eliminating the risk of stale bundles getting stuck in the cache).
-* Ability to optionally split your React Application into multiple Single Page Applications (SPA). For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA.
+
+* Caching. The backend implements HTTP caching and allows long term storage of script bundles in browser's cache that further enhances performance yet supports smooth deployment of versioning changes in production (eliminating the risk of stale bundles getting stuck in the cache).
+
+* Code splitting. Ability to optionally split your React Application into multiple Single Page Applications (SPA). For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA. This approach would be beneficial for medium-to-large React applications that can be split into several domains of functionality, development and testing.
+
 * Seamless debugging. Debug a minified/obfuscated, compressed production bundle and put breakpoints in its TypeScript code using both VS Code and Chrome DevTools. Development build debugging: put breakpoints in the client and backend code and debug both simultaneously using a single instance of VS Code.
-* API. The backend communicates with a cloud service on behalf of clients and makes data available via an API endpoint. It's consumed by the clients. The Name lookup and gender discovery API is used as a sample, see a screenshot in the [Getting Started](#getting-started) section. The implementation provides reusable code, both client-side and backend, making it easier to switch to another API. In fact this approach has been taken by the sibling Crisp BigQuery repository created by cloning and renaming this solution - it uses Google BigQuery API instead.
+
+* API. The backend communicates with a cloud service on behalf of clients and makes data available via an API endpoint. It's consumed by the clients. The Name Lookup API is used as a sample:
+    ![API Screenshot](docs/screenshots/api.png)
+
+    The implementation provides reusable code, both client-side and backend, making it easier to switch to another API. In fact this approach has been taken by the sibling Crisp BigQuery repository created by cloning and renaming this solution - it uses Google BigQuery API instead.<br/>
+This arrangement brings a security benefit: The clients running inside a browser in a non-trusted environment do not have credentials to access a cloud service that holds sensitive data. The backend runs in the trusted environment you control and does have the credentials.
+
 * Containerisation. Docker multi-staged build is used to ensure the backend run-time environment doesn't contain the client build-time dependencies e.g. `client/node_modules/`. It improves security and reduces container's storage footprint.
+
+    - As a container deployment option suitable for a demonstration, you can build and deploy the container on Cloud Run. The prerequisites are to have a Google Cloud account with at least one project created and billing enabled.<br/>
+[![Run on Google Cloud](docs/cloudrun.png)](https://deploy.cloud.run?git_repo=https://github.com/winwiz1/crisp-react)<br/>
+The build will take a while due to free Cloud Shell using a free cloud VM with modest specs. After the build and deployment are finished you can click on the provided link and see the page rendered by the client.<br/><br/>
+:heavy_exclamation_mark: It is highly recommended to delete the created service when the demo is finished. The explanation why this is needed can be found in the [Containerisation](#containerisation) section. Delete the service by executing the following command:<br/>
+`gcloud run services delete crisp-react --platform=managed --region=us-central1 --project=<project-name>`<br/>
+It can be conveniently executed from the Cloud Shell session opened during the deployment. Update the `region` with the one chosen during the deployment and replace `<project-name>` with your project name. Alternatively delete the service using Cloud Run [Console](https://console.cloud.google.com/run).
 
 ## Table of Contents
 - [Getting Started](#getting-started) 
@@ -44,7 +60,7 @@ Install `yarn` if not already installed: `npm install yarn -g`
   <details>
     <summary><strong>With VS Code</strong></summary>
     <br />
-    Prerequisites: Chrome and VS Code with 'Debugger for Chrome' extension.<br />
+    Prerequisites: Chrome and VS Code with 'Debugger for Chrome' extension.<br/><br/>
     <ul>
       <li>Clone the <code>crisp-react</code> repository:<br/>
         <br/>
@@ -95,6 +111,8 @@ Install `yarn` if not already installed: `npm install yarn -g`
   </details>
 </div>
 
+The section can be concluded by optionally renaming the solution. Rename the top-level directory from `crisp-react` to `your-project` and set the `SPAs.appTitle` variable in the [`spa.config.js`](https://github.com/winwiz1/crisp-react/blob/master/client/config/spa.config.js) file accordingly. Ignore the rest of the file for a moment, it's covered in depth in the [SPA Configuration](#spa-configuration) section.
+
 ## Features
 ### Client and Backend Subprojects
 Each subproject supports execution of the following commands/scripts:
@@ -121,7 +139,7 @@ The optional splitting of a React application into multiple SPAs (each rendered 
 
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. Let's see how Crisp React defines the SPAs.
 
-The client subproject builds an application with SPAs defined by the SPA Configuration block in the `client/config/spa.config.js` file:
+The client subproject builds an application with SPAs defined by the SPA Configuration block in the [`spa.config.js`](https://github.com/winwiz1/crisp-react/blob/master/client/config/spa.config.js) file:
 ```js
 /****************** Start SPA Configuration ******************/
   var SPAs = [
@@ -288,9 +306,23 @@ Start the debugging configuration  `Debug Production Client and Backend (workspa
 Wait until an instance of Chrome starts. You should see the overview page. Now you can use VS Code to set breakpoints in both client and backend provided the relevant process is highlighted/selected as explained in the previous scenario. You can also use Chrome DevTools to debug the client application as shown above.<br/>
 To finish stop the running debugging configuration (use the Debugging toolbar or press  `Control+F5`  once).
 ## Containerisation
-To build and run a Docker container execute [`start-container.cmd`](https://github.com/winwiz1/crisp-react/blob/master/start-container.cmd) or [`start-container.sh`](https://github.com/winwiz1/crisp-react/blob/master/start-container.sh). The file can also be executed from an empty directory in which case uncomment the two lines at the top.
+### Using Docker
+To build a Docker container image and start it, execute [`start-container.cmd`](https://github.com/winwiz1/crisp-react/blob/master/start-container.cmd) or [`start-container.sh`](https://github.com/winwiz1/crisp-react/blob/master/start-container.sh). Both files can also be executed from an empty directory in which case uncomment the two lines at the top. Moreover, it can be copied to a computer or VM that doesn't have NodeJS installed. The only prerequisites are Docker and Git.
 
-Moreover, it can be copied to a computer or VM that doesn't have NodeJS installed. The only prerequisites are Docker and Git.
+The `Dockerfile` produces the development build of the client. This is a workaround for the Cloud Run bug explained below. If you are not using Cloud Run, switch to the production build as explained in the [`Dockerfile`](https://github.com/winwiz1/crisp-react/blob/master/Dockerfile) comments.
+
+>Once the container image is built, you can upload it into a private container registry supported by all cloud vendors and run it from there using one of their container offerings. One such option, Google Cloud Run, is described below since it was used for the demonstration in the [Project Highlights](#project-highlights) section. Also note that all vendors allow you to build the image in the cloud so there is no need to upload it.
+
+### Using Google Cloud Run
+This section contains additional considerations that apply to deploying the solution on Cloud Run. The considerations are not specific to this solution and would be relevant for any React SPA.
+
+1. Although Cloud Run provides an ample free tier usage in terms of bandwidth and number of requests, you are billed for the incoming requests once the free usage threshold, 2 million calls per month, is exceeded. This scenario wouldn't be infeasible if the service URL is discovered and used to mount a DoS attack (or come close to it by emulating a significant workload). Deleting the service promptly after a demonstration helps to mitigate this risk. Hopefully Google will make a configurable firewall available soon for Cloud Run running in the public access mode.
+
+2. The security of the deployment can be improved by switching to the private mode. This can be done by changing the `allow-unauthenticated` setting in the `app.json` file to `false`. The switch impacts usability due to the service becoming inaccessible to non-authenticated users. The access to the service can be enabled by an additionally deployed [endpoint](https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run). However the endpoint requires users to authenticate using [Google Sign-In](https://developers.google.com/identity/sign-in/web/) or other methods. Obviously this authentication cannot be facilitated by the React application because any access to it is controlled by the endpoint.
+
+3. The Google provided alternatives to container deployment on Cloud Run with ability to control networking ingress include Cloud Run for Anthos. This option allows to have an ingress controller but is more expensive and technically involved. Google App Engine Flexible Environment is yet another option, it has access to a configurable firewall but [lacks](https://cloud.google.com/appengine/docs/flexible/nodejs/managing-projects-apps-billing) ability to set spending limits.
+
+4. There is a Cloud Run [bug](https://issuetracker.google.com/issues/147185337) that makes it impossible to deploy a production build of the client on Cloud Run. The reason for it is that production builds of React applications typically produce compressed script bundles. The bug causes Cloud Run to strip the `Content-Encoding` HTTP header from the response sent by the backend. As a result, the browser doesn't know the downloaded bundle was compressed and doesn't uncompress it making the bundle unusable. The workaround is to opt for development builds with uncompressed bundles.
 ## What's Next
 Consider the following steps to add the desired functionality:
 * Start with [Client Usage Scenarios](#client-usage-scenarios) to develop UI in absence of API data. For example, develop the initial look and feel of the login page. Take advantage of the Live Reloading to speed up the development. The client scenarios ensure the backend is not started needlessly.
@@ -306,7 +338,7 @@ One of the goals pursued by the [Backend Usage Scenarios](#backend-usage-scenari
 
 The webpack-dev-server is never started in production. This is hardly a good idea. The server, as its name suggests, is meant to be used in development only.
 ## Q & A
-Q: I have changed both SPA names in the SPA Configuration block and kept the rest including the entry points intact. I expect everything to keep working using my new names for the SPA landing pages instead of the old `/first.html` and `second.html`.  However navigation via the menu and Back/Forward browser buttons seems to be broken. How can it be fixed.<br/>
+Q: I have changed both SPA names in the SPA Configuration block and kept the rest including the entry points intact. I expect everything to keep working using my new names for the SPA landing pages instead of the old `/first.html` and `/second.html`.  However navigation via the menu and Back/Forward browser buttons seems to be broken. How can it be fixed.<br/>
 A: Clear the browser's history and cache. Alternatively use an incognito tab. The client, the backend and the tests should work with the new names.
 
 Q: Can I use dynamic imports in addition to multiple SPAs for code splitting?<br/>

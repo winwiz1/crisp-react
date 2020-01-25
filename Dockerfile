@@ -1,9 +1,18 @@
 FROM node:12.8.1-slim as build
 RUN apt-get update -y && apt-get upgrade -y
 
+WORKDIR /crisp-react/server
+COPY --chown=node:node ./server/ .
 WORKDIR /crisp-react/client
 COPY --chown=node:node ./client/ .
-RUN yarn && yarn build:prod
+
+# Development build with uncompressed and not minified bundle - slow
+# Comment out next line when Google fixes issuetracker.google.com/issues/147185337
+RUN yarn && yarn build
+
+# Production build with compressed and minified bundle - fast
+# Uncomment next line when Google fixes the above bug
+#RUN yarn && yarn build:prod
 
 FROM build as prod
 

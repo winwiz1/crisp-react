@@ -1,5 +1,5 @@
 #!/bin/sh
-# Uncomment the next two lines if running this file from empty directory
+# Uncomment the next two lines if running this script from empty directory
 # git clone https://github.com/winwiz1/crisp-react.git
 # cd crisp-react
 HOST_PORT=3000

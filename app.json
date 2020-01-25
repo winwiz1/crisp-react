@@ -1,0 +1,6 @@
+{
+  "name": "crisp-react",
+  "options": {
+    "allow-unauthenticated": true
+  }
+}
