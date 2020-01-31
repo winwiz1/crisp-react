@@ -14,7 +14,14 @@
 </div>
 
 ## Project Highlights
-* Performance. A script bundle with size 3.5 MB in development cut to ~70 KB in production for fast loading.
+* Performance. Achieved by webpack tree shaking, script bundle minification and compression (gzip and Brotli).  Complimented by server-side caching described below.
+
+    | Benchmarking Tool | Result | Throttling  |
+    | :--- |:---:| :---:|
+    | Google LightHouse | ![Run on Google Cloud](docs/benchmarks/100.png) | not throttled |
+    | Google LightHouse | ![Run on Google Cloud](docs/benchmarks/84.png) | throttled to slow 4G,<br/>CPU slowdown |
+
+    The tool is embedded into Chrome so you can easily benchmark yourself. Follow this [link](docs/benchmarks/PERFORMANCE.md) for the details.
 
 * Caching. The backend implements HTTP caching and allows long term storage of script bundles in browser's cache that further enhances performance yet supports smooth deployment of versioning changes in production (eliminating the risk of stale bundles getting stuck in the cache).
 
@@ -135,7 +142,7 @@ The backend subproject:
  * In the development mode starts Express listening on the same port and working as a proxy for webpack-dev-server.
  * Implements HTTP caching arrangement which disables the caching for .html files and enables it for script bundles. A typical React application comes with .html files that are rather small whereas the bundles can be significantly larger. On the other hand, the build process keeps the names of .html files static and embeds a hash into the names of script bundles. As a result the caching arrangement ensures smooth deployment of versioning changes.
 ### SPA Configuration
-The optional splitting of a React application into multiple SPAs (each rendered by its own bundle) improves the application  loading time. It also brings development/testing benefits for medium to large applications. The `vendor` bundle contains `node_modules/` dependencies and is reused between SPAs so that there is no need to download it again when switching from one SPA to another.
+The optional splitting of a React application into multiple SPAs (each rendered by its own bundle) improves the application  loading time. The `vendor` bundle contains `node_modules/` dependencies and is reused between SPAs so that there is no need to download it again when switching from one SPA to another.
 
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. Let's see how Crisp React defines the SPAs.
 
@@ -375,9 +382,6 @@ In case you have a utility class used infrequently, it can also be imported dyna
 
 Q: Do dynamic imports negate the need to have multiple SPAs.<br/>
 A: It depends. These two are complimentary techniques. Obviously once a bundle grows larger, it starts affecting performance as its loading time increases. But the reverse is also true, having too many small bundles could result in more network round-trips and the bundle compression will become less efficient. It can also complicate attempts to scrutinise network traffic including requests for bundles.
-
-Q: I use Apache/IIS/ASP.NET Core, not Express. Can I use the client project and what needs to be changed?<br/>
-A: Yes you can. The client project located in the `client` subdirectory is fully self-contained and can be used without any changes. The client related usage scenarios do not require any modifications.
 
 Q: The client project does not have .html file(s). How can I add my own HTML?<br/>
 A: You can add .html snippet file to the project and change the `HtmlWebpackPlugin` configuration in `webpack.config.js` to include the content of your snippet into the generated .html files. That's how you would include polyfills etc. Look for the [headHtmlSnippet](https://github.com/jaketrent/html-webpack-template) configuration setting (and the bodyHtmlSnippet setting), it accepts a name of .html file. 
