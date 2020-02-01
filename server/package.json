@@ -47,6 +47,7 @@
     "http-proxy-middleware": "^0.20.0",
     "node-cache": "^5.1.0",
     "node-fetch": "^2.6.0",
+    "serve-favicon": "^2.5.0",
     "winston": "3.2.1"
   },
   "devDependencies": {
@@ -57,6 +58,7 @@
     "@types/node": "13.1.6",
     "@types/node-cache": "^4.2.5",
     "@types/node-fetch": "2.5.4",
+    "@types/serve-favicon": "^2.5.0",
     "@types/supertest": "^2.0.8",
     "@types/winston": "^2.4.4",
     "copyfiles": "^2.1.1",

@@ -11,6 +11,7 @@ import nodeFetch from "node-fetch";
 import * as helmet from "helmet";
 import * as expressStaticGzip from "express-static-gzip";
 import proxy = require("http-proxy-middleware");
+import favicon = require("serve-favicon");
 import * as SPAs from "../../config/spa.config";
 import { CustomError, handleErrors } from "../utils/error";
 import { logger } from "../utils/logger";
@@ -45,6 +46,13 @@ class Server {
   /********************** private methods and data ************************/
 
   private config(): void {
+    this.m_app.use([
+      helmet({
+        noCache: false,
+      }),
+      favicon(path.join(__dirname, "../../pub/", "fav.ico"))
+    ]);
+
     this.m_app.use(helmet({
       noCache: true,
     }));
