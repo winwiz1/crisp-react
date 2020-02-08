@@ -1,13 +1,15 @@
-const path = require('path');
-const webpack = require('webpack')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const configuredSPAs = require('./config/spa.config');
+const path = require("path");
+const fs = require("fs");
+const webpack = require("webpack")
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackHarddiskPlugin = require("html-webpack-harddisk-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const configuredSPAs = require("./config/spa.config");
 const verifier = require("./config/verifySpaParameters");
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const headHtmlSnippet = fs.readFileSync(path.join("src", "entrypoints", "head-snippet.html"), "utf8");
 
 configuredSPAs.verifyParameters(verifier);
 
@@ -15,8 +17,8 @@ const getWebpackConfig = (env, argv) => {
   const isProduction = (env && env.prod) ? true : false;
 
   const config = {
-    mode: isProduction ? 'production' : 'development',
-    devtool: 'source-map',
+    mode: isProduction ? "production" : "development",
+    devtool: "source-map",
     entry: configuredSPAs.getEntrypoints(),
     module: {
       rules: [
@@ -25,45 +27,45 @@ const getWebpackConfig = (env, argv) => {
           exclude: /node_modules/,
           use: [
             {
-              loader: 'ts-loader',
+              loader: "ts-loader",
               options: {
                 transpileOnly: true,
                 happyPackMode: true,
-                configFile: path.resolve(__dirname, 'tsconfig.json'),
+                configFile: path.resolve(__dirname, "tsconfig.json"),
               },
             }
           ],
         },
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader'],
+          use: ["style-loader", "css-loader"],
         },
       ]
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: [".tsx", ".ts", ".js"],
       plugins: [
         new TsconfigPathsPlugin()
       ]
     },
     output: {
-      filename: '[name].[hash].bundle.js',
-      chunkFilename: '[name].[hash].bundle.js',
-      path: path.resolve(__dirname, 'dist'),
-      publicPath: '/static/',
+      filename: "[name].[hash].bundle.js",
+      chunkFilename: "[name].[hash].bundle.js",
+      path: path.resolve(__dirname, "dist"),
+      publicPath: "/static/",
     },
     optimization: {
       splitChunks: {
         cacheGroups: {
           vendor: {
             test: /node_modules/,
-            chunks: 'initial',
-            name: 'vendor',
+            chunks: "initial",
+            name: "vendor",
             enforce: true
           },
         },
       },
-      runtimeChunk: 'single',
+      runtimeChunk: "single",
       ...(isProduction && {
         minimizer: [
           new TerserPlugin({
@@ -86,7 +88,7 @@ const getWebpackConfig = (env, argv) => {
     plugins: [
       new CleanWebpackPlugin(),
       new webpack.DefinePlugin({
-        'process.env.DEVELOPMENT': JSON.stringify(isProduction === false)
+        "process.env.DEVELOPMENT": JSON.stringify(isProduction === false)
       }),
       new ForkTsCheckerWebpackPlugin({
         tslint: false,
@@ -96,8 +98,8 @@ const getWebpackConfig = (env, argv) => {
     ],
     devServer: {
       index: `/${configuredSPAs.getRedirectName()}.html`,
-      publicPath: '/static/',
-      contentBase: path.join(__dirname, 'dist'),
+      publicPath: "/static/",
+      contentBase: path.join(__dirname, "dist"),
       compress: false,
       hot: true,
       inline: true,
@@ -114,14 +116,15 @@ const getWebpackConfig = (env, argv) => {
   configuredSPAs.getNames().forEach((entryPoint) => {
     config.plugins.push(
       new HtmlWebpackPlugin({
-        template: require('html-webpack-template'),
+        template: require("html-webpack-template"),
         inject: false,
         title: configuredSPAs.appTitle,
         appMountId: "react-root",
         alwaysWriteToDisk: true,
         filename: `${entryPoint}.html`,
-        chunks: [`${entryPoint}`, 'vendor', 'runtime'],
+        chunks: [`${entryPoint}`, "vendor", "runtime"],
         addBrotliExtension: isProduction,
+        headHtmlSnippet,
         links: [
           "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
         ],
@@ -135,17 +138,17 @@ const getWebpackConfig = (env, argv) => {
   config.plugins.push(new HtmlWebpackHarddiskPlugin());
 
   if (isProduction) {
-    const BrotliPlugin = require('brotli-webpack-plugin');
+    const BrotliPlugin = require("brotli-webpack-plugin");
     const CompressionPlugin = require("compression-webpack-plugin")
     const HtmlWebpackBrotliPlugin = require("html-webpack-brotli-plugin")
 
     config.plugins.push(
       new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify('production')
+        "process.env.NODE_ENV": JSON.stringify("production")
       }));
     config.plugins.push(
       new BrotliPlugin({
-        asset: '[path].br[query]',
+        asset: "[path].br[query]",
         test: /\.(js|css|html|svg)$/,
         threshold: 10240,
         minRatio: 0.8
@@ -155,8 +158,8 @@ const getWebpackConfig = (env, argv) => {
     );
     config.plugins.push(
       new CompressionPlugin({
-        filename: '[path].gz[query]',
-        algorithm: 'gzip',
+        filename: "[path].gz[query]",
+        algorithm: "gzip",
         test: /\.js$|\.css$|\.html$/,
         threshold: 10240,
         minRatio: 0.8
