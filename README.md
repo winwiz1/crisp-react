@@ -203,9 +203,9 @@ To turn off code splitting using multiple SPAs simply leave one SPA in the SPA C
 
 > Tip: Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can focus on a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application out of the testing scope.
 ### Integration with UI and CSS Libraries
-Both libraries ([Semantic UI](https://react.semantic-ui.com) and [Typestyle](https://typestyle.github.io) respectively) provide React with the type safety afforded by Typescript.
+Both libraries ([Semantic UI](https://react.semantic-ui.com) and [Typestyle](https://typestyle.github.io) respectively) provide React with the type safety afforded by TypeScript.
 ### Testing
-Debuggable test cases written in Typescript. Integration with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) on the client and [Supertest](https://github.com/visionmedia/supertest) on the backend. Both using [Jest](https://jestjs.io/) as an engine.<br/>
+Debuggable test cases written in TypeScript. Integration with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) on the client and [Supertest](https://github.com/visionmedia/supertest) on the backend. Both using [Jest](https://jestjs.io/) as an engine.<br/>
 The client and backend can be tested independently by executing the `yarn test` command. Alternatively the same command can be executed at the workspace level.
 
 The repository is integrated with Travis CI and the test outcome is reflected by the test badge.
@@ -383,11 +383,24 @@ In case you have a utility class used infrequently, it can also be imported dyna
 Q: Do dynamic imports negate the need to have multiple SPAs.<br/>
 A: It depends. These two are complimentary techniques. Obviously once a bundle grows larger, it starts affecting performance as its loading time increases. But the reverse is also true, having too many small bundles could result in more network round-trips and the bundle compression will become less efficient. It can also complicate attempts to scrutinise network traffic including requests for bundles.
 
-Q: The client project does not have .html file(s). How can I add my own HTML?<br/>
-A: You can add .html snippet file to the project and change the `HtmlWebpackPlugin` configuration in `webpack.config.js` to include the content of your snippet into the generated .html files. That's how you would include polyfills etc. Look for the [headHtmlSnippet](https://github.com/jaketrent/html-webpack-template) configuration setting (and the bodyHtmlSnippet setting), it accepts a name of .html file. 
+Q: How can I add my own HTML including polyfills etc. to the generated .html files?<br/>
+A: Use react-helmet to add additional HTML tags to the `<head>` element and modify the existing ones. Alternatively use the `client\src\entrypoints\head-snippet.html` file. Its content is inserted into the `<head>` element. You can add a [bodyHtmlSnippet](https://github.com/jaketrent/html-webpack-template) by changing the `HtmlWebpackPlugin` configuration in `webpack.config.js` (search for `headHtmlSnippet` and add similar code).
 
-Q: How can I fix Typescript compilation errors?<br/>
-A: Note the Typescript version in `package.json`. Ensure the Typescript version shown at the VS Code status bar when .ts or .tsx file is opened is not lower.
+Q: I need to support Microsoft Edge and IE11.<br/>
+A: Edge is supported provided it has been updated using Windows updates. To support IE11 add the following 5 lines to the `client\src\entrypoints\head-snippet.html` file:
+```
+<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/whatwg-fetch@3.0.0/dist/fetch.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/abortcontroller-polyfill@1.4.0/dist/umd-polyfill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mdn-polyfills/String.prototype.includes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mdn-polyfills/Object.assign.js"></script>
+```
+
+Q: In addition to Edge and IE11, I also need to support earlier versions of Internet Explorer.<br/>
+A: IE10 is officially [unsupported](https://support.microsoft.com/en-au/help/4488955/support-ending-for-internet-explorer-10) and therefore insecure. This project aims to support browsers that can be made secure.
+
+Q: How can I fix TypeScript compilation errors?<br/>
+A: Note the TypeScript version in `package.json`. Ensure the TypeScript version shown at the VS Code status bar when .ts or .tsx file is opened is not lower.
 
 Q: Breakpoints in Chrome DevTools are not hit. How can I fix it?<br/>
 A: Open the Settings page of the Chrome DevTools and ensure 'Enable JavaScript source maps' and 'Disable cache (while DevTools is open)' boxes are ticked. Close the Settings page and on the Network tab tick the 'Disable cache' box. If debugging a production build, change the `sourceMap` setting of the TerserPlugin config to `true` in `webpack.config.js`, then restart debugging.
