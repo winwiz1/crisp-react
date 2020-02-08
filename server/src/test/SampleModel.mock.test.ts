@@ -6,17 +6,20 @@ import { SampleRetrieval  } from "../api/types/SampleTypes";
 import { TestConfig } from "./TestConfig";
 
 const mockMessage = "test-mock";
+let spyInstance: jest.SpyInstance|undefined;
 
 beforeAll(() => {
   jest.spyOn(SampleModel.prototype, "fetch").mockImplementation(async (_params: any) => {
     return Promise.resolve();
   });
-  jest.spyOn(SampleModel.prototype, "getData").mockImplementation(() => {
+  spyInstance = jest.spyOn(SampleModel.prototype, "getData").mockImplementation(() => {
     return new Error(mockMessage);
   });
 });
 
 afterAll(() => {
+  expect(spyInstance).toBeDefined();
+  expect(spyInstance).toHaveBeenCalledTimes(1);
   jest.restoreAllMocks();
 });
 
