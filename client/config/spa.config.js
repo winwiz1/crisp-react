@@ -72,31 +72,37 @@ var ConfiguredSPAs = function() {
 
   SPAs.getEntrypoints = function() {
     var entryPoints = new Object();
-    SPAs.forEach(spa => (entryPoints[spa.params.name] = spa.params.entryPoint));
+    SPAs.forEach(function(spa) {
+      entryPoints[spa.params.name] = spa.params.entryPoint;
+    });
     return entryPoints;
   };
 
   SPAs.getRedirectName = function() {
-    return SPAs.find(spa => spa.params.redirect).params.name;
+    return SPAs.find(function(spa) {
+      return spa.params.redirect;
+    }).params.name;
   };
 
   SPAs.getNames = function() {
     var spaNames = new Array();
-    SPAs.forEach(spa => spaNames.push(spa.params.name));
+    SPAs.forEach(function(spa) {
+      spaNames.push(spa.params.name);
+    });
     return spaNames;
   };
 
   SPAs.getRewriteRules = function() {
     var ret = new Array();
-    SPAs.forEach(spa => {
+    SPAs.forEach(function(spa) {
       var rule = new Object();
-      rule.from = new RegExp(`^/${spa.params.name}` + "(\\.html)?$");
-      rule.to = `${spa.params.name}.html`;
+      rule.from = new RegExp("^/" + spa.params.name + "(\\.html)?$");
+      rule.to = spa.params.name + ".html";
       ret.push(rule);
     });
     ret.push({
       from: new RegExp("^.*$"),
-      to: `/${SPAs.getRedirectName()}.html`
+      to: "/" + SPAs.getRedirectName() + ".html"
     });
     return ret;
   };

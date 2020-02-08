@@ -1,41 +1,24 @@
-import debug from "debug";
+import * as log from "loglevel";
 import * as SPAs from "../../config/spa.config";
 
-const enum LOG_LEVEL {
-  LOG_TRACE,
-  LOG_INFO,
-  LOG_WARN,
-  LOG_ERROR
-}
-
 export class Log {
-  private readonly BASE = SPAs.appTitle;
+  private readonly m_title = SPAs.appTitle;
+  private readonly m_logger = log.getLogger(this.m_title);
 
-  private generateMessage(level: LOG_LEVEL, message: string, source?: string) {
-    const namespace = `${this.BASE}:${level}`;
-    const logger: debug.Debugger = debug(namespace);
-
-    if (source) {
-      logger(source, message);
-    } else {
-      logger(message);
-    }
+  public trace(message: string) {
+    return this.m_logger.trace(message);
   }
 
-  public trace(message: string, source?: string) {
-    return this.generateMessage(LOG_LEVEL.LOG_TRACE, message, source);
+  public info(message: string) {
+    return this.m_logger.info(message);
   }
 
-  public info(message: string, source?: string) {
-    return this.generateMessage(LOG_LEVEL.LOG_INFO, message, source);
+  public warn(message: string) {
+    return this.m_logger.warn(message);
   }
 
-  public warn(message: string, source?: string) {
-    return this.generateMessage(LOG_LEVEL.LOG_WARN, message, source);
-  }
-
-  public error(message: string, source?: string) {
-    return this.generateMessage(LOG_LEVEL.LOG_ERROR, message, source);
+  public error(message: string) {
+    return this.m_logger.error(message);
   }
 }
 
