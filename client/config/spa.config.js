@@ -8,10 +8,10 @@ Each SPA has:
 - entryPoint component (or to be precise a .tsx file with the code that
   renders the landing page of the SPA). Webpack calls it entry point.
 - redirect flag. If set to true, makes webserver redirect to the landing page
-  of this SPA when serving requests with unknown request path. It's standard
-  behavior required by all SPAs and implemented in webpack-dev-server using
-  the 'historyApiFallback' setting. Only one SPA can have this flag set to
-  exclude redirection ambiguity.
+  of this SPA when serving requests with unknown request path. It's the standard
+  fallback behavior required by all SPAs and implemented in webpack-dev-server
+  using the 'historyApiFallback' setting. Only one SPA can have this flag set
+  to exclude redirection ambiguity.
 
 You can customize SPAs by modifying the SPA Configuration block below. It will
 reconfigure client, backend and the tests. You'll need to adjust 3 lines

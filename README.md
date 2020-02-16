@@ -386,19 +386,6 @@ A: It depends. These two are complimentary techniques. Obviously once a bundle g
 Q: How can I add my own HTML including polyfills etc. to the generated .html files?<br/>
 A: Use react-helmet to add additional HTML tags to the `<head>` element and modify the existing ones. Alternatively use the `client\src\entrypoints\head-snippet.html` file. Its content is inserted into the `<head>` element. You can add a [bodyHtmlSnippet](https://github.com/jaketrent/html-webpack-template) by changing the `HtmlWebpackPlugin` configuration in `webpack.config.js` (search for `headHtmlSnippet` and add similar code).
 
-Q: I need to support Microsoft Edge and IE11.<br/>
-A: Edge is supported provided it has been updated using Windows updates. To support IE11 add the following 5 lines to the `client\src\entrypoints\head-snippet.html` file:
-```
-<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/whatwg-fetch@3.0.0/dist/fetch.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/abortcontroller-polyfill@1.4.0/dist/umd-polyfill.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mdn-polyfills/String.prototype.includes.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mdn-polyfills/Object.assign.js"></script>
-```
-
-Q: In addition to Edge and IE11, I also need to support earlier versions of Internet Explorer.<br/>
-A: IE10 is officially [unsupported](https://support.microsoft.com/en-au/help/4488955/support-ending-for-internet-explorer-10) and therefore insecure. This project aims to support browsers that can be made secure.
-
 Q: How can I fix TypeScript compilation errors?<br/>
 A: Note the TypeScript version in `package.json`. Ensure the TypeScript version shown at the VS Code status bar when .ts or .tsx file is opened is not lower.
 

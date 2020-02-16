@@ -9,7 +9,9 @@ const TerserPlugin = require("terser-webpack-plugin");
 const configuredSPAs = require("./config/spa.config");
 const verifier = require("./config/verifySpaParameters");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-const headHtmlSnippet = fs.readFileSync(path.join("src", "entrypoints", "head-snippet.html"), "utf8");
+const headHtmlSnippetPath = path.join("src", "entrypoints", "head-snippet.html");
+const headHtmlSnippet = fs.existsSync(headHtmlSnippetPath) ?
+  fs.readFileSync(headHtmlSnippetPath, "utf8") : undefined;
 
 configuredSPAs.verifyParameters(verifier);
 

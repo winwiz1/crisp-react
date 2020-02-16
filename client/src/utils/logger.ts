@@ -9,6 +9,10 @@ export class Log {
     return this.m_logger.trace(message);
   }
 
+  public debug(message: string) {
+    return this.m_logger.debug(message);
+  }
+
   public info(message: string) {
     return this.m_logger.info(message);
   }
