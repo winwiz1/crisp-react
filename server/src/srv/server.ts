@@ -10,12 +10,12 @@ import * as express from "express";
 import nodeFetch from "node-fetch";
 import * as helmet from "helmet";
 import * as expressStaticGzip from "express-static-gzip";
-import proxy = require("http-proxy-middleware");
 import favicon = require("serve-favicon");
 import * as SPAs from "../../config/spa.config";
 import { CustomError, handleErrors } from "../utils/error";
 import { logger } from "../utils/logger";
 import { SampleController } from "../api/controllers/SampleController";
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 export enum StaticAssetPath {
   // The path to static assets served by Express needs to be
@@ -62,7 +62,7 @@ class Server {
   }
 
   private addRoutes(): void {
-    // Redirect to the landing page of SPA that has 'redirect: true'
+    // Redirect to the landing page of the SPA that has 'redirect: true'
     this.m_app.get("/", (_req, res, next) => {
       if (Server.s_useDevWebserver) {
         // Get the resourse from dev server
@@ -101,7 +101,7 @@ class Server {
     // Proxy to devserver ws:// protocol
     if (Server.s_useDevWebserver) {
       this.m_app.use("/sockjs-node",
-        proxy({ target: Server.s_urlDevWebserver, changeOrigin: true, ws: true })
+        createProxyMiddleware({ target: Server.s_urlDevWebserver, changeOrigin: true, ws: true })
       );
     }
 
@@ -160,7 +160,7 @@ class Server {
   }
 
   // If there are two SPAs in spa.config.js called 'first and 'second',
-  // then returns string:  "(first)|(second)"
+  // then returns string: "(first)|(second)"
   private static getLandingPages(): string {
     const entryPoints = SPAs.getNames();
     let ret: string = "";
@@ -188,12 +188,13 @@ class Server {
 
   private readonly m_app: express.Application;
   private m_assetPath: StaticAssetPath = StaticAssetPath.TRANSPILED;
-  private m_expressStaticMiddleware: ReturnType<typeof expressStaticGzip>|undefined = undefined;
+  private m_expressStaticMiddleware?: ReturnType<typeof expressStaticGzip> = undefined;
   private static readonly s_htmlExtension = ".html";
   private static readonly s_urlDevWebserver = "http://localhost:8080";
   /* tslint:disable:no-string-literal */
   private static readonly s_useDevWebserver = process.env["USE_DEV_WEBSERVER"] === "true";
   /* tslint:enable:no-string-literal */
+  // Regex must be either simple or constructed using a library that provides DOS protection.
   private static readonly s_regexLandingPages = Server.getLandingPagesRegex();
   private static readonly s_regexArtifacts = Server.getClientBuildArtifactsRegex();
   private static readonly s_expressStaticConfig: expressStaticGzip.ExpressStaticGzipOptions = {

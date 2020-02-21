@@ -2,7 +2,7 @@
 *  Types related to data received from cloud API service
 ***********************************************************************/
 
-// The 'main' or 'central' data piece fnullrom the response
+// The 'main' or 'central' data piece from the response
 // provided by API server
 export class SampleRetrievalData {
   readonly name?: string;

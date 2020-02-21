@@ -13,7 +13,8 @@
         "member-ordering": false,
         "member-access": false,
         "max-classes-per-file": [true, 3, "exclude-class-expressions"],
-        "interface-over-type-literal": false
+        "interface-over-type-literal": false,
+        "no-var-requires": false
     },
     "rulesDirectory": []
 }
