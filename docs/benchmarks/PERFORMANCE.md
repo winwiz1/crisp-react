@@ -34,6 +34,19 @@ To benchmark the solution perform the following steps:
 
 6. Terminate the backend by pressing `Control+C`.
 
+### Scalability
+In theory scalability refers to the ability of the software to manage increased workload. Let's define it in practical terms and with respect to our Express based React application.
+
+>In production scenarios scalability would depend on many factors. E.g. can the solution scale up and take advantage of more powerful CPU by uniformly engaging all its cores under stress load using multiple threads. Or can the solution scale out by starting multiple processes/instances and handle distributed state changes. Here we will use a simplified definition of scalability that is more straightforward yet meaningful and depends on how heavily the React application taxes a webserver.
+
+Suppose the application is an online timesheet deployed at a company where everyone uses it at the beginning of a workday. If the timesheet is containerised and deployed in the cloud, for example using Google Cloud Run, then it can handle between 40 (the default) and 80 (the [maximum](https://cloud.google.com/run/quotas) Google allows) requests concurrently. Let's assume we have set the concurrency setting to __50 requests__. Now we can provide a simplified definition of scalability: it's the number of concurrent timesheet startup/download requests a single Cloud Run container can serve at one point of time (aka burst rate). It can help to decide how many containers are required if CDN is not used for React application deployment.
+
+To find out this number press F12 to open Chrome DevTools, then switch to the `Network` tab and press F5 to refresh the Overview page. Counting the number of requests served by the backend should yield __5 requests__ (one .html page, three script bundles and one icon). Therefore the scalability figure is 50 requests / 5 requests = __10 applications__.
+
+> The backend will have to deal with API requests as well but those will need to be served at the different points of time.
+
+If the React app contains multiple SPAs, then switching from one SPA to another results in 2 requests served by the backend (one .html page and one script bundle). Such a switching will be barely noticeable by a user if the bundle size containment described in the next section is implemented.
+
 ### Future Considerations
 The solution has a limited amount of code, as a boilerplate should. It begs a question to what extent the performance will be affected when the application grows. To contemplate an answer let's have a look at the script bundles:
 
@@ -52,7 +65,9 @@ Let's assume that at the beginning of the development the second SPA and its bun
 
 No substantial impact on the performance can be anticipated until the `first` bundle reaches the size and then outgrowths the `vendor` bundle. At this point it might be a good time to use code splitting and introduce another SPA. One of the goals of using multiple SPAs is to ensure each SPA is rendered by its own and smaller bundle thus reducing React application loading time. See [SPA Configuration](../../README.md#spa-configuration) section for more details.
 
-The conclusion is that with multiple SPAs you can grow the functionality and codebase while maintaining the top performance.
+> Code splitting using multiple SPAs can be introduced much earlier due to considerations related to distributing the development workload among several teams, IP rights protection and security (e.g. to ensure that non-authenticated users can download the Login bundle only).
+
+The conclusion is that with multiple SPAs you can grow the functionality and codebase while maintaining the top performance due to bundle size containment.
 
 ---
 Back to the [README](../../README.md).
