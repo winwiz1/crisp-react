@@ -35,15 +35,15 @@ To benchmark the solution perform the following steps:
 6. Terminate the backend by pressing `Control+C`.
 
 ### Scalability
-In theory scalability refers to the ability of the software to manage increased workload. Let's define it in practical terms and with respect to our Express based React application.
+In theory scalability refers to the ability of the software to manage increased workload. Let's define it in practical terms and with respect to our React application integrated with Express.
 
->In production scenarios scalability would depend on many factors. E.g. can the solution scale up and take advantage of more powerful CPU by uniformly engaging all its cores under stress load using multiple threads. Or can the solution scale out by starting multiple processes/instances and handle distributed state changes. Here we will use a simplified definition of scalability that is more straightforward yet meaningful and depends on how heavily the React application taxes a webserver.
+>In production scenarios scalability would depend on many factors. E.g. can the solution scale up and take advantage of more powerful CPU by uniformly engaging all its cores under stress load using multiple threads. Or can the solution scale out by starting additional processes/instances and handling distributed state changes. However we will use a simplified definition of scalability that is more straightforward yet meaningful and depends on how heavily the React application taxes a webserver.
 
 Suppose the application is an online timesheet deployed at a company where everyone uses it at the beginning of a workday. If the timesheet is containerised and deployed in the cloud, for example using Google Cloud Run, then it can handle between 40 (the default) and 80 (the [maximum](https://cloud.google.com/run/quotas) Google allows) requests concurrently. Let's assume we have set the concurrency setting to __50 requests__. Now we can provide a simplified definition of scalability: it's the number of concurrent timesheet startup/download requests a single Cloud Run container can serve at one point of time (aka burst rate). It can help to decide how many containers are required if CDN is not used for React application deployment.
 
 To find out this number press F12 to open Chrome DevTools, then switch to the `Network` tab and press F5 to refresh the Overview page. Counting the number of requests served by the backend should yield __5 requests__ (one .html page, three script bundles and one icon). Therefore the scalability figure is 50 requests / 5 requests = __10 applications__.
 
-> The backend will have to deal with API requests as well but those will need to be served at the different points of time.
+> The backend deals with API requests as well but those will need to be served at the different points of time.
 
 If the React app contains multiple SPAs, then switching from one SPA to another results in 2 requests served by the backend (one .html page and one script bundle). Such a switching will be barely noticeable by a user if the bundle size containment described in the next section is implemented.
 
