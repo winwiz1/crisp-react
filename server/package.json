@@ -72,5 +72,8 @@
     "tslib": "1.11.0",
     "tslint": "6.0.0",
     "typescript": "3.8.2"
+  },
+  "resolutions": {
+    "minimist": "^1.2.2"
   }
 }
