@@ -15,6 +15,10 @@ const headHtmlSnippet = fs.existsSync(headHtmlSnippetPath) ?
 
 configuredSPAs.verifyParameters(verifier);
 
+// Supress "Failed to load tsconfig.json: Missing baseUrl in compilerOptions" error message.
+// Details: https://github.com/dividab/tsconfig-paths-webpack-plugin/issues/17
+delete process.env.TS_NODE_PROJECT;
+
 const getWebpackConfig = (env, argv) => {
   const isProduction = (env && env.prod) ? true : false;
 

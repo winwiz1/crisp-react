@@ -9,6 +9,7 @@ import * as ReactDOM from "react-dom";
 import { style } from "typestyle";
 import { isCustomError } from "../utils/typeguards";
 import logger from "../utils/logger";
+import { isServer } from "../utils/ssr/misc";
 
 type ErrorBoundaryState = {
   hasError: boolean
@@ -31,7 +32,7 @@ export class ErrorBoundary extends React.PureComponent<{}, ErrorBoundaryState> {
       const errMsg = this.state.errDescription + "\n" + errInfo.componentStack;
       logger.error(errMsg);
       this.setState(prevState =>
-         ({ ...prevState, errDescription: errMsg })
+        ({ ...prevState, errDescription: errMsg })
       );
     }
   }
@@ -44,13 +45,17 @@ export class ErrorBoundary extends React.PureComponent<{}, ErrorBoundaryState> {
 
   public render() {
     if (this.state.hasError) {
-      return (
-        <PortalCreator
-          onClose={this.onClick}
-          errorHeader="Error"
-          errorText={this.state.errDescription!}
-        />
-      );
+      return isServer() ?
+        // Using console at build time is acceptable.
+        // tslint:disable-next-line:no-console
+        (console.error(this.state.errDescription!), <>{`SSR Error: ${this.state.errDescription!}`}</>) :
+        (
+          <PortalCreator
+            onClose={this.onClick}
+            errorHeader="Error"
+            errorText={this.state.errDescription!}
+          />
+        );
     } else {
       return this.props.children;
     }
