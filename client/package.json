@@ -27,6 +27,7 @@
   "scripts": {
     "build": "webpack",
     "build:prod": "webpack --env.prod",
+    "postbuild:prod": "cross-env TS_NODE_PROJECT=tsconfig.ssr.json node -r ts-node/register -r tsconfig-paths/register src/utils/ssr/buildTimeSSR.ts",
     "compile": "tsc -p .",
     "lint": "tslint -p .",
     "dev": "webpack-dev-server --config webpack.config.js",
@@ -73,6 +74,8 @@
     "style-loader": "1.1.3",
     "ts-jest": "^25.2.0",
     "ts-loader": "6.2.1",
+    "ts-node": "^8.6.2",
+    "tsconfig-paths": "^3.9.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tslib": "1.10.0",
     "tslint": "6.0.0",
