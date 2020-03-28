@@ -1,7 +1,7 @@
 /**
  * The 'entry point' (in webpack terminology)
  * of the Second SPA.
- * 
+ *
  * SSR has been enabled for this entry point.
  * To disable SSR:
  *  - comment out import of renderToString

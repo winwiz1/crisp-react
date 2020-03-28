@@ -13,12 +13,20 @@ const Description: React.FC = _props => {
       <Container text textAlign="justified">
         <Header as="h3">Hello from ComponentC</Header>
         <p>
-        <code>ComponentC</code> is used by <code>second.tsx</code> which has been
-        set as an 'entry point' of the 'second' script bundle responsible for the
-        Second SPA rendering. The bundle can be seen by right-clicking on the page
-        and choosing "View Page Source" menu. The Second SPA doesn't have an overview
-        page and this page is the only one that the Second SPA consists of.
-      </p>
+          <code>ComponentC</code> is used by <code>second.tsx</code> which has been
+          set as an 'entry point' of the 'second' script bundle responsible for the
+          Second SPA rendering.
+        </p>
+        <p>
+          The bundle (and HTML produced by SSR which is enabled for this SPA) can be
+          seen by right-clicking on the page and choosing "View Page Source" menu.
+          The page source can be compared to that of any page belonging to the
+          First SPA which has SSR disabled.
+        </p>
+        <p>
+          The Second SPA doesn't have an overview page and this page is the only one
+          the SPA consists of.
+        </p>
       </Container>
     </section>
   );

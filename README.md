@@ -46,7 +46,7 @@ This arrangement brings a security benefit: The clients running inside a browser
 
     - Run-time computing overhead causing [server delays](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-vs-static) (for run-time SSR) thus defeating or partially offsetting the performance benefits of SSR.
 
-    - Run-time computing overhead reducing the ability to sustain workloads (for run-time SSR coupled with complex or long HTML markup) which makes it easier to mount DOS attack aimed at webserver CPU exhaustion. In a case of cloud deployment, the frequency of malicious requests could be low enough to avoid triggering DDOS protection offered by the cloud vendor yet sufficient to saturate the server CPU and trigger autoscaling thus increasing the monetary cost. This challenge can be mitigated using a rate limiter which arguably should be an integral part of run-time SSR offerings.
+    - Run-time computing overhead reducing the ability to sustain workloads (for run-time SSR coupled with complex or long HTML markup) which makes it easier to mount DoS attack aimed at webserver CPU exhaustion. In a case of cloud deployment, the frequency of malicious requests could be low enough to avoid triggering DDoS protection offered by the cloud vendor yet sufficient to saturate the server CPU and trigger autoscaling thus increasing the monetary cost. This challenge can be mitigated using a rate limiter which arguably should be an integral part of run-time SSR offerings.
 
     Choosing build-time SSR allows to exclude the last two costs and effectively mitigate the first one by providing a concise implementation comprised of just few small source [files](https://github.com/winwiz1/crisp-react/tree/master/client/src/utils/ssr). The implementation is triggered as an optional post-build step and is consistent with script bundle compression also performed at the build time to avoid loading the webserver CPU.
 
@@ -71,6 +71,8 @@ It can be conveniently executed from the Cloud Shell session opened during the d
   - [Backend Usage Scenarios](#backend-usage-scenarios)
 - [SSR](#ssr)
 - [Containerisation](#containerisation)
+  - [Using Docker](#using-docker)
+  - [Using Google Cloud Run](#using-google-cloud-run)
 - [What's Next](#whats-next)
 - [Pitfall Avoidance](#pitfall-avoidance)
 - [Q & A](#q--a)
@@ -348,9 +350,11 @@ This section contains additional considerations that apply to deploying the solu
 
 2. The security of the deployment can be improved by switching to the private mode. This can be done by changing the `allow-unauthenticated` setting in the `app.json` file to `false`. The switch impacts usability due to the service becoming inaccessible to non-authenticated users. The access to the service can be enabled by an additionally deployed [endpoint](https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run). However the endpoint requires users to authenticate using [Google Sign-In](https://developers.google.com/identity/sign-in/web/) or other methods. Obviously this authentication cannot be facilitated by the React application because any access to it is controlled by the endpoint.
 
-3. The Google provided alternatives to container deployment on Cloud Run with ability to control networking ingress include Cloud Run for Anthos. This option allows to have an ingress controller but is more expensive and technically involved. Google App Engine Flexible Environment is yet another option, it has access to a configurable firewall but [lacks](https://cloud.google.com/appengine/docs/flexible/nodejs/managing-projects-apps-billing) ability to set spending limits.
+3. The Google provided alternatives to container deployment on Cloud Run with ability to control networking ingress include Cloud Run for Anthos. This option allows to have an ingress controller but is more expensive and technically involved. Google App Engine (GAE) Flexible Environment is yet another option, it has access to a configurable firewall but [lacks](https://cloud.google.com/appengine/docs/flexible/nodejs/managing-projects-apps-billing) ability to set spending limits. The inability to control spending makes GAE more suitable for non-public websites with access controlled by Google Identity-Aware Proxy [(IAP)](https://cloud.google.com/iap/docs/). It's worth noting that currently IAP [cannot](https://github.com/ahmetb/cloud-run-faq/issues/26) be used to control access to Cloud Run.
 
 4. There is a Cloud Run [bug](https://issuetracker.google.com/issues/147185337) that makes it impossible to deploy a production build of the client on Cloud Run. The reason for it is that production builds of React applications typically produce compressed script bundles. The bug causes Cloud Run to strip the `Content-Encoding` HTTP header from the response sent by the backend. As a result, the browser doesn't know the downloaded bundle was compressed and doesn't uncompress it making the bundle unusable. The workaround is to opt for development builds with uncompressed bundles.
+
+To summarize, Cloud Run is a simple and very cost-effective (billed for the duration of HTTP calls) option for a website demo, not so much for the production deployment of either publicly or privately accessed website. For the latter only, GAE coupled with IAP can be used assuming lack of spending limits is not an issue. The production Cloud Run deployments seem to be geared towards microservices.
 ## What's Next
 Consider the following steps to add the desired functionality:
 * Start with [Client Usage Scenarios](#client-usage-scenarios) to develop UI in absence of API data. For example, develop the initial look and feel of the login page. Take advantage of the Live Reloading to speed up the development. The client scenarios ensure the backend is not started needlessly.
