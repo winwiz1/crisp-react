@@ -9,6 +9,7 @@ import * as path from "path";
 import * as express from "express";
 import nodeFetch from "node-fetch";
 import * as helmet from "helmet";
+import * as nocache from "nocache";
 import * as expressStaticGzip from "express-static-gzip";
 import favicon = require("serve-favicon");
 import * as SPAs from "../../config/spa.config";
@@ -47,15 +48,10 @@ class Server {
 
   private config(): void {
     this.m_app.use([
-      helmet({
-        noCache: false,
-      }),
-      favicon(path.join(__dirname, "../../pub/", "fav.ico"))
+      helmet(),
+      favicon(path.join(__dirname, "../../pub/", "fav.ico")),
+      nocache()
     ]);
-
-    this.m_app.use(helmet({
-      noCache: true,
-    }));
 
     this.m_app.disable("etag");
     this.m_app.set("trust proxy", true);
