@@ -373,6 +373,9 @@ The webpack-dev-server is never started in production. This is hardly a good ide
 Q: I have changed both SPA names in the SPA Configuration block and kept the rest including the entry points intact. I expect everything to keep working using my new names for the SPA landing pages instead of the old `/first.html` and `/second.html`.  However navigation via the menu and Back/Forward browser buttons seems to be broken. How can it be fixed.<br/>
 A: Clear the browser's history and cache. Alternatively use an incognito tab. The client, the backend and the tests should work with the new names.
 
+Q: Which versions of Internet Explorer are supported.<br/>
+A: This project aims to work with browsers that are supported by vendors and can be made secure via security updates. Therefore IE11 is supported whereas IE10 and the earlier versions are not.
+
 Q: Can I use dynamic imports in addition to multiple SPAs for code splitting?<br/>
 A: Yes, dynamic imports are fully supported. For example, if there is a Reporting bundle and one component is known to be used infrequently, then it's a good candidate to be separated from the bundle using a dynamic import:
 ```js
