@@ -1,4 +1,4 @@
-# Used by Docker and Cloud Run
+# Used by Heroku
 
 FROM node:12.8.1-slim as build
 RUN apt-get update -y && apt-get upgrade -y
@@ -8,13 +8,7 @@ COPY --chown=node:node ./server/ .
 WORKDIR /crisp-react/client
 COPY --chown=node:node ./client/ .
 
-# Development build with uncompressed and not minified bundle - slow
-# Comment out next line when Google fixes issuetracker.google.com/issues/147185337
-RUN yarn && yarn build
-
-# Production build with compressed and minified bundle - fast
-# Uncomment next line when Google fixes the above bug
-#RUN yarn && yarn build:prod
+RUN yarn && yarn build:prod
 
 FROM build as prod
 

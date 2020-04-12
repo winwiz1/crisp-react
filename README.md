@@ -52,10 +52,10 @@ This arrangement brings a security benefit: The clients running inside a browser
 
 * Containerisation. Docker multi-staged build is used to ensure the backend run-time environment doesn't contain the client build-time dependencies e.g. `client/node_modules/`. It improves security and reduces container's storage footprint.
 
-    - As a container deployment option suitable for a demonstration, you can build and deploy the container on Cloud Run. The prerequisites are to have a Google Cloud account with at least one project created and billing enabled.<br/>
+    - As a container deployment option suitable for a short term demonstration, you can build and deploy the container on Cloud Run. The prerequisites are to have a Google Cloud account with at least one project created and billing enabled.<br/>
 [![Run on Google Cloud](docs/cloudrun.png)](https://deploy.cloud.run?git_repo=https://github.com/winwiz1/crisp-react)<br/>
 The build will take a while due to free Cloud Shell using a free cloud VM with modest specs. After the build and deployment are finished you can click on the provided link and see the page rendered by the client.<br/><br/>
-:heavy_exclamation_mark: It is highly recommended to delete the created service when the demo is finished. The explanation why this is needed can be found in the [Containerisation](#containerisation) section. Delete the service by executing the following command:<br/>
+:heavy_exclamation_mark: It is highly recommended to delete the created service when the demo is finished. The explanation why this is needed can be found [there](#cloud-run-considerations). Delete the service using the command:<br/>
 `gcloud run services delete crisp-react --platform=managed --region=us-central1 --project=<project-name>`<br/>
 It can be conveniently executed from the Cloud Shell session opened during the deployment. Update the `region` with the one chosen during the deployment and replace `<project-name>` with your project name. Alternatively delete the service using Cloud Run [Console](https://console.cloud.google.com/run).
 
@@ -72,7 +72,9 @@ It can be conveniently executed from the Cloud Shell session opened during the d
 - [SSR](#ssr)
 - [Containerisation](#containerisation)
   - [Using Docker](#using-docker)
-  - [Using Google Cloud Run](#using-google-cloud-run)
+  - [Using Heroku](#using-heroku)
+  - [Cloud Run Considerations](#cloud-run-considerations)
+- [Custom Domain and CDN](#custom-domain-and-cdn)
 - [What's Next](#whats-next)
 - [Pitfall Avoidance](#pitfall-avoidance)
 - [Q & A](#q--a)
@@ -241,21 +243,21 @@ To start with client scenarios open the `client` subdirectory in VS Code. Then o
 Execute in Terminal: `yarn dev`. Wait until the command finishes.<br/>
 Start a browser and point it to `localhost:8080`. You should see the First SPA overview page.<br/>
 VS Code: Open `src/components/Overview.tsx` and alter the text on the page. As you type, note the compilation progress in the Terminal followed by automatic browser refresh. The newly typed content should be shown on the overview page. If instead of starting a browser you used already running instance, then you might need to refresh the browser to get Live Reloading working.<br/>
-To finish press `Control+C` in the Terminal.<br/>
+To finish, press `Control+C` in the Terminal.<br/>
 When to use: Develop the part of UI that doesn't need backend data. 
 #### Debug client using devserver and VS Code
 VS Code: Start the `Launch Chrome Connected to Devserver` debugging configuration.<br/> 
 Wait until an instance of Chrome starts and shows the overview page.<br/>
 VS Code: Put a breakpoint on the following line: `src/components/ComponentB.tsx:14`.<br/>
 Use the overview page menu to choose the ComponentB. The breakpoint in VS Code will be hit. Press F5 to continue execution. Alternatively use Chrome to continue execution. Note Live Reloading is supported.<br/>
-To finish remove the breakpoint and stop the running debugging configuration (use Debugging toolbar or press `Shift+F5`).<br/>
+To finish, remove the breakpoint and stop the running debugging configuration (use Debugging toolbar or press `Shift+F5`).<br/>
 When to use: Troubleshoot the client provided backend data is not required.
 #### Debug client using devserver and Chrome DevTools
 Follow the "Debug client using devserver and VS Code" scenario  to see the overview page.<br/>
 In the instance of Chrome started, open Chrome DevTools.<br/>
 Use 'Sources -> Filesystem -> Add folder to workspace' to add `client/src` directory. In this directory open the file `src/components/ComponentB.tsx` and put a breakpoint on the line 14.<br/>
 Use the overview page menu to choose the ComponentB. The breakpoint in Chrome DevTools will be hit. Go to VS Code and note it knows the execution has stopped on this line of code and lets you inspect variables. Use Chrome or VS Code to continue execution. Note Live Reloading is supported.<br/>
-To finish remove the breakpoint and stop the running debugging configuration (use Debugging toolbar or press `Shift+F5`).<br/>
+To finish, remove the breakpoint and stop the running debugging configuration (use Debugging toolbar or press `Shift+F5`).<br/>
 When to use: Troubleshoot UI, inspect DOM tree, etc. provided backend data is not required.
 #### Build client for development or production
 To perform the development build execute in Terminal: `yarn build`. The build artifacts can be found under `client/dist` directory.<br/>
@@ -266,7 +268,7 @@ Terminal: `yarn test`
 #### Debug client test cases
 VS Code: Put a breakpoint in any `.test.tsx` file.<br/>
 VS Code: Start 'Debug Jest Tests' debugging configuration. Wait until the breakpoint is hit.<br/>
-To finish remove the breakpoint and stop the running debugging configuration (use Debugging toolbar or press `Shift+F5`).
+To finish, remove the breakpoint and stop the running debugging configuration (use Debugging toolbar or press `Shift+F5`).
 #### Lint client
 Terminal: `yarn lint`
 ### Backend Usage Scenarios
@@ -284,7 +286,7 @@ Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
 Start the debugging configuration  `Debug Client and Backend (workspace)`.<br/>
 Wait until an instance of Chrome starts. You should see the overview page.<br/>
 VS Code: Open `client/src/components/Overview.tsx` and alter the text on the page. After a few seconds delay the new content should be shown in the browser.<br/>
-To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
+To finish, stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
 #### Test backend
 Open a command prompt in the `server` subdirectory.<br/>
 Execute command: `yarn test`
@@ -292,7 +294,7 @@ Execute command: `yarn test`
 Open the `server` subdirectory in VS Code.<br />
 Put a breakpoint in `.test.tsx` file.<br/>
 Start 'Debug Jest Tests' debugging configuration. Wait until the breakpoint is hit.<br/>
-To finish remove the breakpoint and stop the running debugging configuration.
+To finish, remove the breakpoint and stop the running debugging configuration.
 #### Lint backend
 Open a command prompt in the `server` subdirectory.<br/>
 Execute command: `yarn lint`
@@ -323,38 +325,100 @@ Use the overview page menu to choose the ComponentB. The breakpoint in Chrome De
 </details>
 </div>
 
-To finish stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
+To finish, stop the running debugging configuration (use the ‘Stop’ button on VS Code Debugging toolbar two times or press  <code>Control+F5</code>  twice).
 #### Use backend to debug the production client build
 Open the workspace file  `crisp-react.code-workspace`  in VS Code.<br/>
 Edit file `client/webpack.config.js` to change the `sourceMap` setting of the TerserPlugin config to `true`.<br/>
 Start the debugging configuration  `Debug Production Client and Backend (workspace)`.<br/>
 Wait until an instance of Chrome starts. You should see the overview page. Now you can use VS Code to set breakpoints in both client and backend provided the relevant process is highlighted/selected as explained in the previous scenario. You can also use Chrome DevTools to debug the client application as shown above.<br/>
-To finish stop the running debugging configuration (use the Debugging toolbar or press  `Control+F5`  once).
+To finish, stop the running debugging configuration (use the Debugging toolbar or press  `Control+F5`  once).
 ## SSR
 ### Turning On and Off on the Application Level
 SSR is enabled for production builds. In order to turn it off rename the `postbuild:prod` script in [`package.json`](https://github.com/winwiz1/crisp-react/blob/master/client/package.json), for example prepend an underscore to the script name. This will reduce the build time.
 ### Turning On and Off on the SPA Level
 By default SSR is disabled for the [`first`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/first.tsx) SPA and enabled for the [`second`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/second.tsx) SPA. To toggle this setting follow the instructions provided in the respective file comments.
 ## Containerisation
+A container acts as a mini operating system providing your code with run-time dependencies. One of the benefits of this approach is that your programs are less likely to break during deployments in different e.g. hosting provider supplied environments. It makes a container (represented by the sequence of build instructions in `Dockerfile`) to be a robust deployment vehicle.
+
+Assuming the deployment demo in the [Project Highlights](#project-highlights) section has been completed, a container has already been built in the cloud and deployed to Google Cloud Run. In this section we will build the container locally and expect it to run in two other deployments (in the local environment facilitated by Docker and the cloud one provided by Heroku)  without any further adjustments.
 ### Using Docker
-To build a Docker container image and start it, execute [`start-container.cmd`](https://github.com/winwiz1/crisp-react/blob/master/start-container.cmd) or [`start-container.sh`](https://github.com/winwiz1/crisp-react/blob/master/start-container.sh). Both files can also be executed from an empty directory in which case uncomment the two lines at the top. Moreover, it can be copied to a computer or VM that doesn't have NodeJS installed. The only prerequisites are Docker and Git.
+Install [Docker](https://docs.docker.com/get-docker/). To build a Docker container and start it, execute [`start-container.cmd`](https://github.com/winwiz1/crisp-react/blob/master/start-container.cmd) or [`start-container.sh`](https://github.com/winwiz1/crisp-react/blob/master/start-container.sh). Then point a browser to `localhost:3000`. Both files can also be executed from an empty directory in which case uncomment the two lines at the top. Moreover, it can be copied to a computer or VM that doesn't have NodeJS installed. The only prerequisites are Docker and Git.
 
-The `Dockerfile` produces the development build of the client. This is a workaround for the Cloud Run bug explained below. If you are not using Cloud Run, switch to the production build as explained in the [`Dockerfile`](https://github.com/winwiz1/crisp-react/blob/master/Dockerfile) comments.
+ The `Dockerfile` produces a development build of the client as a workaround for the Cloud Run bug explained below. If you are not using Cloud Run, switch to the production build as explained in the [`Dockerfile`](https://github.com/winwiz1/crisp-react/blob/master/Dockerfile) comments.
+ ### Using Heroku
+Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install).  Then log to Heroku using the `heroku login` command. Execute the following commands to build and deploy a container:
+```
+git clone https://github.com/winwiz1/crisp-react.git
+cd crisp-react
+heroku container:login
+heroku create <app-name>
+heroku stack:set container -a <app-name>
+heroku container:push web --recursive
+heroku container:release web
+```
+> The `--recursive` option ensures the file `Dockerfile.web` is picked up  and production builds of the client are performed. Without this option `Dockerfile` is used instead and development builds of the client are produced.
 
->Once the container image is built, you can upload it into a private container registry supported by all cloud vendors and run it from there using one of their container offerings. One such option, Google Cloud Run, is described below since it was used for the demonstration in the [Project Highlights](#project-highlights) section. Also note that all vendors allow you to build the image in the cloud so there is no need to upload it.
+Replace the  `<app-name>` placeholder with your Heroku app name.  The app will have the URL: `<app-name>.herokuapp.com`.
 
-### Using Google Cloud Run
-This section contains additional considerations that apply to deploying the solution on Cloud Run. The considerations are not specific to this solution and would be relevant for any React SPA.
+If you own a domain name and intend to implement the optional steps described in the [Custom Domain and CDN](#custom-domain-and-cdn) section, then you can improve security by making the app name random, for example `my-crisp-app-XXXXXXXXXXXX` where the last part represents a random pattern. The app name can be changed at any time using the Settings page at `https://dashboard.heroku.com/apps/<app-name>/settings`.
+### Cloud Run Considerations
+The remainder of this section contains additional considerations that apply to deploying the solution on Cloud Run. The considerations are not specific to this solution and would be relevant for any React SPA.
 
-1. Although Cloud Run provides an ample free tier usage in terms of bandwidth and number of requests, you are billed for the incoming requests once the free usage threshold, 2 million calls per month, is exceeded. This scenario wouldn't be infeasible if the service URL is discovered and used to mount a DoS attack (or come close to it by emulating a significant workload). Deleting the service promptly after a demonstration helps to mitigate this risk. Hopefully Google will make a configurable firewall available soon for Cloud Run running in the public access mode.
+1. Although Cloud Run provides an ample free tier usage in terms of bandwidth and number of requests, you are billed for the incoming requests once the free usage threshold, 2 million calls per month, is exceeded. This scenario wouldn’t be infeasible if the  service URL is discovered and used to mount a Layer 7 DoS attack (or come close to it by emulating a significant workload). There is an additional cost for the running time exceeding its free threshold which can be exacerbated by the service scaling itself up under attack. Deleting the service promptly after a demonstration helps to mitigate this risk. Hopefully Google will make a configurable firewall with rate limiting available for Cloud Run running in the public access mode.
 
-2. The security of the deployment can be improved by switching to the private mode. This can be done by changing the `allow-unauthenticated` setting in the `app.json` file to `false`. The switch impacts usability due to the service becoming inaccessible to non-authenticated users. The access to the service can be enabled by an additionally deployed [endpoint](https://cloud.google.com/endpoints/docs/openapi/get-started-cloud-run). However the endpoint requires users to authenticate using [Google Sign-In](https://developers.google.com/identity/sign-in/web/) or other methods. Obviously this authentication cannot be facilitated by the React application because any access to it is controlled by the endpoint.
+2. Cloud Run in private access mode is a great product that offers simplicity, competitive pricing and seems to be geared towards microservices. Deducing the intended use of its public access mode is more challenging. The Google provided alternatives to the public access mode with ability to control networking ingress include Cloud Run for Anthos. This option allows to have an ingress controller but is more expensive and technically involved. Google App Engine (GAE) Flexible Environment is yet another option, it has access to a configurable firewall but [lacks](https://cloud.google.com/appengine/docs/flexible/nodejs/managing-projects-apps-billing) ability to set spending limits. The inability to control spending makes GAE more suitable for non-public websites with access controlled by Google Identity-Aware Proxy [(IAP)](https://cloud.google.com/iap/docs/). It's worth noting that currently IAP [cannot](https://github.com/ahmetb/cloud-run-faq/issues/26) be used to control access to Cloud Run. Finally there is an option to combine Cloud Run with Firebase Hosting but it doesn't seem to add too much certainty with respect to expenses.
 
-3. The Google provided alternatives to container deployment on Cloud Run with ability to control networking ingress include Cloud Run for Anthos. This option allows to have an ingress controller but is more expensive and technically involved. Google App Engine (GAE) Flexible Environment is yet another option, it has access to a configurable firewall but [lacks](https://cloud.google.com/appengine/docs/flexible/nodejs/managing-projects-apps-billing) ability to set spending limits. The inability to control spending makes GAE more suitable for non-public websites with access controlled by Google Identity-Aware Proxy [(IAP)](https://cloud.google.com/iap/docs/). It's worth noting that currently IAP [cannot](https://github.com/ahmetb/cloud-run-faq/issues/26) be used to control access to Cloud Run.
+3. There is a Cloud Run [bug](https://issuetracker.google.com/issues/147185337) that makes it impossible to deploy a production build of the client on Cloud Run. The reason for it is that production builds of React applications typically produce compressed script bundles. The bug causes Cloud Run to strip the `Content-Encoding` HTTP header from the response sent by the backend. As a result, the browser doesn't know the downloaded bundle was compressed and doesn't uncompress it making the bundle unusable. The workaround is to opt for development builds with uncompressed bundles.
 
-4. There is a Cloud Run [bug](https://issuetracker.google.com/issues/147185337) that makes it impossible to deploy a production build of the client on Cloud Run. The reason for it is that production builds of React applications typically produce compressed script bundles. The bug causes Cloud Run to strip the `Content-Encoding` HTTP header from the response sent by the backend. As a result, the browser doesn't know the downloaded bundle was compressed and doesn't uncompress it making the bundle unusable. The workaround is to opt for development builds with uncompressed bundles.
+## Custom Domain and CDN
+This section compliments the deployment described under the [Using Heroku](#using-heroku) heading. It maps Heroku app URL to a custom domain you own. After that, Cloudflare CDN is added to Heroku servers<br/>
+![Deploy](docs/deploy.png)
 
-To summarize, Cloud Run is a simple and very cost-effective (billed for the duration of HTTP calls) option for a website demo, not so much for the production deployment of either publicly or privately accessed website. For the latter only, GAE coupled with IAP can be used assuming lack of spending limits is not an issue. The production Cloud Run deployments seem to be geared towards microservices.
+to take advantage of the distributed cache provided by Cloudflare and achieve better performance with improved security. Both custom domain and CDN are optional. If you haven't used Cloudflare previously this [answer](https://www.quora.com/Cloudflare-product/How-does-Cloudflare-work-Does-Cloudflare-just-divert-malicious-traffic) could be useful.
+
+Prerequisites:
+- Custom domain name ownership,
+- Cloudflare account. It's free and can be created by following this [link](https://dash.cloudflare.com/sign-up).
+
+The steps:
+
+1. Log to the registrar of your custom domain e.g. `yourdomain.com` and create a subdomain, for example `crisp-react.yourdomain.com`. While you can choose any valid name for the subdomain, 'crisp-react' will be assumed for the next steps.
+
+2. Click on the "Add domain" button on Heroku Settings page at `https://dashboard.heroku.com/apps/<app-name>/settings` to add `crisp-react.yourdomain.com` as a custom domain to your app. Heroku will provide a name of a host similar to `xxxxx.herokudns.com`. Copy this name to the clipboard.
+
+3. Use the DNS settings provided by the registrar to add a DNS record:
+    | Record Type | Host or Name | Value or Points To or Content |
+    | :---:| :---:|:---|
+    | `CNAME` | `crisp-react` | `xxxxx.herokudns.com` |
+
+    It will take some time for the new record to propagate across the globe. Once this delay is over, the Heroku app will be available from `crisp-react.yourdomain.com`.
+
+4. Log to Cloudflare [dashboard](https://dash.cloudflare.com/) and add the root domain `yourdomain.com` as a site to your account. Choose either the Free or a paid Cloudflare [plan](https://www.cloudflare.com/plans). As for SSL settings, select the Full option if the Heroku app is accessible via HTTPS protocol and the Flexible option if it uses HTTP.
+
+    At the end Cloudflare will provide you with the hostnames of the two of its name servers.  Use the DNS settings provided by the registrar (some registrars keep name servers under different menu/setting) to replace the name servers of your registrar with the ones provided by Cloudflare.
+
+5. Adjust Cloudflare DNS setting for the newly added site. During the step (4) Cloudflare likely have discovered most of the DNS records applicable to the domain `yourdomain.com` from the registrar and automatically imported those. However the `CNAME` record added at the step (3) could be missing in which case you will need to add it again, this time to Cloudflare DNS settings.
+
+    In case there is no site or app mapped to `yourdomain.com` or in case there is one but you are not interested in it being processed by Cloudflare, change 'Proxy Status' of Cloudflare DNS entries from 'Proxied' to 'DNS only'  leaving only the `CNAME` record created at the step (3) or (5) in the 'Proxied' state:<br/>
+    ![Deploy](docs/cloudflare1.png)
+
+    The setting can be toggled by clicking on the orange Cloudflare icon.
+
+6. Use Cloudflare Page Rules to add the following two rules:
+    - The first rule:<br/>
+        ![Deploy](docs/cloudflare2.png)
+
+    - The second rule:<br/>
+        ![Deploy](docs/cloudflare3.png)
+
+    The order of the rules is important. Since only one page rule is applied, the more specific API rule should be on the top.
+
+    If the Free plan is used the maximum cache duration is limited to 2 hours. It causes a cache miss with subsequent re-caching every 2 hours for all .html pages, script bundles etc.
+
+After the steps are completed the Heroku app will be using distributed caching and a free SSL certificate for the custom domain. Also the cache related statistics, monitoring and the breakdown of incoming requests by country will be available from Cloudflare even on the Free plan.
+
+You can test DNS resolution for `crisp-react.yourdomain.com` using tools like `nslookup` or `dig` to check it resolves to IP addresses that belong to Cloudflare, similarly to the demo [site](https://crisp-react.winwiz1.com/).
+
 ## What's Next
 Consider the following steps to add the desired functionality:
 * Start with [Client Usage Scenarios](#client-usage-scenarios) to develop UI in absence of API data. For example, develop the initial look and feel of the login page. Take advantage of the Live Reloading to speed up the development. The client scenarios ensure the backend is not started needlessly.
