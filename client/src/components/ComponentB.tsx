@@ -14,12 +14,12 @@ const Description: React.FC = _props => {
       <Container text textAlign="justified">
       <Header as="h3">Hello from ComponentB</Header>
       <p>
-        <code>ComponentB</code> is rendered by <code>first.tsx</code> which has been
-        set as an 'entry point' of the 'first' script bundle by <code>
-        webpack.config.js</code>. Because of that the <code>ComponentB</code>
-        component and its dependencies (if any) are packaged into the 'first' script
-        bundle, except for components under <code>node_modules/</code> separated into
-        the 'vendor' bundle.
+        <code>ComponentB</code> is rendered by <code>first.tsx</code> which
+        has been set as an 'entry point' of the 'first' script bundle by
+        <code>webpack.config.js</code>. Because of that the component
+        <code>ComponentB</code> and its dependencies (if any) are packaged
+        into the 'first' script bundle, except for components under
+        <code>node_modules/</code> separated into the 'vendor' bundle.
       </p>
       </Container>
     </section>
