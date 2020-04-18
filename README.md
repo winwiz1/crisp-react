@@ -1,5 +1,5 @@
 ﻿<div align="center">
-  <a href="https://github.com/winwiz1/crisp-react">
+  <a href="https://crisp-react.winwiz1.com">
     <img alt="crisp-react logo" src="docs/crisp-react.png">
   </a>
   <br />
@@ -355,8 +355,8 @@ cd crisp-react
 heroku container:login
 heroku create <app-name>
 heroku stack:set container -a <app-name>
-heroku container:push web --recursive
-heroku container:release web
+heroku container:push web --recursive -a <app-name>
+heroku container:release web -a <app-name>
 ```
 > The `--recursive` option ensures the file `Dockerfile.web` is picked up and a production build of the client is performed. Without this option `Dockerfile` is used instead and a development build of the client is produced.
 
