@@ -39,7 +39,7 @@ export const fetchAdapter = async (props: IFetch) => {
     .then(resp => {
       const contentType = resp.headers.get("Content-Type");
       isResponseJson = (contentType?.includes("application/json")) ? true : false;
-      isResponseText = (contentType?.includes("text/plain")) ? true : false;
+      isResponseText = (contentType?.includes("text/plain") || contentType?.includes("text/html")) ? true : false;
       const ret = isResponseJson ? resp.json() : resp.text();
       isResponseOk = resp.ok;
       responseStatus = resp.status;
