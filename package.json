@@ -47,5 +47,8 @@
     "start:prod": "cd client && yarn build:prod",
     "poststart:prod": "cd server && yarn start:prod",
     "run:prod": "cd server && yarn run:prod"
+  },
+  "engines" : {
+    "node" : ">=10.17"
   }
 }

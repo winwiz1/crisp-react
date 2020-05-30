@@ -1,6 +1,6 @@
 # Used by Heroku
 
-FROM node:12.8.1-slim as build
+FROM node:12.17.0-slim as build
 RUN apt-get update -y && apt-get upgrade -y
 
 WORKDIR /crisp-react/server
