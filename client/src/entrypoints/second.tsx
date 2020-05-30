@@ -35,7 +35,7 @@ if (!isServer()) {
 // ReactDOM.render(                         // .render(...) is used without SSR
    ReactDOM.hydrate(                        // .hydrate(...) is used with SSR
     <Second />,
-    document.getElementById("react-root")
+    document.getElementById("app-root")
   );
 }
 

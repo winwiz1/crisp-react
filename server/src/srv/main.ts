@@ -9,5 +9,5 @@ const port = getListeningPort();
 const server = Server();
 
 server.listen(port, () => {
-  logger.info({ message: `Backend started at http://localhost:${port}` });
+  logger.info({ message: `Server started, port: ${port}` });
 });

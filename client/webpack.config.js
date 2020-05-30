@@ -12,6 +12,12 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const headHtmlSnippetPath = path.join("src", "entrypoints", "head-snippet.html");
 const headHtmlSnippet = fs.existsSync(headHtmlSnippetPath) ?
   fs.readFileSync(headHtmlSnippetPath, "utf8") : undefined;
+const metaDescription = "Skeleton website built using Crisp React \
+https://github.com/winwiz1/crisp-react boilerplate. Consists of two sample \
+React SPAs with optional build-time SSR turned on for the second SPA.";
+const metaKeywords = "React, TypeScript, Express, webpack, NodeJS, Jest";
+const metaOwnUrl = "https://crisp-react.winwiz1.com/";
+
 
 configuredSPAs.verifyParameters(verifier);
 
@@ -123,20 +129,33 @@ const getWebpackConfig = (env, argv) => {
     config.plugins.push(
       new HtmlWebpackPlugin({
         template: require("html-webpack-template"),
-        inject: false,
+        inject: true,
         title: configuredSPAs.appTitle,
-        appMountId: "react-root",
+        appMountId: "app-root",
         alwaysWriteToDisk: true,
         filename: `${entryPoint}.html`,
         chunks: [`${entryPoint}`, "vendor", "runtime"],
-        addBrotliExtension: isProduction,
         headHtmlSnippet,
         links: [
-          "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+          "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css",
+          {
+            href: metaOwnUrl,
+            rel: "canonical"
+          }
         ],
         meta: [
           { name: "viewport", content: "width=device-width, initial-scale=1.0, shrink-to-fit=no" },
+          { name: "description", content: metaDescription },
+          { name: "keywords", content: metaKeywords },
+          { name: "robots", content: "index, follow" },
+          { property: "og:title", content: configuredSPAs.appTitle },
+          { property: "og:type", content: "website" },
+          { property: "og:url", content: metaOwnUrl },
+          { property: "og:description", content: metaDescription },
+          { property: "twitter:title", content: configuredSPAs.appTitle },
+          { property: "twitter:description", content: metaDescription },
         ],
+        minify: false,
       })
     );
   })
@@ -144,24 +163,24 @@ const getWebpackConfig = (env, argv) => {
   config.plugins.push(new HtmlWebpackHarddiskPlugin());
 
   if (isProduction) {
-    const BrotliPlugin = require("brotli-webpack-plugin");
-    const CompressionPlugin = require("compression-webpack-plugin")
-    const HtmlWebpackBrotliPlugin = require("html-webpack-brotli-plugin")
+    const CompressionPlugin = require("compression-webpack-plugin");
 
     config.plugins.push(
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": JSON.stringify("production")
       }));
     config.plugins.push(
-      new BrotliPlugin({
-        asset: "[path].br[query]",
-        test: /\.(js|css|html|svg)$/,
+      new CompressionPlugin({
+        filename: '[path].br[query]',
+        algorithm: 'brotliCompress',
+        test: /\.js$|\.css$|\.html$/,
+        compressionOptions: {
+          level: 11,
+        },
         threshold: 10240,
-        minRatio: 0.8
+        minRatio: 0.8,
+        deleteOriginalAssets: false,
       }));
-    config.plugins.push(
-      new HtmlWebpackBrotliPlugin()
-    );
     config.plugins.push(
       new CompressionPlugin({
         filename: "[path].gz[query]",

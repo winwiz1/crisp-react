@@ -52,7 +52,7 @@ export const fetchAdapter = async (props: IFetch) => {
         let errMsg = props.errorMessage ?? "Could not get data from the backend.";
         if (isResponseText === true && isResponseJson === false &&
           responseStatus && responseStatus >= 400) {
-          errMsg += ` Error: ${respData}`;
+          errMsg += ` Error: ${responseStatus === 404? "404 Not Found." : respData}`;
         }
         const detailMsg = `Fetch error ${responseStatus} for URL ${props.targetPath}, details: ${respData}`;
         props.errorHandler(new CustomError(errMsg, detailMsg));

@@ -10,7 +10,7 @@ const logFileName = "server.log";
 const isCloudRun = isGoogleCloudRun();
 const logDestinations: Winston.LoggerOptions["transports"] =
   [
-    // On Google Cloud Run the console output can go into Stackdriver
+    // On Cloud Run the console output can go into Stackdriver
     // Logging that could be automatically exported to BigQuery
     new (Winston.transports.Console)(),
   ];
@@ -22,6 +22,6 @@ if (!isCloudRun) {
 
 export const logger = Winston.createLogger({
   format: Winston.format.json({ replacer: undefined, space: 3 }),
-  level: "error",
+  level: "warn",
   transports: logDestinations
 });

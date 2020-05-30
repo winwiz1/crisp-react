@@ -13,3 +13,12 @@ export function isGoogleCloudRun(): boolean {
 export function isTest(): boolean {
   return process.env.NODE_ENV === "test";
 }
+
+export function isProduction(): boolean {
+  return process.env.NODE_ENV === "production";
+}
+
+export function useProxy(): boolean {
+  const ret = parseInt(process.env.BEHIND_PROXY || "0", 10);
+  return ret === 1;
+}

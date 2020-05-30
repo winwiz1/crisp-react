@@ -58,6 +58,7 @@ The build will take a while due to free Cloud Shell using a free cloud VM with m
 :heavy_exclamation_mark: It is highly recommended to delete the created service when the demo is finished. The explanation why this is needed can be found [there](#cloud-run-considerations). Delete the service using the command:<br/>
 `gcloud run services delete crisp-react --platform=managed --region=us-central1 --project=<project-name>`<br/>
 It can be conveniently executed from the Cloud Shell session opened during the deployment. Update the `region` with the one chosen during the deployment and replace `<project-name>` with your project name. Alternatively delete the service using Cloud Run [Console](https://console.cloud.google.com/run).
+* Sample websites. [Skeleton](https://crisp-react.winwiz1.com/), [production](https://covid.winwiz1.com/).
 
 ## Table of Contents
 - [Getting Started](#getting-started) 
@@ -263,6 +264,8 @@ To finish, remove the breakpoint and stop the running debugging configuration (u
 When to use: Troubleshoot UI, inspect DOM tree, etc. provided backend data is not required.
 #### Build client for development or production
 To perform the development build execute in Terminal: `yarn build`. The build artifacts can be found under `client/dist` directory.<br/>
+>:bulb: You might want to edit `client/webpack.config.js` file and change the [three](https://github.com/winwiz1/crisp-react/blob/master/client/webpack.config.js#L15-L19) `metaXxx` variables to alter the `<meta>` tags describing your website to the search engines.
+
 To perform the production build execute in Terminal: `yarn build:prod`. The build artifacts including the bundles with various compressions can be found under the same directory. If a bundle is too small to benefit from compression then it won't be compressed.<br/>
 When to use: As a preparatory step when the backend is required. This step will be executed automatically by the backend usage scenarios below when needed.
 #### Test client

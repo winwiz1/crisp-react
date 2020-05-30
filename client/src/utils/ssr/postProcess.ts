@@ -34,7 +34,7 @@ async function postProcessFile(htmlFile: string, ssrFile: string): Promise<void>
 
   const dataHtml = await readFile(htmlFilePath);
   const dataSsr = (await readFile(ssrFilePath)).toString();
-  const reReact = /^\s*<div\s+id="react-root">/;
+  const reReact = /^\s*<div\s+id="app-root">/;
   const ar: string[] = dataHtml.toString().replace(/\r\n?/g, '\n').split('\n');
 
   const out = ar.map(str => {

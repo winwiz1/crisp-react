@@ -57,7 +57,8 @@ export class CustomError extends Error {
   // If true then no response is sent by error-handling middleware
   private m_logOnly: boolean = false;
 
-  readonly m_loggingTuple: [boolean, boolean] = [true, true];
+  // By default do log the request and do not log the response
+  readonly m_loggingTuple: [boolean, boolean] = [true, false];
 }
 
 export function isError(err: any): err is Error {
@@ -83,7 +84,7 @@ function errorMiddleware(
 
   if (isCustomError(err)) {
     const status = err.status;
-    isTest() || logger.error({
+    isTest() || logger.warn({
       message: "ErrorMessage: " + (err.unobscuredMessage ?? err.message) + "\n",
       ...(err.m_loggingTuple[0] && request),
       ...(err.m_loggingTuple[1] && response)
@@ -92,7 +93,7 @@ function errorMiddleware(
       response.status(status).type("txt").send(err.message);
     }
   } else if (isError(err)) {
-    logger.error({
+    logger.warn({
       message: "ErrorMessage: " + err.message + "\n",
       request,
       response });
