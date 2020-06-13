@@ -54,7 +54,12 @@ class Server {
           browserSniff: false,
           directives: {
             frameSrc: ["'self'"],
-            defaultSrc: ["'self'", "cdn.jsdelivr.net"],
+            defaultSrc: ["'self'"],
+            // Uncommenting the 'scriptSrc: xxx' line below will suppress browser's console
+            // message about refusing to execute <script> located in head-snippet.html.
+            // However this script doesn't need to be executed by browsers that understand
+            // SRI so leaving the message is fine.
+            // scriptSrc: ["'self'", "'sha256-SuONhcfr49gviXGu4vUSnIzwTSVHVAa7+O2walEP68E='"],
             styleSrc: ["'unsafe-inline'", "cdn.jsdelivr.net", "fonts.googleapis.com"],
             fontSrc: ["data:", "fonts.googleapis.com", "cdn.jsdelivr.net", "fonts.gstatic.com"],
             imgSrc: ["'self'", "data:"]
@@ -94,17 +99,24 @@ class Server {
           this.sendDevServerAsset(`/${entryPoint}`, res, next);
         } else {
           // Serve the static asset from disk
-          res.sendFile(path.resolve(this.getAssetPath(), entryPoint!),
-                       { etag: false });
+          res.sendFile(path.resolve(this.getAssetPath(), entryPoint!), { etag: false });
         }
       } else {
-        if (entryPoint === "robots.txt") {
-          // Modify permissive robots.txt as needed
-          res.send("User-agent: *<br/>Allow: /");
+        if (entryPoint === Server.s_robotsName) {
+          Server.setCacheHeaders(res);
+          res.send(Server.getRobotsContent());
         } else {
           // Emulate historyApiFallback in webpack-dev-server
           res.redirect(303, "/");
         }
+      }
+    });
+
+    this.m_app.get("/:entryPointPng([\\w-]+.png$)", (req, res, _next) => {
+      const entryPoint: string|undefined = req.params.entryPointPng;
+      if (entryPoint === Server.s_appleIcon) {
+        Server.setCacheHeaders(res);
+        res.sendFile(path.join(__dirname, "../../pub/", Server.s_appleIcon), { etag: true });
       }
     });
 
@@ -121,9 +133,9 @@ class Server {
     SampleController.addRoute(this.m_app);
 
     // Default 404 handler
-    this.m_app.use((req, _res, next) => {
+    this.m_app.use((_req, _res, next) => {
       const err = new CustomError(404, "Resourse not found");
-      err.unobscuredMessage = `Invalid resourse requested from ${req.ips} using path ${req.originalUrl}`;
+      err.unobscuredMessage = "Invalid resourse requested";
       return next(err);
     });
   }
@@ -166,7 +178,7 @@ class Server {
       }
     } else {
       const err = new CustomError(404, "Resourse not found");
-      logger.info({ message: `Invalid static resourse "${artifactFile}" requested from ${req.ips} using path ${req.originalUrl}` });
+      logger.info({ message: `Invalid static resourse ${artifactFile} requested` });
       return next(err);
     }
   }
@@ -198,11 +210,26 @@ class Server {
     return new RegExp(`^(${Server.getLandingPages()}|(runtime)|(vendor))\\.\\w{16,32}\\.bundle\\.js((\\.map)|(\\.gz)|(\\.br))?$`);
   }
 
+  // The content of the robots.txt
+  private static getRobotsContent(): string {
+    // Modify permissive robots.txt as needed
+    return "User-agent: *<br/>Allow: /";
+  }
+
+  private static setCacheHeaders (res: express.Response): void {
+    res.removeHeader("Surrogate-Control");
+    res.removeHeader("Pragma");
+    res.removeHeader("Expires");
+    res.setHeader("Cache-Control", "public,max-age=604800,immutable");
+  }
+
   private readonly m_app: express.Application;
   private m_assetPath: StaticAssetPath = StaticAssetPath.TRANSPILED;
   private m_expressStaticMiddleware?: ReturnType<typeof expressStaticGzip> = undefined;
   private static readonly s_htmlExtension = ".html";
   private static readonly s_urlDevWebserver = "http://localhost:8080";
+  private static readonly s_appleIcon = "apple-touch-icon.png";
+  private static readonly s_robotsName = "robots.txt";
   /* tslint:disable:no-string-literal */
   private static readonly s_useDevWebserver = process.env["USE_DEV_WEBSERVER"] === "true";
   /* tslint:enable:no-string-literal */
@@ -222,10 +249,7 @@ class Server {
       maxAge: "7d",
       redirect: false,
       setHeaders: (res: express.Response, _path: string, _stat: any): void => {
-        res.removeHeader("Surrogate-Control");
-        res.removeHeader("Pragma");
-        res.removeHeader("Expires");
-        res.setHeader("Cache-Control", "public,max-age=604800,immutable");
+        Server.setCacheHeaders(res);
       }
     }
   };

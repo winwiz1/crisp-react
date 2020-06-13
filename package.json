@@ -1,6 +1,6 @@
 {
   "name": "crisp-react",
-  "version": "1.2.1",
+  "version": "1.2.6",
   "description": "Boilerplate project with React client and Express backend, both written in Typescript.",
   "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [

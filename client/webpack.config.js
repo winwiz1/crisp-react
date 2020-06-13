@@ -65,6 +65,7 @@ const getWebpackConfig = (env, argv) => {
       chunkFilename: "[name].[hash].bundle.js",
       path: path.resolve(__dirname, "dist"),
       publicPath: "/static/",
+      crossOriginLoading: "anonymous",
     },
     optimization: {
       splitChunks: {
@@ -141,7 +142,12 @@ const getWebpackConfig = (env, argv) => {
           {
             href: metaOwnUrl,
             rel: "canonical"
-          }
+          },
+          {
+            href: "/apple-touch-icon.png",
+            rel: "apple-touch-icon",
+            sizes: "180x180"
+          },
         ],
         meta: [
           { name: "viewport", content: "width=device-width, initial-scale=1.0, shrink-to-fit=no" },
@@ -164,11 +170,16 @@ const getWebpackConfig = (env, argv) => {
 
   if (isProduction) {
     const CompressionPlugin = require("compression-webpack-plugin");
+    const SriPlugin = require("webpack-subresource-integrity");
 
     config.plugins.push(
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": JSON.stringify("production")
       }));
+    config.plugins.push(
+      new SriPlugin({
+      hashFuncNames: ["sha384"]
+    }));
     config.plugins.push(
       new CompressionPlugin({
         filename: '[path].br[query]',

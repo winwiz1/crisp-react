@@ -2,10 +2,16 @@
 .github/
 .vscode/
 docs/
+build/
+dist/
+server/config/
 node_modules/
 README.md
 .gitignore
+.gcloudignore
 .travis.yml
 crisp-react.code-workspace
 start-container-windows.cmd
 bookmarks.json
+logs/
+*.log

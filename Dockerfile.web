@@ -5,6 +5,7 @@ RUN apt-get update -y && apt-get upgrade -y
 
 WORKDIR /crisp-react/server
 COPY --chown=node:node ./server/ .
+RUN yarn
 WORKDIR /crisp-react/client
 COPY --chown=node:node ./client/ .
 
