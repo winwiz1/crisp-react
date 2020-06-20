@@ -443,7 +443,7 @@ Q: I have changed both SPA names in the SPA Configuration block and kept the res
 A: Clear the browser's history and cache. Alternatively use an incognito tab. The client, the backend and the tests should work with the new names.
 
 Q: Which versions of Internet Explorer are supported.<br/>
-A: This project aims to work with browsers that are supported by vendors and can be made secure via security updates. Therefore IE11 is supported whereas IE10 and the earlier versions are not.
+A: This project aims to work with browsers that are supported by vendors and can be made secure via security updates. Therefore IE11 is supported whereas IE10 and the earlier versions are not. The unsupported versions render a blank page with explanatory [message](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/head-snippet.html#L8-L10) asking to upgrade.
 
 Q: Can I use dynamic imports in addition to multiple SPAs for code splitting?<br/>
 A: Yes, dynamic imports are fully supported. For example, if there is a Reporting bundle and one component is known to be used infrequently, then it's a good candidate to be separated from the bundle using a dynamic import:

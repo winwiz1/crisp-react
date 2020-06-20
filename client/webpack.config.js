@@ -104,9 +104,9 @@ const getWebpackConfig = (env, argv) => {
         "process.env.DEVELOPMENT": JSON.stringify(isProduction === false)
       }),
       new ForkTsCheckerWebpackPlugin({
-        tslint: false,
-        useTypescriptIncrementalApi: true,
-        checkSyntacticErrors: true,
+        typescript: true,
+        eslint: undefined,
+        logger: { infrastructure: "console", issues: "console" }
       })
     ],
     devServer: {
@@ -138,7 +138,20 @@ const getWebpackConfig = (env, argv) => {
         chunks: [`${entryPoint}`, "vendor", "runtime"],
         headHtmlSnippet,
         links: [
-          "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css",
+          {
+            rel: "dns-prefetch",
+            href: "//fonts.gstatic.com/"
+          },
+          {
+            rel: "dns-prefetch",
+            href: "//fonts.googleapis.com/"
+          },
+          {
+            rel: "stylesheet",
+            href: "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css",
+            integrity: "sha384-JKIDqM48bt14NZpzl9v0AP36VK2C/X6RuSPfimxpoWdSANUXblZUX1cgdQw8cZUK",
+            crossorigin: "anonymous"
+          },
           {
             href: metaOwnUrl,
             rel: "canonical"

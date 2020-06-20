@@ -55,10 +55,10 @@ class Server {
           directives: {
             frameSrc: ["'self'"],
             defaultSrc: ["'self'"],
-            // Uncommenting the 'scriptSrc: xxx' line below will suppress browser's console
-            // message about refusing to execute <script> located in head-snippet.html.
-            // However this script doesn't need to be executed by browsers that understand
-            // SRI so leaving the message is fine.
+            // CSP can be tested by removing the 'nomodule' attribute from inline <script>
+            // located in head-snippet.html and observing browser's console message about
+            // refusing to execute the script which in turn can be suppressed by
+            // uncommenting the line below.
             // scriptSrc: ["'self'", "'sha256-SuONhcfr49gviXGu4vUSnIzwTSVHVAa7+O2walEP68E='"],
             styleSrc: ["'unsafe-inline'", "cdn.jsdelivr.net", "fonts.googleapis.com"],
             fontSrc: ["data:", "fonts.googleapis.com", "cdn.jsdelivr.net", "fonts.gstatic.com"],
