@@ -1,7 +1,11 @@
 # Used by Heroku
 
 FROM node:12.18.1-slim as build
-RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get update -qq && apt-get upgrade -qq \
+  && apt-get clean autoclean && apt-get autoremove -y \
+  && rm -rf \
+    /var/lib/cache \
+    /var/lib/log
 
 WORKDIR /crisp-react/server
 COPY --chown=node:node ./server/ .
