@@ -81,17 +81,18 @@ export interface ISampleFetcher extends ISampleData {
   See SampleModel.test.ts for an example.
 */
 export class SampleModel implements ISampleFetcher {
+  static initialize() {
+    SampleModel.s_cache.on("expired", SampleModel.handleCacheExpiry);
+  }
 
   static set Config(config: SampleModelConfig) {
     SampleModel.s_config = config;
-    SampleModel.s_instance = undefined;
   }
 
   static get Factory(): SampleModel {
-    if (!SampleModel.s_instance) {
-      SampleModel.s_instance = new SampleModel();
-    }
-    return SampleModel.s_instance;
+    const ret = new SampleModel();
+    // do some extra work that the model might require
+    return ret;
   }
 
   public async fetch(quoteRequest: SampleRequest): Promise<void> {
@@ -130,7 +131,6 @@ export class SampleModel implements ISampleFetcher {
     if (!SampleModel.s_config) {
       throw new Error("SampleModelConfig is undefined");
     }
-    this.m_cache.on("expired", this.handleCacheExpiry);
   }
 
   private async fetchData(): Promise<void> {
@@ -154,7 +154,7 @@ export class SampleModel implements ISampleFetcher {
     }
   }
 
-  private handleCacheExpiry = (cache_key: string, _value: any) => {
+  private static handleCacheExpiry = (cache_key: string, _value: any) => {
     if (!cache_key) {
       return;
     }
@@ -179,7 +179,7 @@ export class SampleModel implements ISampleFetcher {
     }
 
     const clientKey = SampleModel.s_limitPrefix + clientAddress;
-    const cacheData = this.m_cache.mget([clientKey, SampleModel.s_limitInstance]);
+    const cacheData = SampleModel.s_cache.mget([clientKey, SampleModel.s_limitInstance]);
     const clientData = typeof cacheData[clientKey] === "number" ?
       cacheData[clientKey] as number : 0;
     const instanceData = typeof cacheData[SampleModel.s_limitInstance] === "number" ?
@@ -195,7 +195,7 @@ export class SampleModel implements ISampleFetcher {
 
     const { client_key, client_data, instance_data } = this.getDataUsage(clientAddress);
 
-    const ret = this.m_cache.mset([
+    const ret = SampleModel.s_cache.mset([
       { key: client_key,
         ttl: SampleModel.s_limitCleanupInterval,
         val: client_data + usageCount,
@@ -216,14 +216,6 @@ export class SampleModel implements ISampleFetcher {
   private m_request?: SampleRequest = undefined;
   private m_result: SampleRetrieval = new Error("API server call not attempted");
 
-  private readonly m_cache = new NodeCache({
-    checkperiod: 900,
-    deleteOnExpire: true,
-    stdTTL: SampleModel.s_limitCleanupInterval,
-    useClones: false
-  });
-
-  private static s_instance?: SampleModel = undefined;
   private static s_config?: SampleModelConfig = undefined;
   private static readonly s_errMsg = "Failed to query the API server. Please retry later. If the problem persists contact Support";
   private static readonly s_errLimitClient = "The daily API call limit has been reached. Please contact Support if you feel this limit is inadequate.";
@@ -231,4 +223,13 @@ export class SampleModel implements ISampleFetcher {
   private static readonly s_limitPrefix = "apilimit_";
   private static readonly s_limitInstance = "apilimit_instance";
   private static readonly s_limitCleanupInterval = 3600 * 24;
+
+  private static readonly s_cache = new NodeCache({
+    checkperiod: 900,
+    deleteOnExpire: true,
+    stdTTL: SampleModel.s_limitCleanupInterval,
+    useClones: false
+  });
 }
+
+SampleModel.initialize();
