@@ -61,10 +61,12 @@ export class CustomError extends Error {
   readonly m_loggingTuple: [boolean, boolean] = [true, false];
 }
 
+// eslint-disable-next-line
 export function isError(err: any): err is Error {
   return !!err && err instanceof Error && err.constructor !== CustomError;
 }
 
+// eslint-disable-next-line
 export function isCustomError(err: any): err is CustomError {
   return !!err && err.constructor === CustomError;
 }
@@ -113,7 +115,7 @@ function errorMiddleware(
   }
 }
 
-export function handleErrors(app: Express.Application) {
+export function handleErrors(app: Express.Application): void {
   app.use(errorMiddleware);
 }
 

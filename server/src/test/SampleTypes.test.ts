@@ -7,12 +7,12 @@ describe("Testing SampleRequest with invalid data", () => {
   const errInfo: JsonParsingError = { message: undefined };
 
   it("should reject empty JSON object", () => {
-    const obj: object = {};
+    const obj = {};
     expect(SampleRequest.fromJson(obj, validAddress, errInfo)).not.toBeDefined();
   });
 
   it("should reject invalid JSON object", () => {
-    const obj: object = {
+    const obj = {
       name: "1"
     };
     expect(SampleRequest.fromJson(obj, validAddress, errInfo)).not.toBeDefined();

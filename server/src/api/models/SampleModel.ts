@@ -35,7 +35,7 @@ export class SampleModelConfig {
     }
   }
 
-  public readonly setClientDailyLiImit = (limit: number) => {
+  public readonly setClientDailyLiImit = (limit: number): void => {
     if (typeof limit !== "number" || !Number.isInteger(limit)) {
       throw new TypeError("Client API call limit is not an integer");
     }
@@ -81,7 +81,7 @@ export interface ISampleFetcher extends ISampleData {
   See SampleModel.test.ts for an example.
 */
 export class SampleModel implements ISampleFetcher {
-  static initialize() {
+  static initialize(): void {
     SampleModel.s_cache.on("expired", SampleModel.handleCacheExpiry);
   }
 
@@ -91,7 +91,7 @@ export class SampleModel implements ISampleFetcher {
 
   static get Factory(): SampleModel {
     const ret = new SampleModel();
-    // do some extra work that the model might require
+    // do some extra work the model might require
     return ret;
   }
 
@@ -154,7 +154,7 @@ export class SampleModel implements ISampleFetcher {
     }
   }
 
-  private static handleCacheExpiry = (cache_key: string, _value: any) => {
+  private static handleCacheExpiry = (cache_key: string, _value: any): void => {
     if (!cache_key) {
       return;
     }
@@ -179,7 +179,10 @@ export class SampleModel implements ISampleFetcher {
     }
 
     const clientKey = SampleModel.s_limitPrefix + clientAddress;
-    const cacheData = SampleModel.s_cache.mget([clientKey, SampleModel.s_limitInstance]);
+    const cacheData = SampleModel.s_cache.mget([
+      clientKey,
+      SampleModel.s_limitInstance
+    ]);
     const clientData = typeof cacheData[clientKey] === "number" ?
       cacheData[clientKey] as number : 0;
     const instanceData = typeof cacheData[SampleModel.s_limitInstance] === "number" ?

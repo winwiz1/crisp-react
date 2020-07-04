@@ -12,9 +12,11 @@ function verifySpaParameters(parameters, index) {
   }
 
   const ret = {
+  /* eslint-disable */
     name,
     entryPoint,
     redirect
+  /* eslint-enable */
   } = params;
 
   if (typeof ret.name !== "string") {

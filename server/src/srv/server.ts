@@ -1,4 +1,4 @@
-/**
+/*
  * The class Server is responsible for Express configuration.
  * Express is configured to serve the build artefacts produced
  * by the sibling 'client' sub-project (script bundles, HTML files,
@@ -88,6 +88,7 @@ class Server {
     });
 
     this.m_app.get("/:entryPoint([\\w.]+)", (req, res, next) => {
+      // eslint-disable-next-line prefer-const
       let entryPoint: string|undefined = req.params.entryPoint;
       const match = Server.s_regexLandingPages.test(entryPoint || "");
 
@@ -199,6 +200,7 @@ class Server {
   // If there are two SPAs in spa.config.js called 'first and 'second',
   // then returns RegExp similar to:  /^((first)|(second))(\.html)?$/;
   private static getLandingPagesRegex(): RegExp {
+    // eslint-disable-next-line no-useless-escape
     return new RegExp(`^(${Server.getLandingPages()})(\.html)?$`);
   }
 
@@ -230,9 +232,7 @@ class Server {
   private static readonly s_urlDevWebserver = "http://localhost:8080";
   private static readonly s_appleIcon = "apple-touch-icon.png";
   private static readonly s_robotsName = "robots.txt";
-  /* tslint:disable:no-string-literal */
   private static readonly s_useDevWebserver = process.env["USE_DEV_WEBSERVER"] === "true";
-  /* tslint:enable:no-string-literal */
   // Regex must be either simple or constructed using a library that provides DoS protection.
   private static readonly s_regexLandingPages = Server.getLandingPagesRegex();
   private static readonly s_regexArtifacts = Server.getClientBuildArtifactsRegex();

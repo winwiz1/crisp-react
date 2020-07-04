@@ -14,7 +14,7 @@ type GenderTuple = [
   number];
 
 export class TestConfig {
-  static readonly getValidNames = () => {
+  static readonly getValidNames = (): ReadonlyArray<string> => {
     const names = [
       "Tim",
       "ALICE",
@@ -24,7 +24,7 @@ export class TestConfig {
     return names;
   }
 
-  static readonly getInvalidNames = () => {
+  static readonly getInvalidNames = (): ReadonlyArray<string|undefined> => {
     const names = [
       "Tim#",
       "to<m",

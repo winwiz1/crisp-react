@@ -85,7 +85,7 @@ var ConfiguredSPAs = function() {
   };
 
   SPAs.getNames = function() {
-    var spaNames = new Array();
+    var spaNames = [];
     SPAs.forEach(function(spa) {
       spaNames.push(spa.params.name);
     });
@@ -93,7 +93,7 @@ var ConfiguredSPAs = function() {
   };
 
   SPAs.getRewriteRules = function() {
-    var ret = new Array();
+    var ret = [];
     SPAs.forEach(function(spa) {
       var rule = new Object();
       rule.from = new RegExp("^/" + spa.params.name + "(\\.html)?$");

@@ -57,6 +57,7 @@ export class SampleRequest {
   // Keeping constructor private ensures all attempts to instantiate the
   // class have to use this method (and the input data validation it uses).
   static fromJson(
+    // eslint-disable-next-line
     objJson: any,
     clientAddress: string,
     errInfo: JsonParsingError): SampleRequest | undefined {
