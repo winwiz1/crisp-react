@@ -32,6 +32,7 @@ COPY --from=build --chown=node:node /crisp-react/client/dist/ /crisp-react/serve
 
 EXPOSE 3000
 ENV NODE_ENV=production
+STOPSIGNAL SIGTERM
 
 USER node
 CMD ["node", "./build/srv/main.js"]
