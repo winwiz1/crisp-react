@@ -104,10 +104,11 @@ export class BackendManager implements IBackendClient {
     }
   }
 
-  private static parser = (inputObj: object): SampleRetrievalResult | undefined => {
+  private static parser = (inputObj: Record<string, unknown>): SampleRetrievalResult | undefined => {
     const obj: SampleRetrievalResult = Object.create(SampleRetrievalResult.prototype);
     const ret = Object.assign(obj, inputObj);
     const propNames = ["response"];
+    // eslint-disable-next-line no-prototype-builtins
     const hasProps = propNames.every(prop => ret.hasOwnProperty(prop));
 
     return hasProps ? ret : undefined;

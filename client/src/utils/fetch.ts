@@ -22,7 +22,7 @@ export interface IFetch {
   exceptionExtraMessageNetwork?: string;
 }
 
-export const fetchAdapter = async (props: IFetch) => {
+export const fetchAdapter = async (props: IFetch): Promise<void> => {
   let isResponseJson: boolean | undefined;
   let isResponseText: boolean | undefined;
   let isResponseOk: boolean | undefined;

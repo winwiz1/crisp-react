@@ -80,6 +80,7 @@ const NameLookupContent: React.FC = _props => {
     setName(data.value);
   };
   function isNameValid(nameToCheck: string | undefined): boolean {
+    // eslint-disable-next-line no-extra-boolean-cast
     return !!nameToCheck ? BackendManager.RegexName.test(nameToCheck) : false;
   }
 

@@ -2,11 +2,11 @@ import * as fs from "fs";
 import { promisify } from "util";
 import { postProcess } from "./postProcess";
 
-export async function renderToString() {
+export async function renderToString(): Promise<void> {
   type SSRTuple = [string, () => string];
   type SSRArray = Array<SSRTuple>;
 
-  const ar: SSRArray = new Array();
+  const ar: SSRArray = [];
 
   const getEntrypoints = require("../../../config/spa.config").getEntrypoints;
 
@@ -25,16 +25,12 @@ export async function renderToString() {
     }));
     await postProcess();
   } catch (e) {
-    // Using console at build time is acceptable.
-    // tslint:disable-next-line:no-console
     console.error(`Failed to create pre-built SSR file, exception: ${e}`);
     process.exit(1);
   }
-};
+}
 
-renderToString().catch(e => {
-  // Using console at build time is acceptable.
-  // tslint:disable-next-line:no-console
+renderToString().catch((e: Error) => {
   console.error(`SSR processing failed, error: ${e}`);
   process.exit(2);
 });

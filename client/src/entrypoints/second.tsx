@@ -41,7 +41,7 @@ if (!isServer()) {
 
 /****************** SSR block start ******************/
 
-const asString = () => {
+const asString = (): string => {
  return renderToString(<Second />)
 }
 

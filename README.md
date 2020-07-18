@@ -494,9 +494,6 @@ A: Try to remove the breakpoint and set it again. If the breakpoint is in the cl
 
 Q: I need to add Redux.<br/>
 A: Have a look at the sibling Crisp BigQuery repository created by cloning and renaming this solution. It uses Redux.
-
-Q: Linting the client and the backend yields a couple of errors. How do I fix it?<br/>
-A: The linting errors left unfixed are either erroneous or are considered to be harmless and not worth fixing until the planned transition from tslint to eslint is completed.
 ## License
 Crisp React project with its 'server' and 'client' subprojects is open source software [licensed as MIT](./LICENSE).
 

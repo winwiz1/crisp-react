@@ -22,8 +22,6 @@ export async function postProcess(): Promise<void> {
     return postProcessFile(k, v);
   }));
 
-  // Using console at build time is acceptable.
-  // tslint:disable-next-line:no-console
   console.log("Finished SSR post-processing")
 }
 
@@ -48,8 +46,6 @@ async function postProcessFile(htmlFile: string, ssrFile: string): Promise<void>
 
   const stream = fs.createWriteStream(htmlFilePath);
   stream.on('error', err => {
-    // Using console at build time is acceptable.
-    // tslint:disable-next-line:no-console
     console.error(`Failed to write to file ${htmlFilePath}, error: ${err}`)
   });
   out.forEach(str => { stream.write(str); });

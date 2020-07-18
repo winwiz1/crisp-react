@@ -5,23 +5,23 @@ export class Log {
   private readonly m_title = SPAs.appTitle;
   private readonly m_logger = log.getLogger(this.m_title);
 
-  public trace(message: string) {
+  public trace(message: string): void  {
     return this.m_logger.trace(message);
   }
 
-  public debug(message: string) {
+  public debug(message: string): void {
     return this.m_logger.debug(message);
   }
 
-  public info(message: string) {
+  public info(message: string): void {
     return this.m_logger.info(message);
   }
 
-  public warn(message: string) {
+  public warn(message: string): void {
     return this.m_logger.warn(message);
   }
 
-  public error(message: string) {
+  public error(message: string): void {
     return this.m_logger.error(message);
   }
 }

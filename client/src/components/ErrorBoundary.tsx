@@ -16,6 +16,7 @@ type ErrorBoundaryState = {
   errDescription?: string
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export class ErrorBoundary extends React.PureComponent<{}, ErrorBoundaryState> {
   public readonly state: ErrorBoundaryState = { hasError: false };
 
@@ -27,7 +28,7 @@ export class ErrorBoundary extends React.PureComponent<{}, ErrorBoundaryState> {
     return ret;
   }
 
-  public componentDidCatch(_err: Error, errInfo: React.ErrorInfo) {
+  public componentDidCatch(_err: Error, errInfo: React.ErrorInfo): void {
     if (errInfo.componentStack) {
       const errMsg = this.state.errDescription + "\n" + errInfo.componentStack;
       logger.error(errMsg);
@@ -37,17 +38,16 @@ export class ErrorBoundary extends React.PureComponent<{}, ErrorBoundaryState> {
     }
   }
 
-  public readonly onClick = (_evt: React.MouseEvent<HTMLButtonElement>) => {
+  public readonly onClick = (_evt: React.MouseEvent<HTMLButtonElement>): void => {
     this.setState(prevState => {
       return prevState.hasError ? { ...prevState, hasError: false } : prevState;
     });
   }
 
+  // eslint-disable-next-line
   public render() {
     if (this.state.hasError) {
       return isServer() ?
-        // Using console at build time is acceptable.
-        // tslint:disable-next-line:no-console
         (console.error(this.state.errDescription!), <>{`SSR Error: ${this.state.errDescription!}`}</>) :
         (
           <PortalCreator
@@ -78,6 +78,7 @@ interface IPortalCreatorProps {
   onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 class PortalCreator extends React.Component<IPortalCreatorProps, {}> {
   public componentDidMount() {
     document.body.appendChild(this.m_overlayContainer);
