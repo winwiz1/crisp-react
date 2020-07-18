@@ -12,17 +12,9 @@ COPY --chown=node:node ./server/ .
 RUN yarn
 WORKDIR /crisp-react/client
 COPY --chown=node:node ./client/ .
-
-# Development build with uncompressed and not minified bundle - slow
-# Comment out next line when Google fixes issuetracker.google.com/issues/147185337
-RUN yarn && yarn build
-
-# Production build with compressed and minified bundle - fast
-# Uncomment next line when Google fixes the above bug
-#RUN yarn && yarn build:prod
+RUN yarn && yarn build:prod
 
 FROM build as prod
-
 WORKDIR /crisp-react/server
 COPY --chown=node:node ./server/ .
 COPY --from=build --chown=node:node /crisp-react/client/config/ /crisp-react/server/config/

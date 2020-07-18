@@ -348,8 +348,6 @@ A container acts as a mini operating system providing your code with run-time de
 Assuming the deployment demo in the [Project Highlights](#project-highlights) section has been completed, a container has already been built in the cloud and deployed to Google Cloud Run. In this section we will build the container locally and expect it to run in two other deployments (in the local environment facilitated by Docker and the cloud one provided by Heroku)  without any further adjustments.
 ### Using Docker
 Install [Docker](https://docs.docker.com/get-docker/). To build a Docker container and start it, execute [`start-container.cmd`](https://github.com/winwiz1/crisp-react/blob/master/start-container.cmd) or [`start-container.sh`](https://github.com/winwiz1/crisp-react/blob/master/start-container.sh). Then point a browser to `localhost:3000`. Both files can also be executed from an empty directory in which case uncomment the two lines at the top. Moreover, it can be copied to a computer or VM that doesn't have NodeJS installed. The only prerequisites are Docker and Git.
-
-The `Dockerfile` produces a development build of the client as a workaround for the Cloud Run bug explained below. If you are not using Cloud Run, switch to the production build as explained in the [`Dockerfile`](https://github.com/winwiz1/crisp-react/blob/master/Dockerfile) comments.
 ### Using Heroku
 Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install).  Then log to Heroku using the `heroku login` command. Execute the following commands to build and deploy a container:
 ```
@@ -358,11 +356,9 @@ cd crisp-react
 heroku container:login
 heroku create <app-name>
 heroku stack:set container -a <app-name>
-heroku container:push web --recursive -a <app-name>
+heroku container:push web -a <app-name>
 heroku container:release web -a <app-name>
 ```
-> The `--recursive` option ensures the file `Dockerfile.web` is picked up and a production build of the client is performed. Without this option `Dockerfile` is used instead and a development build of the client is produced.
-
 Replace the  `<app-name>` placeholder with your Heroku app name.  The app will have the URL: `<app-name>.herokuapp.com`.
 
 If you own a domain name and intend to implement the optional steps described in the [Custom Domain and CDN](#custom-domain-and-cdn) section, then you can improve security by making the app name random, for example `my-crisp-app-XXXXXXXXXXXX` where the last part represents a random pattern. The app name can be changed at any time using the Settings page at `https://dashboard.heroku.com/apps/<app-name>/settings`.
@@ -372,8 +368,6 @@ The remainder of this section contains additional considerations that apply to d
 1. Although Cloud Run provides an ample free tier usage in terms of bandwidth and number of requests, you are billed for the incoming requests once the free usage threshold, 2 million calls per month, is exceeded. This scenario wouldn’t be infeasible if the  service URL is discovered and used to mount a Layer 7 DoS attack (or come close to it by emulating a significant workload). There is an additional cost for the running time exceeding its free threshold which can be exacerbated by the service scaling itself up under attack. Deleting the service promptly after a demonstration helps to mitigate this risk. Hopefully Google will make a configurable firewall with rate limiting available for Cloud Run running in the public access mode.
 
 2. Cloud Run in private access mode is a great product that offers simplicity, competitive pricing and seems to be geared towards microservices. Deducing the intended use of its public access mode is more challenging. The Google provided alternatives to the public access mode with ability to control networking ingress include Cloud Run for Anthos. This option allows to have an ingress controller but is more expensive and technically involved. Google App Engine (GAE) Flexible Environment is yet another option, it has access to a configurable firewall but [lacks](https://cloud.google.com/appengine/docs/flexible/nodejs/managing-projects-apps-billing) ability to set spending limits. The inability to control spending makes GAE more suitable for non-public websites with access controlled by Google Identity-Aware Proxy [(IAP)](https://cloud.google.com/iap/docs/). It's worth noting that currently IAP [cannot](https://github.com/ahmetb/cloud-run-faq/issues/26) be used to control access to Cloud Run. Finally there is an option to combine Cloud Run with Firebase Hosting but it doesn't seem to add too much certainty with respect to expenses.
-
-3. There is a Cloud Run [bug](https://issuetracker.google.com/issues/147185337) that makes it impossible to deploy a production build of the client on Cloud Run. The reason for it is that production builds of React applications typically produce compressed script bundles. The bug causes Cloud Run to strip the `Content-Encoding` HTTP header from the response sent by the backend. As a result, the browser doesn't know the downloaded bundle was compressed and doesn't uncompress it making the bundle unusable. The workaround is to opt for development builds with uncompressed bundles.
 
 ## Custom Domain and CDN
 This section compliments the deployment described under the [Using Heroku](#using-heroku) heading. It maps Heroku app URL to a custom domain you own. After that, Cloudflare CDN is added to Heroku servers<br/>
