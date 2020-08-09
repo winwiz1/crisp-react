@@ -486,6 +486,63 @@ A: Open the Settings page of the Chrome DevTools and ensure 'Enable JavaScript s
 Q: Breakpoints in VS Code are not hit. How can it be fixed.<br/>
 A: Try to remove the breakpoint and set it again. If the breakpoint is in the client code, refresh the page.
 
+Q: I'm debugging the backend in VS Code by running one of the debugging configurations specified in [launch.json](https://github.com/winwiz1/crisp-react/blob/master/server/.vscode/launch.json). How can I get one of the yarn scripts (e.g. `copyfiles` or `prestart` in the `scripts` section of [package.json](https://github.com/winwiz1/crisp-react/blob/master/server/package.json)) executed before the debugging starts?
+
+> This question is inspired by the issue #11
+
+A: What gets executed before a debugging configuration starts is controlled by its optional `preLaunchTask` setting. This setting refers to a task from [tasks.json](https://github.com/winwiz1/crisp-react/blob/master/server/.vscode/tasks.json) by the task name. The name is defined by the tasks's `label` setting. To get a yarn script executed, add another task (let's call it `prestart`) to run the `prestart` script and chain both tasks using `dependsOn`:
+```
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "tsc",
+      "type": "typescript",
+      "tsconfig": "tsconfig.json",
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "tsc-watch",
+      "type": "typescript",
+      "tsconfig": "tsconfig.json",
+      "option": "watch",
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "dependsOn": [
+        "prestart",
+      ]
+    },
+    {
+      "label": "kill process in terminal",
+      "type": "process",
+      "command": "${command:workbench.action.terminal.kill}"
+    },
+    {
+      "label": "prestart",
+      "type": "npm",
+      "script": "prestart",
+      "presentation": {
+        "reveal": "never"
+      }
+    }
+  ]
+}
+```
+
 Q: I need to add Redux.<br/>
 A: Have a look at the sibling Crisp BigQuery repository created by cloning and renaming this solution. It uses Redux.
 ## License
