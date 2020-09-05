@@ -491,7 +491,12 @@ Q: I'm debugging the backend in VS Code by running one of the debugging configur
 > This question is inspired by the issue #11
 
 A: What gets executed before a debugging configuration starts is controlled by its optional `preLaunchTask` setting. This setting refers to a task from [tasks.json](https://github.com/winwiz1/crisp-react/blob/master/server/.vscode/tasks.json) by the task name. The name is defined by the tasks's `label` setting. To get a yarn script executed, add another task (let's call it `prestart`) to run the `prestart` script and chain both tasks using `dependsOn`:
-```
+
+<div>
+  <details>
+    <summary>tasks.json</summary>
+    <br />
+    <pre>
 {
   "version": "2.0.0",
   "tasks": [
@@ -541,7 +546,9 @@ A: What gets executed before a debugging configuration starts is controlled by i
     }
   ]
 }
-```
+    </pre>
+  </details>
+</div>
 
 Q: I need to add Redux.<br/>
 A: Have a look at the sibling Crisp BigQuery repository created by cloning and renaming this solution. It uses Redux.
