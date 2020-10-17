@@ -412,7 +412,7 @@ The steps:
 
     The order of the rules is important. Since only one page rule is applied, the more specific API rule should be on the top.
 
-    If the Free plan is used the maximum cache duration is limited to 2 hours. It causes a cache miss with subsequent re-caching every 2 hours for all .html pages, script bundles etc.
+    If the Free plan is used, the maximum cache duration is limited to 2 hours. It causes a cache miss with subsequent re-caching every 2 hours for all .html pages, script bundles etc.
 
 After the steps are completed the Heroku app will be using distributed caching and a free SSL certificate for the custom domain. Also the cache related statistics, monitoring and the breakdown of incoming requests by country will be available from Cloudflare even on the Free plan.
 
@@ -422,7 +422,7 @@ You can test DNS resolution for `crisp-react.yourdomain.com` using tools like `n
 Consider the following steps to add the desired functionality:
 * Start with [Client Usage Scenarios](#client-usage-scenarios) to develop UI in absence of API data. For example, develop the initial look and feel of the login page. Take advantage of the Live Reloading to speed up the development. The client scenarios ensure the backend is not started needlessly.
 *  Implement an API endpoint in the backend, in addition or instead the existing sample API endpoint. For example, a login endpoint. Technically it can be done by renaming the `SampleXxx` pattern in the names of source files and classes with `LoginXxx`, then modifying the classes as needed. This approach can be observed in the sibling [Crisp BigQuery](https://github.com/winwiz1/crisp-bigquery) repository, the `SampleXxx` pattern was replaced with `BigQueryXxx`.
-*  Switch to [Backend Usage Scenarios](#backend-usage-scenarios) to consume the API endpoint in the client.  Modify the API related classes `BackendManager` and `BackendRequest` as needed. Keep taking advantage of the Live Reloading that is supported for client and backend code.
+*  Switch to [Backend Usage Scenarios](#backend-usage-scenarios) to consume the API endpoint in the client.  Modify the API related classes `BackendManager` and `BackendRequest` as needed. Keep taking advantage of Live Reloading that is supported for client and backend code.
 ## Pitfall Avoidance
 One of the goals pursued by the [Backend Usage Scenarios](#backend-usage-scenarios) is to avoid the following common pitfalls:
 - :fire: Running the webpack-dev-server in production.
@@ -490,7 +490,7 @@ Q: I'm debugging the backend in VS Code by running one of the debugging configur
 
 > This question is inspired by the issue #11
 
-A: What gets executed before a debugging configuration starts is controlled by its optional `preLaunchTask` setting. This setting refers to a task from [tasks.json](https://github.com/winwiz1/crisp-react/blob/master/server/.vscode/tasks.json) by the task name. The name is defined by the tasks's `label` setting. To get a yarn script executed, add another task (let's call it `prestart`) to run the `prestart` script and chain both tasks using `dependsOn`:
+A: What gets executed before a debugging configuration starts is controlled by its optional `preLaunchTask` setting. This setting refers to a task from [tasks.json](https://github.com/winwiz1/crisp-react/blob/master/server/.vscode/tasks.json) by the task name. The name is defined by the tasks'`label` setting. To get a yarn script executed, add another task (let's call it `prestart`) to run the `prestart` script and chain both tasks using `dependsOn`:
 
 <div>
   <details>
