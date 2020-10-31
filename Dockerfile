@@ -1,6 +1,6 @@
 # Used by Docker and Cloud Run
 
-FROM node:12.18.4-slim as build
+FROM node:14.15.0-slim as build
 RUN apt-get update -qq && apt-get upgrade -qq \
   && apt-get clean autoclean && apt-get autoremove -y \
   && rm -rf \
