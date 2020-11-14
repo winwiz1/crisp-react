@@ -8,19 +8,21 @@ RUN apt-get update -qq && apt-get upgrade -qq \
     /var/lib/log
 
 WORKDIR /crisp-react/server
-COPY --chown=node:node ./server/ .
+COPY ./server/ .
 RUN yarn
 WORKDIR /crisp-react/client
-COPY --chown=node:node ./client/ .
+COPY ./client/ .
 RUN yarn && yarn build:prod
 
 FROM build as prod
 WORKDIR /crisp-react/server
-COPY --chown=node:node ./server/ .
-COPY --from=build --chown=node:node /crisp-react/client/config/ /crisp-react/server/config/
+COPY ./server/ .
+COPY --from=build /crisp-react/client/config/ /crisp-react/server/config/
 RUN yarn && yarn compile
 
-COPY --from=build --chown=node:node /crisp-react/client/dist/ /crisp-react/server/build/client/static/
+COPY --from=build /crisp-react/client/dist/ /crisp-react/server/build/client/static/
+RUN find /crisp-react -type d -exec chmod 755 {} \;
+RUN find /crisp-react -type f -exec chmod 644 {} \;
 
 EXPOSE 3000
 ENV NODE_ENV=production
