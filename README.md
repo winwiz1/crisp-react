@@ -365,10 +365,7 @@ If you own a domain name and intend to implement the optional steps described in
 ### Cloud Run Considerations
 The remainder of this section contains additional considerations that apply to deploying the solution on Cloud Run. The considerations are not specific to this solution and would be relevant for any React SPA.
 
-1. Although Cloud Run provides an ample free tier usage in terms of bandwidth and number of requests, you are billed for the incoming requests once the free usage threshold, 2 million calls per month, is exceeded. This scenario wouldn’t be infeasible if the  service URL is discovered and used to mount a Layer 7 DoS attack (or come close to it by emulating a significant workload). There is an additional cost for the running time exceeding its free threshold which can be exacerbated by the service scaling itself up under attack. Deleting the service promptly after a demonstration helps to mitigate this risk. Hopefully Google will make a configurable firewall with rate limiting available for Cloud Run running in the public access mode.
-
-2. Cloud Run in private access mode is a great product that offers simplicity, competitive pricing and seems to be geared towards microservices. Deducing the intended use of its public access mode is more challenging. The Google provided alternatives to the public access mode with ability to control networking ingress include Cloud Run for Anthos. This option allows to have an ingress controller but is more expensive and technically involved. Google App Engine (GAE) Flexible Environment is yet another option, it has access to a configurable firewall but [lacks](https://cloud.google.com/appengine/docs/flexible/nodejs/managing-projects-apps-billing) ability to set spending limits. The inability to control spending makes GAE more suitable for non-public websites with access controlled by Google Identity-Aware Proxy [(IAP)](https://cloud.google.com/iap/docs/). It's worth noting that currently IAP [cannot](https://github.com/ahmetb/cloud-run-faq/issues/26) be used to control access to Cloud Run. Finally there is an option to combine Cloud Run with Firebase Hosting but it doesn't seem to add too much certainty with respect to expenses.
-
+Although Cloud Run provides an ample free tier usage in terms of bandwidth and number of requests, you are billed for the incoming requests once the free usage threshold, 2 million calls per month, is exceeded. This scenario wouldn’t be infeasible if the  service URL is discovered and used to mount a Layer 7 DDoS attack (or come close to it by emulating a significant workload). There is an additional cost for the running time exceeding its free threshold which can be exacerbated by the service scaling itself up under attack. Deleting the service promptly after a demonstration helps to mitigate this risk. Hopefully Google will make a configurable firewall with rate limiting available for Cloud Run running in the public access mode.
 ## Custom Domain and CDN
 This section compliments the deployment described under the [Using Heroku](#using-heroku) heading. It maps Heroku app URL to a custom domain you own. After that, Cloudflare CDN is added to Heroku servers<br/>
 ![Deploy](docs/deploy.png)
@@ -412,7 +409,7 @@ The steps:
 
     The order of the rules is important. Since only one page rule is applied, the more specific API rule should be on the top.
 
-    If the Free plan is used, the maximum cache duration is limited to 2 hours. It causes a cache miss with subsequent re-caching every 2 hours for all .html pages, script bundles etc.
+    The maximum cache duration was limited to 2 hours on the Free plan, however Cloudflare has removed this restriction. For example, you can set the duration  to 7 days and ensure the subsequent re-caching occurs every week for all .html pages, script bundles etc.
 
 After the steps are completed the Heroku app will be using distributed caching and a free SSL certificate for the custom domain. Also the cache related statistics, monitoring and the breakdown of incoming requests by country will be available from Cloudflare even on the Free plan.
 
