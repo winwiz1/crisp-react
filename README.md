@@ -58,7 +58,7 @@ The build will take a while due to free Cloud Shell using a free cloud VM with m
 :heavy_exclamation_mark: It is highly recommended to delete the created service when the demo is finished. The explanation why this is needed can be found [there](#cloud-run-considerations). Delete the service using the command:<br/>
 `gcloud run services delete crisp-react --platform=managed --region=us-central1 --project=<project-name>`<br/>
 It can be conveniently executed from the Cloud Shell session opened during the deployment. Update the `region` with the one chosen during the deployment and replace `<project-name>` with your project name. Alternatively delete the service using Cloud Run [Console](https://console.cloud.google.com/run).
-* Sample websites. [Skeleton](https://crisp-react.winwiz1.com/), [production](https://covid.winwiz1.com/).
+* Sample websites. [Skeleton](https://crisp-react.winwiz1.com/), [production](https://virusquery.com/).
 
 ## Table of Contents
 - [Getting Started](#getting-started) 
@@ -409,7 +409,7 @@ The steps:
 
     The order of the rules is important. Since only one page rule is applied, the more specific API rule should be on the top.
 
-    The maximum cache duration was limited to 2 hours on the Free plan, however Cloudflare has removed this restriction. For example, you can set the duration  to 7 days and ensure the subsequent re-caching occurs every week for all .html pages, script bundles etc.
+    The maximum cache duration was limited to 2 hours on the Free plan, however Cloudflare has removed this restriction. For example, you can set the duration to 7 days and ensure the subsequent re-caching occurs every week for all .html pages, script bundles etc.
 
 After the steps are completed the Heroku app will be using distributed caching and a free SSL certificate for the custom domain. Also the cache related statistics, monitoring and the breakdown of incoming requests by country will be available from Cloudflare even on the Free plan.
 
