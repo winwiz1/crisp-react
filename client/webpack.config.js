@@ -195,8 +195,8 @@ const getWebpackConfig = (env, argv) => {
     }));
     config.plugins.push(
       new CompressionPlugin({
-        filename: '[path].br[query]',
-        algorithm: 'brotliCompress',
+        filename: "[path][base].br",
+        algorithm: "brotliCompress",
         test: /\.js$|\.css$|\.html$/,
         compressionOptions: {
           level: 11,
@@ -207,7 +207,7 @@ const getWebpackConfig = (env, argv) => {
       }));
     config.plugins.push(
       new CompressionPlugin({
-        filename: "[path].gz[query]",
+        filename: "[path][base].gz",
         algorithm: "gzip",
         test: /\.js$|\.css$|\.html$/,
         threshold: 10240,
