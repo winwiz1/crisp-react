@@ -61,8 +61,8 @@ const getWebpackConfig = (env, argv) => {
       ]
     },
     output: {
-      filename: "[name].[hash].bundle.js",
-      chunkFilename: "[name].[hash].bundle.js",
+      filename: "[name].[fullhash].bundle.js",
+      chunkFilename: "[name].[fullhash].bundle.js",
       path: path.resolve(__dirname, "dist"),
       publicPath: "/static/",
       crossOriginLoading: "anonymous",
@@ -82,9 +82,7 @@ const getWebpackConfig = (env, argv) => {
       ...(isProduction && {
         minimizer: [
           new TerserPlugin({
-            cache: false,
             parallel: true,
-            sourceMap: false,         // set to true if debugging of production build needed
             terserOptions: {
               keep_classnames: false,
               mangle: true,
@@ -93,7 +91,8 @@ const getWebpackConfig = (env, argv) => {
               output: {
                 comments: false,
               }
-            }
+            },
+            extractComments: false
           })
         ]
       }),
