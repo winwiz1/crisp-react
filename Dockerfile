@@ -1,11 +1,6 @@
 # Used by Docker and Cloud Run
 
-FROM node:14.15.0-slim as build
-RUN apt-get update -qq && apt-get upgrade -qq \
-  && apt-get clean autoclean && apt-get autoremove -y \
-  && rm -rf \
-    /var/lib/cache \
-    /var/lib/log
+FROM node:14.15.3-slim as build
 
 WORKDIR /crisp-react/server
 COPY ./server/ .
@@ -14,7 +9,14 @@ WORKDIR /crisp-react/client
 COPY ./client/ .
 RUN yarn && yarn build:prod
 
-FROM build as prod
+FROM node:14.15.3-slim as prod
+
+RUN apt-get update -qq && apt-get upgrade -qq \
+  && apt-get clean autoclean && apt-get autoremove -y \
+  && rm -rf \
+    /var/lib/cache \
+    /var/lib/log
+
 WORKDIR /crisp-react/server
 COPY ./server/ .
 COPY --from=build /crisp-react/client/config/ /crisp-react/server/config/
