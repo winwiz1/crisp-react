@@ -161,18 +161,12 @@ const getWebpackConfig = (env, argv) => {
             sizes: "180x180"
           },
         ],
-        meta: [
-          { name: "viewport", content: "width=device-width, initial-scale=1.0, shrink-to-fit=no" },
-          { name: "description", content: metaDescription },
-          { name: "keywords", content: metaKeywords },
-          { name: "robots", content: "index, follow" },
-          { property: "og:title", content: configuredSPAs.appTitle },
-          { property: "og:type", content: "website" },
-          { property: "og:url", content: metaOwnUrl },
-          { property: "og:description", content: metaDescription },
-          { property: "twitter:title", content: configuredSPAs.appTitle },
-          { property: "twitter:description", content: metaDescription },
-        ],
+        meta: {
+          viewport:    "width=device-width, initial-scale=1.0, shrink-to-fit=no",
+          description: metaDescription,
+          keywords:    metaKeywords,
+          robots:      "index, follow",
+        },
         minify: false,
       })
     );
