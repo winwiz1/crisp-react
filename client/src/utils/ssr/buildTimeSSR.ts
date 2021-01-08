@@ -1,28 +1,71 @@
 import * as fs from "fs";
 import { promisify } from "util";
+import { webpack } from "webpack";
 import { postProcess } from "./postProcess";
 
-export async function renderToString(): Promise<void> {
-  type SSRTuple = [string, () => string];
-  type SSRArray = Array<SSRTuple>;
+export async function performBuildtimeSSR(): Promise<void> {
+  const ssrSpaName = require("../../../config/spa.config").getSsrName();
 
-  const ar: SSRArray = [];
+  if (!ssrSpaName) {
+    return;
+  }
+
+  type SSRTuple = [string, string];
+  let tp: SSRTuple|undefined;
+
+  console.log("Starting SSR post-processing");
 
   const getEntrypoints = require("../../../config/spa.config").getEntrypoints;
 
   for (const [key, value] of Object.entries(getEntrypoints())) {
-    const ssrFileName = `${key}-SSR.txt`;
-    const entryPointPath = (value as string).replace(/^\.\/src/, "../..").replace(/\.\w+$/, "");
-    const { default: renderAsString } = await import(entryPointPath);
-    !!renderAsString && ar.push([ssrFileName, renderAsString] as SSRTuple);
+    if (key === ssrSpaName) {
+      const ssrFileName = `${key}-SSR.txt`;
+      tp = [ssrFileName, value as string];
+      break;
+    }
   }
 
+  if (!tp) {
+    console.error("Internal SSR processing error");
+    process.exit(1);
+  }
+
+  const webpackConfig = require("../../../webpack.config.ssr.js");
+  const compiler = webpack({...webpackConfig, entry: tp[1]});
+
+  type PromiseCallback = () => void;
+
+  class CallbackWrapper {
+    constructor(readonly callback: PromiseCallback) {
+    }
+    readonly invoke = (): void => {
+      this.callback();
+    }
+  }
+
+  let cbWrapper: CallbackWrapper|undefined;
+  const waitForCompiler = new Promise<void>((resolve) => { cbWrapper = new CallbackWrapper(resolve)});
+
+  compiler.run((err, stats) => {
+    if (err) {
+      console.error(`Library compilation failed, error: ${err}`);
+      process.exit(1);
+    }
+    if (stats?.hasErrors()) {
+      console.error(`Library compilation failed, error: ${stats?.toString() ?? "no description"}`);
+      process.exit(1);
+    }
+    cbWrapper?.invoke();
+  });
+
+  await waitForCompiler;
+
+  const { ssrLibrary }  = require("../../../dist-ssr/ssr-library");
+  const { default: asString } = ssrLibrary;
   const writeFile = promisify(fs.writeFile);
 
   try {
-    await Promise.all(ar.map(entry => {
-      return writeFile('./dist/' + entry[0], entry[1]());
-    }));
+    await writeFile('./dist/' + tp[0], asString());
     await postProcess();
   } catch (e) {
     console.error(`Failed to create pre-built SSR file, exception: ${e}`);
@@ -30,7 +73,7 @@ export async function renderToString(): Promise<void> {
   }
 }
 
-renderToString().catch((e: Error) => {
+performBuildtimeSSR().catch((e: Error) => {
   console.error(`SSR processing failed, error: ${e}`);
   process.exit(2);
 });

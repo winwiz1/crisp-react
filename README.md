@@ -38,7 +38,7 @@
     The implementation provides reusable code, both client-side and backend, making it easier to switch to another API. In fact this approach has been taken by the sibling Crisp BigQuery repository created by cloning and renaming this solution - it uses Google BigQuery API instead.<br/>
 This arrangement brings a security benefit: The clients running inside a browser in a non-trusted environment do not have credentials to access a cloud service that holds sensitive data. The backend runs in the trusted environment you control and does have the credentials.
 
-* SSR. Build-time SSR (also known as prerendering) is supported. The solution allows to selectively turn the SSR on or off for the chosen parts (e.g. SPAs) of the React application. This innovative flexibility is important because as noted by the in-depth [article](https://developers.google.com/web/updates/2019/02/rendering-on-the-web) on this subject, SSR is not a good recipe for every project and comes with costs. For example, the costs analysis could lead to a conclusion the Login part of an application is a good fit for SSR whereas the Reporting module is not. Implementing each part as an SPA with selectively enabled/disabled SSR would provide an optimal implementation and resolve this design disjuncture.
+* SSR. Build-time SSR (also known as prerendering) is supported. The solution allows to selectively turn the SSR on or off for the chosen part (e.g. a particular SPA) of the React application. This innovative flexibility is important because as noted by the in-depth [article](https://developers.google.com/web/updates/2019/02/rendering-on-the-web) on this subject, SSR is not a good recipe for every project and comes with costs. For example, the costs analysis could lead to a conclusion the Login part of an application is a good fit for SSR whereas the Reporting module is not. Implementing each part as an SPA with selectively enabled/disabled SSR would provide an optimal implementation and resolve this design disjuncture.
 
     The SSR related costs depend on:
 
@@ -49,6 +49,8 @@ This arrangement brings a security benefit: The clients running inside a browser
     - Run-time computing overhead reducing the ability to sustain workloads (for run-time SSR coupled with complex or long HTML markup) which makes it easier to mount DoS attack aimed at webserver CPU exhaustion. In a case of cloud deployment, the frequency of malicious requests could be low enough to avoid triggering DDoS protection offered by the cloud vendor yet sufficient to saturate the server CPU and trigger autoscaling thus increasing the monetary cost. This challenge can be mitigated using a rate limiter which arguably should be an integral part of run-time SSR offerings.
 
     Choosing build-time SSR allows to exclude the last two costs and effectively mitigate the first one by providing a concise implementation comprised of just few small source [files](https://github.com/winwiz1/crisp-react/tree/master/client/src/utils/ssr). The implementation is triggered as an optional post-build step and is consistent with script bundle compression also performed at the build time to avoid loading the webserver CPU.
+
+    Only the SPA landing page is prerendered. Other SPA pages are not prerendered because these are the internal SPA pages. Switch to the internal pages is performed by SPA without spending time on network trips and hitting the webserver thus lowering its workload and letting it serve more clients simultaneously.
 
 * Containerisation. Docker multi-staged build is used to ensure the backend run-time environment doesn't contain the client build-time dependencies e.g. `client/node_modules/`. It improves security and reduces container's storage footprint.
 
@@ -174,18 +176,20 @@ The client subproject builds an application with SPAs defined by the SPA Configu
     new SPA({
       name: "first",
       entryPoint: "./src/entrypoints/first.tsx",
+      ssr: false,
       redirect: true
     }),
     new SPA({
       name: "second",
       entryPoint: "./src/entrypoints/second.tsx",
+      ssr: true,
       redirect: false
     })
   ];
   SPAs.appTitle = "Crisp React";
 /****************** End SPA Configuration ******************/
 ```
-Each SPA is defined using 3 pieces of data: name, entry point (e.g. the landing page component) and a boolean flag. Ignore the flag for a moment. There is also an `appTitle`, it provides the application-wide default setting for the `<title>` tag in the `<head>` section of all pages. The title can be easily overwritten as needed.
+Each SPA is defined using 4 pieces of data: name, entry point (e.g. the landing page component) and two boolean flags. Ignore the flags for a moment. There is also an `appTitle`, it provides the application-wide default setting for the `<title>` tag in the `<head>` section of all pages. The title can be easily overwritten as needed.
 
 SPA's name "first" is used to define the SPA's landing page e.g. `/first.html` and name the bundle that renders the SPA: `first<hash>.js`. More information about all the configuration data pieces is provided in the configuration file comments. The file is copied during the backend build from the client subproject and used to configure the client, the backend and the unit tests.
 
@@ -198,11 +202,13 @@ To reconfigure the application to have a separate SPA for login and another one 
     new SPA({
       name: "login",
       entryPoint: "./src/entrypoints/login.tsx",
+      ssr: false,
       redirect: false
     }),
     new SPA({
       name: "app",
       entryPoint: "./src/entrypoints/app.tsx",
+      ssr: false,
       redirect: true
     })
   ];

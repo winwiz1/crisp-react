@@ -4,6 +4,7 @@
 docs/
 build/
 dist/
+dist-ssr/
 server/config/
 node_modules/
 README.md

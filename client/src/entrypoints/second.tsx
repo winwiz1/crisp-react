@@ -4,9 +4,12 @@
  *
  * SSR has been enabled for this entry point.
  * To disable SSR:
- *  - comment out import of renderToString
- *  - replace ReactDOM.hydrate with ReactDOM.render (see comments below),
- *  - comment out the SSR block at the bottom.
+ *  - comment out import { renderToString } ...
+ *  - replace ReactDOM.hydrate with ReactDOM.render (see comments below)
+ *  - comment out the SSR block at the bottom
+ *  - set the 'ssr' flag to false for this SPA in spa.config.js
+ *
+ * Note than only one SPA (and therefore one entry point) can have SSR enabled.
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";

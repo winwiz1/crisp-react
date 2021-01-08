@@ -10,8 +10,13 @@ Each SPA has:
 - redirect flag. If set to true, makes webserver redirect to the landing page
   of this SPA when serving requests with unknown request path. It's the standard
   fallback behavior required by all SPAs and implemented in webpack-dev-server
-  using the 'historyApiFallback' setting. Only one SPA can have this flag set
-  to exclude redirection ambiguity.
+  using the 'historyApiFallback' setting. One and only one SPA must have this
+  flag set to avoid redirection ambiguity.
+- SSR flag. If set to true, the SPA landing page will be prerendered at the
+  build time e.g. its HTML will be generated and inserted into the <body> of
+  the .html file.
+  Only one SPA can have this flag set. When the flag is not set, the <body>
+  contains mainly references to the script bundles with very little HTML markup.
 
 You can customize SPAs by modifying the SPA Configuration block below. It will
 reconfigure client, backend and the tests. You'll need to adjust 3 lines
@@ -40,11 +45,13 @@ var ConfiguredSPAs = function() {
     new SPA({
       name: "first",
       entryPoint: "./src/entrypoints/first.tsx",
+      ssr: false,
       redirect: true
     }),
     new SPA({
       name: "second",
       entryPoint: "./src/entrypoints/second.tsx",
+      ssr: true,
       redirect: false
     })
   ];
@@ -68,6 +75,14 @@ var ConfiguredSPAs = function() {
     if (num !== 1) {
       throw new RangeError("One and only one SPA must have 'redirect: true'");
     }
+
+    num = SPAs.reduce(function(acc, item) {
+      return item.params.ssr ? acc + 1 : acc;
+    }, 0);
+
+    if (num > 1) {
+      throw new RangeError("At most one SPA can have 'ssr: true'");
+    }
   };
 
   SPAs.getEntrypoints = function() {
@@ -82,6 +97,13 @@ var ConfiguredSPAs = function() {
     return SPAs.find(function(spa) {
       return spa.params.redirect;
     }).params.name;
+  };
+
+  SPAs.getSsrName = function() {
+    var spa = SPAs.find(function(spa) {
+      return spa.params.ssr;
+    });
+    return !!spa? spa.params.name : undefined;
   };
 
   SPAs.getNames = function() {
