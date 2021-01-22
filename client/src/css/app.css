@@ -1,11 +1,12 @@
 /*
-  This file is a placeholder for CSS imports. It can be
-  referenced in .tsx files under src/ using import:
-    import <some path starting with ../>/css/app.css
+  This file is a placeholder for CSS @imports. The
+  imports can be referenced in .tsx files under src/
+  using import:
+    import <some path>/css/app.css
 
-  For example, if react-day-picker or other component
-  that comes with its own custom CSS was used, then this
-  file would have:
+  For example, if react-day-picker (or other component
+  that comes with its own custom CSS) was used, then
+  this file would have:
     @import "react-day-picker/lib/style.css";
 */
 

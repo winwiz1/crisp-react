@@ -13,9 +13,10 @@ const headHtmlSnippetPath = path.join("src", "entrypoints", "head-snippet.html")
 const headHtmlSnippet = fs.existsSync(headHtmlSnippetPath) ?
   fs.readFileSync(headHtmlSnippetPath, "utf8") : undefined;
 const metaDescription = "Skeleton website built using Crisp React \
-https://github.com/winwiz1/crisp-react boilerplate. Consists of two sample \
-React SPAs with optional build-time SSR turned on for the second SPA.";
-const metaKeywords = "React, TypeScript, Express, webpack, NodeJS, Jest";
+boilerplate. Consists of two sample React SPAs with optional build-time \
+SSR turned on for the first SPA.";
+const metaKeywords = "Lightweight React/Express/TypeScript boilerplate with \
+optional SSR. Deploy anywhere as container.";
 const metaOwnUrl = "https://crisp-react.winwiz1.com/";
 
 
@@ -74,7 +75,8 @@ const getWebpackConfig = (env, argv) => {
             test: /node_modules/,
             chunks: "initial",
             name: "vendor",
-            enforce: true
+            enforce: true,
+            maxInitialSize: 1000000
           },
         },
       },
@@ -138,18 +140,18 @@ const getWebpackConfig = (env, argv) => {
         headHtmlSnippet,
         links: [
           {
-            rel: "dns-prefetch",
+            rel: "preconnect",
             href: "//fonts.gstatic.com/"
-          },
-          {
-            rel: "dns-prefetch",
-            href: "//fonts.googleapis.com/"
           },
           {
             rel: "stylesheet",
             href: "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css",
             integrity: "sha384-JKIDqM48bt14NZpzl9v0AP36VK2C/X6RuSPfimxpoWdSANUXblZUX1cgdQw8cZUK",
             crossorigin: "anonymous"
+          },
+          {
+            rel: "stylesheet",      // imported by the SUI stylesheet above
+            href: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin"
           },
           {
             href: metaOwnUrl,

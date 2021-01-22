@@ -45,13 +45,13 @@ var ConfiguredSPAs = function() {
     new SPA({
       name: "first",
       entryPoint: "./src/entrypoints/first.tsx",
-      ssr: false,
+      ssr: true,
       redirect: true
     }),
     new SPA({
       name: "second",
       entryPoint: "./src/entrypoints/second.tsx",
-      ssr: true,
+      ssr: false,
       redirect: false
     })
   ];

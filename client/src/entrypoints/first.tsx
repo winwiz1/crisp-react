@@ -2,12 +2,12 @@
  * The 'entry point' (in webpack terminology)
  * of the First SPA.
  *
- * SSR has been disabled for this entry point.
- * To enable SSR:
- *  - uncomment import { renderToString } ...
- *  - replace ReactDOM.render with ReactDOM.hydrate (see comments below)
- *  - uncomment the SSR block at the bottom
- *  - set the 'ssr' flag to true for this SPA in spa.config.js
+ * SSR has been enabled for this entry point.
+ * To disable SSR:
+ *  - comment out import { renderToString } ...
+ *  - replace ReactDOM.hydrate with ReactDOM.render (see comments below)
+ *  - comment out the SSR block at the bottom
+ *  - set the 'ssr' flag to false for this SPA in spa.config.js
  *
  * Note than only one SPA (and therefore one entry point) can have SSR enabled.
  */
@@ -16,11 +16,11 @@ import * as ReactDOM from "react-dom";
 import { Helmet } from "react-helmet";
 import { Router, Route, Switch } from "react-router-dom";
 import { ComponentA } from "../components/ComponentA";
-import { ComponentB } from "../components/ComponentB";
+import { Lighthouse } from "../components/Lighthouse";
 import { Overview } from "../components/Overview";
 import { NameLookup } from "../components/NameLookup";
 import { ErrorBoundary } from "../components/ErrorBoundary";
-// import { renderToString } from "react-dom/server";                 // used for SSR
+import { renderToString } from "react-dom/server";                 // used for SSR
 import * as SPAs from "../../config/spa.config";
 import { isServer, getHistory } from "../utils/ssr/misc";
 
@@ -36,7 +36,7 @@ const First: React.FC = _props => {
           <Switch>
             <Route exact path="/" component={Overview} />
             <Route path="/a" component={ComponentA} />
-            <Route path="/b" component={ComponentB} />
+            <Route path="/lighthouse" component={Lighthouse} />
             <Route path="/namelookup" component={NameLookup} />
             <Route component={Overview} />
           </Switch>
@@ -47,19 +47,19 @@ const First: React.FC = _props => {
 };
 
 if (!isServer()) {
-   ReactDOM.render(                         // .render(...) is used without SSR
-// ReactDOM.hydrate(                        // .hydrate(...) is used with SSR
+// ReactDOM.render(                         // .render(...) is used without SSR
+   ReactDOM.hydrate(                        // .hydrate(...) is used with SSR
     <First />,
     document.getElementById("app-root")
   );
 }
 
 /****************** SSR block start ******************/
-/*
-const asString = () => {
+
+const asString = (): string => {
   return renderToString(<First />)
 }
 
 export default asString;
-*/
+
 /****************** SSR block end ******************/

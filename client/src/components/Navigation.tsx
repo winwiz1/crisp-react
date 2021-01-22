@@ -14,15 +14,16 @@ export const Navigation: React.FC = _props => {
         <Menu.Item>
           <Menu.Header>First SPA</Menu.Header>
           <Menu.Menu>
+            <Menu.Item as={Link} to="/">Overview</Menu.Item>
             <Menu.Item as={Link} to="/a">ComponentA</Menu.Item>
-            <Menu.Item as={Link} to="/b">ComponentB</Menu.Item>
+            <Menu.Item as={Link} to="/lighthouse">Lighthouse</Menu.Item>
             <Menu.Item as={Link} to="/namelookup">NameLookup</Menu.Item>
           </Menu.Menu>
         </Menu.Item>
         <Menu.Item>
           <Menu.Header>Second SPA</Menu.Header>
           <Menu.Menu>
-            <Menu.Item href={`/${SPAs.getNames()[1]}.html`}>ComponentC</Menu.Item>
+            <Menu.Item href={`/${SPAs.getNames()[1]}.html`}>ComponentB</Menu.Item>
           </Menu.Menu>
         </Menu.Item>
       </Menu>

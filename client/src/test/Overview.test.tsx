@@ -19,7 +19,7 @@ describe("Testing Overview", () => {
 
     getByText(content => content.startsWith("The First SPA"));
     expect(getAllByText("ComponentA", { exact: true, selector: "code" })[0]).toBeVisible();
-    expect(getAllByText("ComponentC", { exact: true, selector: "code" })[0]).toBeVisible();
+    expect(getAllByText("ComponentB", { exact: true, selector: "code" })[0]).toBeVisible();
 
     // Testing sample to show how to find a DOM element. In this case it's the menu header.
     // Selector to find Semantic UI menu header
