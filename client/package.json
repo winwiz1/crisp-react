@@ -31,7 +31,7 @@
     "postbuild:prod": "cross-env TS_NODE_PROJECT=tsconfig.ssr.json node -r ts-node/register -r tsconfig-paths/register src/utils/ssr/buildTimeSSR.ts && yarn prettier",
     "compile": "tsc -p .",
     "lint": "eslint . --ext .ts,.tsx",
-    "dev": "webpack-dev-server --config webpack.config.js",
+    "dev": "webpack serve --config webpack.config.js",
     "test": "cross-env NODE_ENV=test jest",
     "build:prod-debug": "webpack --env.prod",
     "postbuild:prod-debug": "yarn copy",
