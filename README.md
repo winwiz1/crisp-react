@@ -19,8 +19,8 @@
 
     | Benchmarking Tool | Result | Throttling  |
     | :--- |:---:| :---:|
-    | Google LightHouse | ![Run on Google Cloud](docs/benchmarks/100.png) | not throttled |
-    | Google LightHouse | ![Run on Google Cloud](docs/benchmarks/84.png) | throttled to slow 4G,<br/>CPU slowdown |
+    | Google Lighthouse | ![Run on Google Cloud](docs/benchmarks/100.png) | not throttled |
+    | Google Lighthouse | ![Run on Google Cloud](docs/benchmarks/84.png) | throttled to slow 4G,<br/>CPU slowdown |
 
     The tool is embedded into Chrome so you can easily benchmark yourself. Follow this [link](docs/benchmarks/PERFORMANCE.md) for the details.
 
@@ -176,13 +176,13 @@ The client subproject builds an application with SPAs defined by the SPA Configu
     new SPA({
       name: "first",
       entryPoint: "./src/entrypoints/first.tsx",
-      ssr: false,
+      ssr: true,
       redirect: true
     }),
     new SPA({
       name: "second",
       entryPoint: "./src/entrypoints/second.tsx",
-      ssr: true,
+      ssr: false,
       redirect: false
     })
   ];
@@ -202,7 +202,7 @@ To reconfigure the application to have a separate SPA for login and another one 
     new SPA({
       name: "login",
       entryPoint: "./src/entrypoints/login.tsx",
-      ssr: false,
+      ssr: true,
       redirect: false
     }),
     new SPA({
@@ -347,7 +347,7 @@ To finish, stop the running debugging configuration (use the Debugging toolbar o
 ### Turning On and Off on the Application Level
 SSR is enabled for production builds. In order to turn it off rename the `postbuild:prod` script in [`package.json`](https://github.com/winwiz1/crisp-react/blob/master/client/package.json), for example prepend an underscore to the script name. This will reduce the build time.
 ### Turning On and Off on the SPA Level
-By default SSR is disabled for the [`first`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/first.tsx) SPA and enabled for the [`second`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/second.tsx) SPA. To toggle this setting follow the instructions provided in the respective file comments.
+By default SSR is enabled for the [`first`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/first.tsx) SPA and disabled for the [`second`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/second.tsx) SPA. To toggle this setting follow the instructions provided in the respective file comments.
 ## Containerisation
 A container acts as a mini operating system providing your code with run-time dependencies. One of the benefits of this approach is that your programs are less likely to break during deployments in different e.g. hosting provider supplied environments. It makes a container (represented by the sequence of build instructions in `Dockerfile`) to be a robust deployment vehicle.
 
