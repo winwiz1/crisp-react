@@ -31,6 +31,7 @@ const getWebpackConfig = (env, argv) => {
 
   const config = {
     mode: isProduction ? "production" : "development",
+    target: ["web", "es5"],
     devtool: "source-map",
     entry: configuredSPAs.getEntrypoints(),
     module: {

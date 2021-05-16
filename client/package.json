@@ -46,7 +46,7 @@
     "react-helmet": "6.1.0",
     "react-router-dom": "^5.2.0",
     "semantic-ui-react": "2.0.1",
-    "typestyle": "2.1.0"
+    "typestyle": "2.0.4"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",
