@@ -103,6 +103,7 @@ var ConfiguredSPAs = function() {
     var spa = SPAs.find(function(spa) {
       return spa.params.ssr;
     });
+    // eslint-disable-next-line
     return !!spa? spa.params.name : undefined;
   };
 
