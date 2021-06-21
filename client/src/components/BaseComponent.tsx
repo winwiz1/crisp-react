@@ -22,7 +22,14 @@ cssRaw(`
 const cssStyle: Record<string, string> = {
   container: style({
     display: "flex",
-    flexFlow: "row wrap"
+    flexFlow: "row nowrap",
+    $nest: {
+      "@media screen and \
+      (max-width: 350px) and \
+      (orientation: portrait)": {
+        flexFlow: "row wrap",
+      },
+    }
   }),
 
   left: style({
