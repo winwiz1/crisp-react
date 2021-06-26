@@ -59,7 +59,7 @@ class Server {
             // refusing to execute the script which in turn can be suppressed by
             // uncommenting the line below.
             // scriptSrc: ["'self'", "'sha256-SuONhcfr49gviXGu4vUSnIzwTSVHVAa7+O2walEP68E='"],
-            styleSrc: ["'unsafe-inline'", "cdn.jsdelivr.net", "fonts.googleapis.com"],
+            styleSrc: ["'unsafe-inline'", "'self'", "cdn.jsdelivr.net", "fonts.googleapis.com"],
             fontSrc: ["data:", "fonts.googleapis.com", "cdn.jsdelivr.net", "fonts.gstatic.com"],
             imgSrc: ["'self'", "data:"]
           }
@@ -209,7 +209,7 @@ class Server {
   // then returns RegExp similar to:
   //   /^((first)|(second)|(runtime)|(vendor))\.\w{16,32}\.bundle\.js((\.map)|(\.gz)|(\.br))?$/
   private static getClientBuildArtifactsRegex(): RegExp {
-    return new RegExp(`^(${Server.getLandingPages()}|(runtime)|(vendor))\\.\\w{16,32}\\.bundle\\.js((\\.map)|(\\.gz)|(\\.br))?$`);
+    return new RegExp(`^(${Server.getLandingPages()}|(runtime)|(vendor))\\.\\w{16,32}((\\.bundle\\.js((\\.map)|(\\.gz)|(\\.br))?)|(.css(.map)?))$`);
   }
 
   private static setCacheHeaders (res: express.Response): void {

@@ -4,7 +4,7 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const isProduction = true;
 
 // Supress "Failed to load tsconfig.json: Missing baseUrl in compilerOptions" error message.
@@ -31,12 +31,20 @@ module.exports = {
           ],
         },
         {
-          test: /\.css$/i,
+          test: /\.css$/,
           use: [
             {
               loader: MiniCssExtractPlugin.loader,
+              options: {
+                emit: false,
+              },
             },
-            "null-loader",
+            {
+              loader: "css-loader",
+              options: {
+                modules: true
+              }
+            }
           ],
         },
       ]
@@ -57,7 +65,11 @@ module.exports = {
         eslint: undefined,
         logger: { infrastructure: "console", issues: "console" }
       }),
-      new MiniCssExtractPlugin()
+      new MiniCssExtractPlugin({
+        linkType: "text/css",
+        filename: "[name].[fullhash].css",
+        chunkFilename: "[id].[fullhash].css",
+      }),
     ],
     output: {
       path: path.resolve(__dirname, 'dist-ssr'),

@@ -6,10 +6,11 @@
 import * as React from "react";
 import {
   Header,
+  Message,
+  Icon,
   Container,
   Divider,
-  Icon,
-  Message
+  
 } from "semantic-ui-react";
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";

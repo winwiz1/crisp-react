@@ -18,7 +18,7 @@ SSR turned on for the first SPA.";
 const metaKeywords = "Lightweight React/Express/TypeScript boilerplate with \
 optional SSR. Deploy anywhere as container.";
 const metaOwnUrl = "https://crisp-react.winwiz1.com/";
-
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 configuredSPAs.verifyParameters(verifier);
 
@@ -52,7 +52,26 @@ const getWebpackConfig = (env, argv) => {
         },
         {
           test: /\.css$/,
-          use: ["style-loader", "css-loader"],
+          use: [
+            isProduction?
+              MiniCssExtractPlugin.loader :
+              {
+                loader: "style-loader",
+                options: {
+                  injectType: "singletonStyleTag"
+                },
+              },
+            {
+              loader: "css-loader",
+              options: {
+                // 'true' ensures class selector names are mangled to be unique
+                // and injected at run-time as values into 'styles' object with
+                // unmangled (e.g. taken from the .css file) names used as the
+                // keys.
+                modules: true
+              }
+            }
+          ],
         },
       ]
     },
@@ -132,7 +151,8 @@ const getWebpackConfig = (env, argv) => {
     config.plugins.push(
       new HtmlWebpackPlugin({
         template: require("html-webpack-template"),
-        inject: true,
+        inject: "body",
+        scriptLoading: "blocking",
         title: configuredSPAs.appTitle,
         appMountId: "app-root",
         alwaysWriteToDisk: true,
@@ -186,9 +206,8 @@ const getWebpackConfig = (env, argv) => {
         "process.env.NODE_ENV": JSON.stringify("production")
       }));
     config.plugins.push(
-      new SriPlugin({
-      hashFuncNames: ["sha384"]
-    }));
+      new SriPlugin.SubresourceIntegrityPlugin()
+    );
     config.plugins.push(
       new CompressionPlugin({
         filename: "[path][base].br",
@@ -209,6 +228,13 @@ const getWebpackConfig = (env, argv) => {
         threshold: 10240,
         minRatio: 0.8
       }));
+      config.plugins.push(
+        new MiniCssExtractPlugin({
+          linkType: "text/css",
+          filename: "[name].[fullhash].css",
+          chunkFilename: "[id].[fullhash].css",
+        })
+      );
   }
 
   return config;

@@ -30,7 +30,7 @@ const Description: React.FC = _props => {
           used, the performance score should be around 100 depending on the hardware.
         </p>
         <p>
-          Alternatively use a standalone Lighthouse provided by Google at web.dev <a
+          Alternatively use a cloud instance of Lighthouse provided by Google at web.dev <a
           href="https://web.dev/measure/" target="_blank" rel="noopener noreferrer">
           Measure</a> page. It will emulate a smartphone so the score could be
           somewhat lower.

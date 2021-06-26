@@ -1,0 +1,41 @@
+/*
+* Optional plain stylesheet without TypeScript strong typings.
+* Can be used in addition to TypeStyle which comes with TypeScript
+* support (or other CSS library like styled-components that needs
+* @types/styled-components for TypeScript integration).
+*
+* This stylesheet can contain CSS @imports. For example, if
+  react-day-picker or other component that comes with its own
+  custom CSS was used, then this file would have:
+    @import "react-day-picker/lib/style.css";
+**/
+
+code {
+  font-size: 0.9em;
+  font-family: monospace;
+  white-space: pre;
+}
+
+.component_container {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+}
+
+@media only screen and (max-width: 512px) and (orientation: portrait) {
+  .component_container {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+  }
+}
+
+.left_component {
+  flex: initial;
+  margin-bottom: 1rem;
+  margin-left: 2rem;
+}
+
+.right_component {
+  flex: auto;
+}
