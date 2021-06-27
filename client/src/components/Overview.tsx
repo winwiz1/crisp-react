@@ -4,6 +4,7 @@
  * Uses BaseComponent for rendering.
  */
 import * as React from "react";
+import { style } from "typestyle";
 import {
   Header,
   Message,
@@ -15,15 +16,31 @@ import {
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
 
+const cssMessage = style({
+  $nest: {
+    "&>a": {
+      fontWeight: 600,
+    },
+    "&>a:hover": {
+      textDecoration: "underline",
+      textDecorationThickness: "2px",
+    },
+    "& i": {
+      float: "left",
+      marginTop: "0.2em !important"
+    },
+
+  }
+});
+
 const Description: React.FC = _props => {
   return (
     <Container text textAlign="justified">
-      <Message>
+      <Message className={cssMessage}>
         <Icon
           name="info circle"
           color="blue"
           size="big"
-          style={{ float: "left", marginTop: "0.2em" }}
         />
         This demo webapp was built by cloning <a target="_blank"
         rel="noopener noreferrer"
@@ -31,7 +48,7 @@ const Description: React.FC = _props => {
         </a> repository and executing <code>&nbsp;yarn build:prod
         </code>&nbsp; command.
       </Message>
-      <Header as="h4">
+      <Header as="h3">
         The First Single Page Application (SPA) - Overview
       </Header>
       <p>
@@ -48,10 +65,19 @@ const Description: React.FC = _props => {
         any existing Redux store(s) thus allowing the next SPA to start with
         a clean plate.
       </p>
+      <p>
+      The Lighthouse menu opens a similarly named page with performance
+      benchmarking suggestions. The results are meant to prove that innovative
+      features this projects offer (ability to split monolithic React application
+      into multiple SPAs to contain script bundle size, protect Intellectual
+      Property and distribute work among developers/teams; perform SSR without
+      need to learn, use and troubleshoot a framework) do not need to come at the
+      price of speed compromise.
+      </p>
       <Divider />
       <p>
-        The bundle (and HTML produced by SSR which is enabled for this SPA) can be
-        seen by right-clicking on the page and choosing "View Page Source" menu.
+        The bundle and HTML produced by SSR which is enabled for this SPA can be
+        seen by right-clicking on the page and choosing "View page source" menu.
         The HTML markup can be compared to that of the Second SPA which has SSR
         disabled.
       </p>

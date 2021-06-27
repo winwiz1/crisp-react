@@ -4,6 +4,7 @@
  * for rendering.
  */
 import * as React from "react";
+import { style } from "typestyle";
 import {
   Header,
   Container,
@@ -11,6 +12,13 @@ import {
 } from "semantic-ui-react";
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
+
+const cssIcon = style({
+  float: "left",
+  marginTop: "0.2em !important",
+  marginRight: "0.7em  !important",
+  marginBottom: "0em  !important"
+});
 
 const Description: React.FC = _props => {
   return (
@@ -22,11 +30,11 @@ const Description: React.FC = _props => {
             name="tachometer alternate"
             size="big"
             color="blue"
-            style={{ float: "left", marginTop: "0.2em", marginRight: "0.7em", marginBottom: "0em" }}
+            className={cssIcon}
           />
           The performance of this website can be measured using Google Lighthouse
           tool. The tool is embedded into Chrome. Open Chrome DevTools and use the
-          Audit tab to run a performance audit. Assuming the 'Desktop' setting is
+          Lighthouse tab to run a performance audit. Assuming the 'Desktop' setting is
           used, the performance score should be around 100 depending on the hardware.
         </p>
         <p>

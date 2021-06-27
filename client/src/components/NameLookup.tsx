@@ -53,10 +53,20 @@ const cssInputHeader = style({
   marginTop: "0.4em"
 });
 
+const cssWidth = "27ch";
+
 const cssInputFootnote = style({
   marginTop: "1em",
   overflow: "hidden",
-  width: "27ch"
+  width: cssWidth
+});
+
+const cssInput = style({
+  width: cssWidth
+});
+
+const cssCardMeta = style({
+  marginTop: "0.7em"
 });
 
 const cssButton = style({
@@ -170,7 +180,7 @@ const NameLookupContent: React.FC = _props => {
             <Input
               type="text"
               maxLength="32"
-              style={{ width: "27ch" }}
+              className={cssInput}
               error={!isNameValid(name)}
               onChange={onNameChange}
               ref={inputRef}
@@ -184,14 +194,14 @@ const NameLookupContent: React.FC = _props => {
           <Segment basic className={cssFlexItem}>
             <Card>
               <Card.Content>
-                <Card.Header>API Data</Card.Header>
-                <Card.Meta>
+                <Card.Header textAlign="center">API Data</Card.Header>
+                <Card.Meta className={cssCardMeta}>
                   {`Probability: ${getProbability()}`}
                 </Card.Meta>
                 <Card.Description>
                   {`The gender is:  ${getGender() ?? "unknown"}`}
                 </Card.Description>
-                <div style={{ textAlign: "center" }}>
+                <Card.Content extra textAlign="center" >
                   <Button
                     className={cssButton}
                     size="tiny"
@@ -203,7 +213,7 @@ const NameLookupContent: React.FC = _props => {
                     <Icon name="search" />
                     Find gender
                   </Button>
-                </div>
+                </Card.Content>
               </Card.Content>
             </Card>
           </Segment>

@@ -30,7 +30,7 @@ describe("Testing Overview", () => {
       //    - the signature class 'ui', as any SUI component,
       //    - unsurprisingly the class 'menu' for <Menu>
       // and additionally the three classes we explicitly added to the <Menu>
-      "div.ui.borderless.compact.vertical.menu " +
+      "div.ui.vertical.menu " +
       // Finally under <Menu> we have used <Menu.Item> followed by <Menu.Header>
       "div.item div.header";
 
