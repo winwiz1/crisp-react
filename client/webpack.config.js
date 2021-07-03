@@ -69,10 +69,11 @@ const getWebpackConfig = (env, argv) => {
             {
               loader: "css-loader",
               options: {
-                // 'true' ensures class selector names are mangled to be unique
-                // and injected at run-time as values into 'styles' object with
-                // unmangled (e.g. taken from the .css file) names used as the
-                // keys.
+                // 'true' ensures class selector names are mangled to be unique.
+                // The key-value pairs (with non-mangled e.g. taken from the .css
+                // file selector names used as the keys and mangled ones being
+                // the values) are injected into the default export object. We
+                // import it as 'styles'.
                 modules: true
               }
             }
