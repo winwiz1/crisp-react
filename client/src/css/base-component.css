@@ -3,12 +3,7 @@
 * Can be used in addition to TypeStyle which comes with TypeScript
 * support (or other CSS library like styled-components that needs
 * @types/styled-components for TypeScript integration).
-*
-* This stylesheet can contain CSS @imports. For example, if
-  react-day-picker or other component that comes with its own
-  custom CSS was used, then this file would have:
-    @import "react-day-picker/lib/style.css";
-**/
+*/
 
 code {
   font-size: 0.9em;
@@ -22,7 +17,7 @@ code {
   align-items: flex-start;
 }
 
-@media only screen and (max-width: 512px) and (orientation: portrait) {
+@media only screen and (max-width: 550px) {
   .component_container {
     display: flex;
     flex-flow: row wrap;

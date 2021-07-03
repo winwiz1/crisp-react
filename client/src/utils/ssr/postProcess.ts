@@ -1,14 +1,15 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import { promisify } from 'util';
+import * as fs from "fs";
+import * as path from "path";
+import { promisify } from "util";
+import { JSDOM } from "jsdom";
 
-const workDir = './dist/';
+const workDir = "./dist/";
 
 export async function postProcess(): Promise<void> {
   const readdir = promisify(fs.readdir);
   const files = await readdir(workDir);
-  const txtFiles = files.filter(file => path.extname(file) === '.txt');
-  const htmlFiles = files.filter(file => path.extname(file) === '.html');
+  const txtFiles = files.filter(file => path.extname(file) === ".txt");
+  const htmlFiles = files.filter(file => path.extname(file) === ".html");
   const ar = new Array<[string, string]>();
 
   htmlFiles.forEach(file => {
@@ -33,21 +34,36 @@ async function postProcessFile(htmlFile: string, ssrFile: string): Promise<void>
   const dataHtml = await readFile(htmlFilePath);
   const dataSsr = (await readFile(ssrFilePath)).toString();
   const reReact = /^\s*<div\s+id="app-root">/;
-  const ar: string[] = dataHtml.toString().replace(/\r\n?/g, '\n').split('\n');
+  const ar: string[] = dataHtml.toString().replace(/\r\n?/g, "\n").split("\n");
 
   const out = ar.map(str => {
     if (reReact.test(str)) {
-      str += '\n';
+      str += "\n";
       str += dataSsr;
     }
-    str += '\n';
+    str += "\n";
     return str;
   });
 
   const stream = fs.createWriteStream(htmlFilePath);
-  stream.on('error', err => {
+  stream.on("error", err => {
     console.error(`Failed to write to file ${htmlFilePath}, error: ${err}`)
   });
   out.forEach(str => { stream.write(str); });
   stream.end();
+
+  const jsdom = await JSDOM.fromFile(htmlFilePath);
+
+  if (!jsdom) {
+    throw "JSDOM creation failure";
+  }
+
+  const links: NodeListOf<HTMLLinkElement> = jsdom.window.document.querySelectorAll("head>link[rel='stylesheet'][href^='/static']");
+
+  if (links.length > 1) {
+    const el = links[0];
+    el.parentNode?.removeChild(el);
+    const writeFile = promisify(fs.writeFile);
+    await writeFile(htmlFilePath, jsdom.serialize());
+  }
 }

@@ -56,7 +56,7 @@ module.exports = {
       ]
     },
     plugins: [
-      new CleanWebpackPlugin(),
+      new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ["dist-ssr"]}),
       new webpack.DefinePlugin({
         "process.env.DEVELOPMENT": JSON.stringify(isProduction === false)
       }),

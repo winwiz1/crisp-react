@@ -15,29 +15,22 @@ import {
 } from "semantic-ui-react";
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
+import { getAnchorCSS } from "../css/common-styles";
 
-const cssMessage = style({
-  $nest: {
-    "&>a": {
-      fontWeight: 600,
-    },
-    "&>a:hover": {
-      textDecoration: "underline",
-      textDecorationThickness: "2px",
-    },
-    "& i": {
-      float: "left",
-      marginTop: "0.2em !important"
-    },
-
-  }
+const cssIcon = style({
+  float: "left",
+  marginTop: "0.2em !important"
 });
+
+const cssMessage = style(
+  getAnchorCSS()
+);
 
 const Description: React.FC = _props => {
   return (
     <Container text textAlign="justified">
       <Message className={cssMessage}>
-        <Icon
+        <Icon className={cssIcon}
           name="info circle"
           color="blue"
           size="big"
@@ -66,13 +59,14 @@ const Description: React.FC = _props => {
         a clean plate.
       </p>
       <p>
-      The Lighthouse menu opens a similarly named page with performance
-      benchmarking suggestions. The results are meant to prove that innovative
-      features this projects offer (ability to split monolithic React application
-      into multiple SPAs to contain script bundle size, protect Intellectual
-      Property and distribute work among developers/teams; perform SSR without
-      need to learn, use and troubleshoot a framework) do not need to come at the
-      price of speed compromise.
+      The <code>Lighthouse</code> menu opens a similarly named page with
+      performance benchmarking suggestions. The results are meant to prove
+      that innovative features this project offers (ability to split a
+      monolithic React application into multiple SPAs to contain script
+      bundle size, protect Intellectual Property and distribute work among
+      developers/teams; perform build-time SSR without need to learn, use
+      and troubleshoot a framework) do not have to come at the price of speed
+      compromise.
       </p>
       <Divider />
       <p>

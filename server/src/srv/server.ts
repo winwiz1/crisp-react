@@ -52,7 +52,6 @@ class Server {
       helmet(isProduction()? {
         contentSecurityPolicy: {
           directives: {
-            frameSrc: ["'self'"],
             defaultSrc: ["'self'"],
             // CSP can be tested by removing the 'nomodule' attribute from inline <script>
             // located in head-snippet.html and observing browser's console message about
@@ -61,7 +60,8 @@ class Server {
             // scriptSrc: ["'self'", "'sha256-SuONhcfr49gviXGu4vUSnIzwTSVHVAa7+O2walEP68E='"],
             styleSrc: ["'unsafe-inline'", "'self'", "cdn.jsdelivr.net", "fonts.googleapis.com"],
             fontSrc: ["data:", "fonts.googleapis.com", "cdn.jsdelivr.net", "fonts.gstatic.com"],
-            imgSrc: ["'self'", "data:"]
+            imgSrc: ["'self'", "data:"],
+            objectSrc: ["'none'"],
           }
         }
       } : {}),
@@ -104,7 +104,7 @@ class Server {
       } else {
         if (entryPoint === Server.s_robotsName) {
           Server.setCacheHeaders(res);
-          res.type('text/plain');
+          res.type("text/plain");
           res.send("User-agent: *\nAllow: /");
         } else {
           // Emulate historyApiFallback in webpack-dev-server
@@ -209,7 +209,7 @@ class Server {
   // then returns RegExp similar to:
   //   /^((first)|(second)|(runtime)|(vendor))\.\w{16,32}\.bundle\.js((\.map)|(\.gz)|(\.br))?$/
   private static getClientBuildArtifactsRegex(): RegExp {
-    return new RegExp(`^(${Server.getLandingPages()}|(runtime)|(vendor))\\.\\w{16,32}((\\.bundle\\.js((\\.map)|(\\.gz)|(\\.br))?)|(.css(.map)?))$`);
+    return new RegExp(`^(${Server.getLandingPages()}|(runtime)|(vendor)|(styles))\\.\\w{16,32}((\\.bundle\\.js((\\.map)|(\\.gz)|(\\.br))?)|(.css(.map)?))$`);
   }
 
   private static setCacheHeaders (res: express.Response): void {

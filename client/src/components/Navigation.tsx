@@ -7,19 +7,29 @@ import { NavLink } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
 import { style } from "typestyle";
 import * as SPAs from "../../config/spa.config";
+import styles from "../css/navigation.css";
+
+const cssStyle: Record<string, string> = {
+  menu: styles["menu"],
+};
 
 const cssMenu = style({
   $nest: {
-    "&>a": {
-      lineHeight: "1.4em !important",
+    "div.header": {
+      fontSize: "1.1em !important"
+    },
+    "& a": {
+      fontSize: "0.9em !important",
+      paddingTop: "1em !important",
+      paddingBottom: "1em !important",
     },
   }
 });
 
 export const Navigation: React.FC = _props => {
   return (
-    <nav>
-      <Menu vertical>
+    <nav className={cssStyle.menu}>
+      <Menu vertical className={cssMenu}>
         <Menu.Item>
           <Menu.Header>First SPA</Menu.Header>
           <Menu.Menu className={cssMenu}>
@@ -31,7 +41,7 @@ export const Navigation: React.FC = _props => {
         </Menu.Item>
         <Menu.Item>
           <Menu.Header>Second SPA</Menu.Header>
-          <Menu.Menu className={cssMenu}>
+          <Menu.Menu>
             <Menu.Item href={`/${SPAs.getNames()[1]}.html`}>ComponentB</Menu.Item>
           </Menu.Menu>
         </Menu.Item>

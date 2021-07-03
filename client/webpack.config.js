@@ -15,10 +15,10 @@ const headHtmlSnippet = fs.existsSync(headHtmlSnippetPath) ?
 const metaDescription = "Skeleton website built using Crisp React \
 boilerplate. Consists of two sample React SPAs with optional build-time \
 SSR turned on for the first SPA.";
-const metaKeywords = "Lightweight React/Express/TypeScript boilerplate with \
-optional SSR. Deploy anywhere as container.";
+const metaKeywords = "React,Express,TypeScript,boilerplate,SSR,Docker";
 const metaOwnUrl = "https://crisp-react.winwiz1.com/";
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 configuredSPAs.verifyParameters(verifier);
 
@@ -54,11 +54,16 @@ const getWebpackConfig = (env, argv) => {
           test: /\.css$/,
           use: [
             isProduction?
-              MiniCssExtractPlugin.loader :
+              {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  emit: true,
+                },
+              } :
               {
                 loader: "style-loader",
                 options: {
-                  injectType: "singletonStyleTag"
+                  injectType: "singletonStyleTag",
                 },
               },
             {
@@ -98,6 +103,12 @@ const getWebpackConfig = (env, argv) => {
             enforce: true,
             maxInitialSize: 1000000
           },
+          styles: {
+            name: "styles",
+            type: "css/mini-extract",
+            chunks: "all",
+            enforce: true,
+          },
         },
       },
       runtimeChunk: "single",
@@ -115,7 +126,10 @@ const getWebpackConfig = (env, argv) => {
               }
             },
             extractComments: false
-          })
+          }),
+          new CssMinimizerPlugin({
+            parallel: true,
+          }),
         ]
       }),
     },
@@ -232,7 +246,6 @@ const getWebpackConfig = (env, argv) => {
         new MiniCssExtractPlugin({
           linkType: "text/css",
           filename: "[name].[fullhash].css",
-          chunkFilename: "[id].[fullhash].css",
         })
       );
   }
