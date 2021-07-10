@@ -22,7 +22,7 @@ import { NameLookup } from "../components/NameLookup";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { renderToString } from "react-dom/server";                 // used for SSR
 import * as SPAs from "../../config/spa.config";
-import { isServer, getHistory } from "../utils/ssr/misc";
+import { isServer, getHistory } from "../utils/postprocess/misc";
 
 const First: React.FC = _props => {
   return (

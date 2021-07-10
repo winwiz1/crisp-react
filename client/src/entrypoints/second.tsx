@@ -18,7 +18,7 @@ import { ComponentB } from "../components/ComponentB";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 // import { renderToString } from "react-dom/server";
 import * as SPAs from "../../config/spa.config";
-import { isServer } from "../utils/ssr/misc";
+import { isServer } from "../utils/postprocess/misc";
 
 const Second: React.FC = _props => {
   return (

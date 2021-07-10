@@ -28,7 +28,7 @@
     "build": "webpack",
     "postbuild": "yarn prettier",
     "build:prod": "webpack --env prod",
-    "postbuild:prod": "cross-env TS_NODE_PROJECT=tsconfig.ssr.json node -r ts-node/register -r tsconfig-paths/register src/utils/ssr/buildTimeSSR.ts && yarn prettier",
+    "postbuild:prod": "cross-env TS_NODE_PROJECT=tsconfig.ssr.json node -r ts-node/register -r tsconfig-paths/register src/utils/postprocess/postProcess.ts && yarn prettier",
     "compile": "tsc -p .",
     "lint": "eslint . --ext .ts,.tsx",
     "dev": "webpack serve --config webpack.config.js",

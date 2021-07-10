@@ -9,7 +9,7 @@ import * as ReactDOM from "react-dom";
 import { style } from "typestyle";
 import { isCustomError } from "../utils/typeguards";
 import logger from "../utils/logger";
-import { isServer } from "../utils/ssr/misc";
+import { isServer } from "../utils/postprocess/misc";
 
 type ErrorBoundaryState = {
   hasError: boolean

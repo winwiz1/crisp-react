@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import { promisify } from "util";
-import { JSDOM } from "jsdom";
 
 const workDir = "./dist/";
 
@@ -51,19 +50,4 @@ async function postProcessFile(htmlFile: string, ssrFile: string): Promise<void>
   });
   out.forEach(str => { stream.write(str); });
   stream.end();
-
-  const jsdom = await JSDOM.fromFile(htmlFilePath);
-
-  if (!jsdom) {
-    throw "JSDOM creation failure";
-  }
-
-  const links: NodeListOf<HTMLLinkElement> = jsdom.window.document.querySelectorAll("head>link[rel='stylesheet'][href^='/static']");
-
-  if (links.length > 1) {
-    const el = links[0];
-    el.parentNode?.removeChild(el);
-    const writeFile = promisify(fs.writeFile);
-    await writeFile(htmlFilePath, jsdom.serialize());
-  }
 }

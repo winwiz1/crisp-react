@@ -176,18 +176,20 @@ const getWebpackConfig = (env, argv) => {
         headHtmlSnippet,
         links: [
           {
-            rel: "preconnect",
-            href: "//fonts.gstatic.com/"
+            rel: "preload",         // imported by the SUI stylesheet below
+            href: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin",
+            as: "style",
           },
           {
             rel: "stylesheet",
-            href: "//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css",
+            href: "https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css",
             integrity: "sha384-JKIDqM48bt14NZpzl9v0AP36VK2C/X6RuSPfimxpoWdSANUXblZUX1cgdQw8cZUK",
             crossorigin: "anonymous"
           },
           {
-            rel: "stylesheet",      // imported by the SUI stylesheet above
-            href: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&subset=latin"
+            rel: "preconnect",
+            href: "https://fonts.gstatic.com/",
+            crossorigin: "anonymous"
           },
           {
             href: metaOwnUrl,
@@ -200,7 +202,7 @@ const getWebpackConfig = (env, argv) => {
           },
         ],
         meta: {
-          viewport:    "width=device-width, initial-scale=1.0, shrink-to-fit=no",
+          viewport:    "width=device-width, initial-scale=1.0",
           description: metaDescription,
           keywords:    metaKeywords,
           robots:      "index, follow",
@@ -215,40 +217,44 @@ const getWebpackConfig = (env, argv) => {
   if (isProduction) {
     const CompressionPlugin = require("compression-webpack-plugin");
     const SriPlugin = require("webpack-subresource-integrity");
+    const compressionRegex = /\.(js|css|html|ttf|svg|woff|woff2|eot)$/;
 
     config.plugins.push(
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": JSON.stringify("production")
-      }));
-    config.plugins.push(
-      new SriPlugin.SubresourceIntegrityPlugin()
+      })
     );
     config.plugins.push(
       new CompressionPlugin({
         filename: "[path][base].br",
         algorithm: "brotliCompress",
-        test: /\.js$|\.css$|\.html$/,
+        test: compressionRegex,
         compressionOptions: {
           level: 11,
         },
         threshold: 10240,
         minRatio: 0.8,
         deleteOriginalAssets: false,
-      }));
+      })
+    );
     config.plugins.push(
       new CompressionPlugin({
         filename: "[path][base].gz",
         algorithm: "gzip",
-        test: /\.js$|\.css$|\.html$/,
+        test: compressionRegex,
         threshold: 10240,
         minRatio: 0.8
-      }));
-      config.plugins.push(
-        new MiniCssExtractPlugin({
-          linkType: "text/css",
-          filename: "[name].[fullhash].css",
-        })
-      );
+      })
+    );
+    config.plugins.push(
+      new MiniCssExtractPlugin({
+        linkType: "text/css",
+        filename: "[name].[fullhash].css",
+      })
+    );
+    config.plugins.push(
+      new SriPlugin.SubresourceIntegrityPlugin()
+    );
   }
 
   return config;
