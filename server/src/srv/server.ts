@@ -77,7 +77,7 @@ class Server {
     // Redirect to the landing page of the SPA that has 'redirect: true'
     this.m_app.get("/", (_req, res, next) => {
       if (Server.s_useDevWebserver) {
-        // Get the resourse from dev server
+        // Get the resource from dev server
         this.sendDevServerAsset(`/${SPAs.getRedirectName()}${Server.s_htmlExtension}`, res, next);
       } else {
         // Serve the static asset from disk
@@ -95,7 +95,7 @@ class Server {
         // Serve SPA landing page
         entryPoint!.endsWith(Server.s_htmlExtension) || (entryPoint! += Server.s_htmlExtension);
         if (Server.s_useDevWebserver) {
-          // Get the requested resourse from dev server
+          // Get the requested resource from dev server
           this.sendDevServerAsset(`/${entryPoint}`, res, next);
         } else {
           // Serve the static asset from disk
@@ -135,8 +135,8 @@ class Server {
 
     // Default 404 handler
     this.m_app.use((_req, _res, next) => {
-      const err = new CustomError(404, "Resourse not found");
-      err.unobscuredMessage = "Invalid resourse requested";
+      const err = new CustomError(404, "Resource not found");
+      err.unobscuredMessage = "Invalid resource requested";
       return next(err);
     });
   }
@@ -178,8 +178,8 @@ class Server {
         this.m_expressStaticMiddleware!(req, res, next);
       }
     } else {
-      const err = new CustomError(404, "Resourse not found");
-      logger.info({ message: `Invalid static resourse ${artifactFile} requested` });
+      const err = new CustomError(404, "Resource not found");
+      logger.info({ message: `Invalid static resource ${artifactFile} requested` });
       return next(err);
     }
   }
