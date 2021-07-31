@@ -11,4 +11,4 @@ git:
   depth: 3
 language: node_js
 node_js: 
-  - "14.17.1"
+  - "14.17.4"
