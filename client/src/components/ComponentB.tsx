@@ -6,7 +6,7 @@ import * as React from "react";
 import { Header, Container, Menu } from "semantic-ui-react";
 import { BaseComponent } from "./BaseComponent";
 import * as SPAs from "../../config/spa.config";
-import "../css/app.css";       // import this plain CSS file once in any source file.
+import "../css/app.css";       // import plain CSS file once in any source file.
 
 const Description: React.FC = _props => {
   return (
