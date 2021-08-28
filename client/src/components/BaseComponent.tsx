@@ -11,19 +11,7 @@
  * other.
  **/
 import * as React from "react";
-
-/**
- * If css-loader has option 'modules: false' in both
- * webpack.config.* files, then the import can be
- * done using
- *   import "../css/base-component.css";
- * in which case change the 'cssStyle' below:
- *   container: "component_container",
- * and so forth. This approach uses unmangled names
- * of CSS class selectors and comes with burden to
- * ensure the names are unique.
- **/
-import styles from "../css/base-component.css";
+import styles from "../css/base-component-style.css";
 
 const cssStyle: Record<string, string> = {
   container: styles["component_container"],

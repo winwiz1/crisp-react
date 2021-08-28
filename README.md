@@ -15,7 +15,11 @@
 </div>
 
 ## Project Highlights
-* Performance. Achieved by webpack tree shaking, script bundle minification and compression (gzip and Brotli).  Complimented by server-side caching and bundle size containment described below.
+* Code splitting. Based on innovative ability to optionally split your React Application into multiple Single Page Applications (SPA). For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA. This approach would be beneficial for medium-to-large React applications that can be split into several domains of functionality, development and testing.
+
+    To achieve better performance it's recommended to split when the size of a production bundle reaches 100 KB. In enterprise environment it's recommended to split regardless of bundle size to protect Intellectual Property (by having a Login SPA and making other bundles available for download to authenticated users only) and augment Role Based Access Security (for example, make the Audit bundle available to users who have either Management or Finance role attested in their JWT token) while parallelizing development among several teams.
+
+* Performance. Achieved by webpack tree shaking, script bundle minification and compression (gzip and Brotli).  Complimented by server-side caching and bundle size containment.
 
     | Benchmarking Tool | Result | Throttling  |
     | :--- |:---:| :---:|
@@ -24,19 +28,7 @@
 
     The tool is embedded into Chrome so you can easily benchmark yourself. Follow this [link](docs/benchmarks/PERFORMANCE.md) for the details.
 
-* Caching. The backend implements HTTP caching and allows long term storage of script bundles in browser's cache that further enhances performance yet supports smooth deployment of versioning changes in production (eliminating the risk of stale bundles getting stuck in the cache).
-
-* Code splitting. Based on innovative ability to optionally split your React Application into multiple Single Page Applications (SPA). For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA. This approach would be beneficial for medium-to-large React applications that can be split into several domains of functionality, development and testing. To achieve better performance it's recommended to split when the size of a production bundle reaches 100 KB.
-
-* Seamless debugging. Debug a minified/obfuscated, compressed production bundle and put breakpoints in its TypeScript code using both VS Code and Chrome DevTools. Development build debugging: put breakpoints in the client and backend code and debug both simultaneously using a single instance of VS Code.
-
-* Overall simplicity. For any starter project or boilerplate, the probability of having bugs/issues down the track increases along with the amount of code. It is shown by the code size badge and can be checked for any GitHub repository using the link: `https://img.shields.io/github/languages/code-size/<user-name>/<repo-name>`. For Crisp React, the React client and the Express backend each contribute ~50% of the codebase.<br/>The code size of other starter projects was a main motivation to develop this solution. The other projects were enjoyable for learning purposes however the amount of code was percieved to be excessive for use in production.
-
-* API. The backend communicates with a cloud service on behalf of clients and makes data available via an API endpoint. It's consumed by the clients. The Name Lookup API is used as a sample:
-    ![API Screenshot](docs/screenshots/api.png)
-
-    The implementation provides reusable code, both client-side and backend, making it easier to switch to another API. In fact this approach has been taken by the sibling Crisp BigQuery repository created by cloning and renaming this solution - it uses Google BigQuery API instead.<br/>
-This arrangement brings a security benefit: The clients running inside a browser in a non-trusted environment do not have credentials to access a cloud service that holds sensitive data. The backend runs in the trusted environment you control and does have the credentials.
+    The backend implements HTTP caching and allows long term storage of script bundles in browser's cache that further enhances performance yet supports smooth deployment of versioning changes in production (eliminating the risk of stale bundles getting stuck in the cache).
 
 * SSR. Build-time SSR (also known as prerendering) is supported. The solution allows to selectively turn the SSR on or off for the chosen part (e.g. a particular SPA) of the React application. This innovative flexibility is important because as noted by the in-depth [article](https://developers.google.com/web/updates/2019/02/rendering-on-the-web) on this subject, SSR is not a good recipe for every project and comes with costs. For example, the costs analysis could lead to a conclusion the Login part of an application is a good fit for SSR whereas the Reporting module is not. Implementing each part as an SPA with selectively enabled/disabled SSR would provide an optimal implementation and resolve this design disjuncture.
 
@@ -52,7 +44,28 @@ This arrangement brings a security benefit: The clients running inside a browser
 
     Only the SPA landing page is prerendered. Other SPA pages are not prerendered because these are the internal SPA pages. Switch to the internal pages is performed by SPA without spending time on network trips and hitting the webserver thus lowering its workload and letting it serve more clients simultaneously.
 
-* Containerisation. Docker multi-staged build is used to ensure the backend run-time environment doesn't contain the client build-time dependencies e.g. `client/node_modules/`. It improves security and reduces container's storage footprint.
+* Overall simplicity. For any starter project or boilerplate, the probability of having bugs/issues down the track increases along with the amount of code. It is shown by the code size badge and can be checked for any GitHub repository using the link: `https://img.shields.io/github/languages/code-size/<user-name>/<repo-name>`. For Crisp React, the React client and the Express backend each contribute ~50% of the codebase.<br/>The code size of other starter projects was a main motivation to develop this solution. The other projects were enjoyable for learning purposes however the amount of code was percieved to be excessive for use in production.
+
+* CSS Handling. The following three CSS handling approaches can be used:
+    1. Plain CSS: Simple and performant with the burden to track name collisions created by multiple components using rulesets with similarly named class selectors.
+    2. CSS Modules:  Performant with convenience of name collisions resolved automatically and drawback of possible rule repetition leading to an increase in size of the resulting stylesheet.
+    3. CSS-in-JS: Developer’s convenience with more flexible CSS adjusted if needed during its construction at run-time. The application logic that drives CSS adjustments (for example, driven by the shape of data received) can be sophisticated and challenging to be expressed via CSS created at build time. Overall this approach translates into self-adjusting components and generally better development speed with possible rule repetition on the downside along with a performance penalty caused by dependency on script bundles download, parsing and execution.
+
+    The solution innovatively allows to use each approach as a sole CSS handling technique or combine it with any or both of the remaining two approaches - with no configuration effort. More details are available under the [CSS Handling](#css-handling) heading.
+
+* API. The backend communicates with a cloud service on behalf of clients and makes data available via an API endpoint. It's consumed by the clients. The Name Lookup API is used as a sample:
+    ![API Screenshot](docs/screenshots/api.png)
+
+    The implementation provides reusable code, both client-side and backend, making it easier to switch to another API. In fact this approach has been taken by the sibling Crisp BigQuery repository created by cloning and renaming this solution - it uses Google BigQuery API instead.<br/>
+This arrangement brings a security benefit: The clients running inside a browser in a non-trusted environment do not have credentials to access a cloud service that holds sensitive data. The backend runs in the trusted environment you control and does have the credentials.
+
+* Containerisation. A container acts as a mini operating system providing your code with the same run-time dependencies no matter where the container runs. One of the benefits of this approach is that your programs are less likely to break during deployments due to differences between your run-time environment and the one supplied by hosting provider. It makes a container (represented by the sequence of build instructions in `Dockerfile`) to be a robust deployment vehicle.
+
+    Another benefit is vendor lock-in avoidance: All cloud vendors including AWS, Azure, GCP, Heroku and others accept containers.
+
+    Yet another benefit is the simplicity of deployment. For example, a click on the button shown below will deploy a container on GCP whereas few simple commands provided under the [Using Heroku](#using-heroku) heading will achieve the same for Heroku.
+
+    Docker multi-staged build is used to ensure the backend run-time environment doesn't contain the client build-time dependencies e.g. `client/node_modules/`. It improves security and reduces container's storage footprint.
 
     - As a single-click container deployment option, you can build and deploy the container on Cloud Run. The prerequisites are to have a Google Cloud account with at least one project created and billing enabled.<br/>
 [![Run on Google Cloud](docs/cloudrun.png)](https://deploy.cloud.run?git_repo=https://github.com/winwiz1/crisp-react)<br/>
@@ -60,6 +73,9 @@ The build will take a while due to free Cloud Shell using a free cloud VM with m
 :heavy_exclamation_mark: It is highly recommended to either add a firewall protection to the created service or to delete it if the deployment was used as a demo/proof of concept. The explanation why this is needed can be found [there](#cloud-run-considerations). Delete the service using the command:<br/>
 `gcloud run services delete crisp-react --platform=managed --region=us-central1 --project=<project-name>`<br/>
 It can be conveniently executed from the Cloud Shell session opened during the deployment. Update the `region` with the one chosen during the deployment and replace `<project-name>` with your project name. Alternatively delete the service using Cloud Run [Console](https://console.cloud.google.com/run).
+
+* Seamless debugging. Debug a minified/obfuscated, compressed production bundle and put breakpoints in its TypeScript code using both VS Code and Chrome DevTools. Development build debugging: put breakpoints in the client and backend code and debug both simultaneously using a single instance of VS Code.
+
 * Sample websites. [Skeleton](https://crisp-react.winwiz1.com/), [production](https://virusquery.com/).
 
 ## Table of Contents
@@ -73,6 +89,7 @@ It can be conveniently executed from the Cloud Shell session opened during the d
   - [Client Usage Scenarios](#client-usage-scenarios)
   - [Backend Usage Scenarios](#backend-usage-scenarios)
 - [SSR](#ssr)
+- [CSS Handling](#css-handling)
 - [Containerisation](#containerisation)
   - [Using Docker](#using-docker)
   - [Using Heroku](#using-heroku)
@@ -348,9 +365,9 @@ To finish, stop the running debugging configuration (use the Debugging toolbar o
 SSR is enabled for production builds. In order to turn it off rename the `postbuild:prod` script in [`package.json`](https://github.com/winwiz1/crisp-react/blob/master/client/package.json), for example prepend an underscore to the script name. This will reduce the build time.
 ### Turning On and Off on the SPA Level
 By default SSR is enabled for the [`first`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/first.tsx) SPA and disabled for the [`second`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/second.tsx) SPA. To toggle this setting follow the instructions provided in the respective file comments.
+## CSS Handling
+Under construction.
 ## Containerisation
-A container acts as a mini operating system providing your code with run-time dependencies. One of the benefits of this approach is that your programs are less likely to break during deployments in different e.g. hosting provider supplied environments. It makes a container (represented by the sequence of build instructions in `Dockerfile`) to be a robust deployment vehicle.
-
 Assuming the deployment demo in the [Project Highlights](#project-highlights) section has been completed, a container has already been built in the cloud and deployed to Google Cloud Run. In this section we will build the container locally and expect it to run in two other deployments (in the local environment facilitated by Docker and the cloud one provided by Heroku)  without any further adjustments.
 ### Using Docker
 Install [Docker](https://docs.docker.com/get-docker/). To build a Docker container and start it, execute [`start-container.cmd`](https://github.com/winwiz1/crisp-react/blob/master/start-container.cmd) or [`start-container.sh`](https://github.com/winwiz1/crisp-react/blob/master/start-container.sh). Then point a browser to `localhost:3000`. Both files can also be executed from an empty directory in which case uncomment the two lines at the top. Moreover, it can be copied to a computer or VM that doesn't have NodeJS installed. The only prerequisites are Docker and Git.

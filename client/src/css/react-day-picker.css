@@ -1,0 +1,17 @@
+/*
+If this project would have used react-day-picker
+(see https://react-day-picker.js.org/), then the
+following two steps would be required:
+  1. Execute yarn add react-day-picker
+  2. Uncomment the '@import' below:
+*/
+
+/*
+@import "react-day-picker/lib/style.css";
+*/
+
+/* Optionally use this CSS to adjust style: 
+.DayPicker-Weekday {
+  color: dimgrey !important;
+}
+*/

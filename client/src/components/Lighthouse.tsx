@@ -3,8 +3,9 @@
  * Belongs to the First SPA and uses BaseComponent
  * for rendering.
  */
+/** @jsx jsx */
+import { jsx, css } from "@emotion/react";
 import * as React from "react";
-import { style } from "typestyle";
 import {
   Header,
   Divider,
@@ -15,11 +16,11 @@ import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
 import { getAnchorCSS } from "../css/common-styles";
 
-const cssContainer = style(
+const cssContainer = css(
   getAnchorCSS()
 );
 
-const cssIcon = style({
+const cssIcon = css({
   float: "left",
   marginTop: "0.2em !important",
   marginRight: "0.7em  !important",
@@ -29,14 +30,14 @@ const cssIcon = style({
 const Description: React.FC = _props => {
   return (
     <section>
-      <Container text textAlign="justified" className={cssContainer}>
+      <Container text textAlign="justified" css={cssContainer}>
         <Header as="h3">Hello from the Lighthouse component</Header>
         <p>
           <Icon
             name="tachometer alternate"
             size="big"
             color="blue"
-            className={cssIcon}
+            css={cssIcon}
           />
           The performance of this webapp can be measured using Google Lighthouse
           tool. The tool is embedded into Chrome. Open Chrome DevTools and use the

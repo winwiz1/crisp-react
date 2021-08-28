@@ -2,8 +2,9 @@
  * The APIClient component renders the data received from
  * backend via API call.
  */
+/** @jsx jsx */
+import { jsx, css } from "@emotion/react";
 import * as React from "react";
-import { style } from "typestyle";
 import {
   Button,
   Card,
@@ -33,19 +34,19 @@ import {
 
 //#region CSS
 
-const cssFlexContainer = style({
+const cssFlexContainer = css({
   display: "flex",
   flexDirection: "row",
   flexWrap: "wrap",
 
 });
 
-const cssFlexItem = style({
+const cssFlexItem = css({
   flex: "1 0 auto",
   marginTop: "1rem !important"
 });
 
-const cssInputHeader = style({
+const cssInputHeader = css({
   display: "block",
   fontSize: "1.3em",
   fontWeight: "bold",
@@ -55,26 +56,26 @@ const cssInputHeader = style({
 
 const cssWidth = "27ch";
 
-const cssInputFootnote = style({
+const cssInputFootnote = css({
   marginTop: "1em",
   overflow: "hidden",
   width: cssWidth
 });
 
-const cssInput = style({
+const cssInput = css({
   width: cssWidth
 });
 
-const cssCardMeta = style({
+const cssCardMeta = css({
   marginTop: "0.7em"
 });
 
-const cssButton = style({
+const cssButton = css({
   marginBottom: "0.9em !important",
   marginTop: "1.5em !important"
 });
 
-const cssDivider = style({
+const cssDivider = css({
   marginTop: "2.5em !important"
 });
 
@@ -173,29 +174,29 @@ const NameLookupContent: React.FC = _props => {
           BigQuery in the sibling Crisp BigQuery project. The credentials (if any)
           required to access the cloud service are held by the backend.
         </p>
-        <Divider horizontal className={cssDivider}>API</Divider>
-        <div className={cssFlexContainer}>
-          <Segment compact basic className={cssFlexItem}>
-            <div className={cssInputHeader}>Name to lookup</div>
+        <Divider horizontal css={cssDivider}>API</Divider>
+        <div css={cssFlexContainer}>
+          <Segment compact basic css={cssFlexItem}>
+            <div css={cssInputHeader}>Name to lookup</div>
             <Input
               type="text"
               maxLength="32"
-              className={cssInput}
+              css={cssInput}
               error={!isNameValid(name)}
               onChange={onNameChange}
               ref={inputRef}
             />
-            <div className={cssInputFootnote}>
+            <div css={cssInputFootnote}>
               Type a name e.g. &nbsp; <code>Alice</code>.<br />
               Then click on the button to discover the gender.
           </div>
           </Segment>
 
-          <Segment basic className={cssFlexItem}>
+          <Segment basic css={cssFlexItem}>
             <Card>
               <Card.Content>
                 <Card.Header textAlign="center">API Data</Card.Header>
-                <Card.Meta className={cssCardMeta}>
+                <Card.Meta css={cssCardMeta}>
                   {`Probability: ${getProbability()}`}
                 </Card.Meta>
                 <Card.Description>
@@ -203,7 +204,7 @@ const NameLookupContent: React.FC = _props => {
                 </Card.Description>
                 <Card.Content extra textAlign="center" >
                   <Button
-                    className={cssButton}
+                    css={cssButton}
                     size="tiny"
                     color="blue"
                     disabled={!isNameValid(name) || inFlight}

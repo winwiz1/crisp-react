@@ -3,8 +3,9 @@
  * an overview of the First SPA it belongs to.
  * Uses BaseComponent for rendering.
  */
+/** @jsx jsx */
+import { jsx, css } from "@emotion/react";
 import * as React from "react";
-import { style } from "typestyle";
 import {
   Header,
   Message,
@@ -17,20 +18,20 @@ import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
 import { getAnchorCSS } from "../css/common-styles";
 
-const cssIcon = style({
+const cssIcon = css({
   float: "left",
   marginTop: "0.2em !important"
 });
 
-const cssMessage = style(
+const cssMessage = css(
   getAnchorCSS()
 );
 
 const Description: React.FC = _props => {
   return (
     <Container text textAlign="justified">
-      <Message className={cssMessage}>
-        <Icon className={cssIcon}
+      <Message css={cssMessage}>
+        <Icon css={cssIcon}
           name="info circle"
           color="blue"
           size="big"
@@ -61,12 +62,8 @@ const Description: React.FC = _props => {
       <p>
       The <code>Lighthouse</code> menu opens a similarly named page with
       performance benchmarking suggestions. The results are meant to prove
-      that innovative features this project offers (ability to split a
-      monolithic React application into multiple SPAs to contain script
-      bundle size, protect Intellectual Property and distribute work among
-      developers/teams; perform build-time SSR without need to learn, use
-      and troubleshoot a framework) do not have to come at the price of speed
-      compromise.
+      that innovative features this project offers do not have to come at
+      the price of speed compromise.
       </p>
       <Divider />
       <p>

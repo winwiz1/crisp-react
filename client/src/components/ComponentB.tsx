@@ -6,6 +6,7 @@ import * as React from "react";
 import { Header, Container, Menu } from "semantic-ui-react";
 import { BaseComponent } from "./BaseComponent";
 import * as SPAs from "../../config/spa.config";
+import "../css/app.css";       // import this plain CSS file once in any source file.
 
 const Description: React.FC = _props => {
   return (
@@ -27,6 +28,14 @@ const Description: React.FC = _props => {
           the SPA consists of.
         </p>
       </Container>
+      <span
+        className="sr-only"
+        id="sampleId"
+      >
+        This text is not visible. It could have contained a screen reader prompt.
+        Which could be used by a screen reader provided there is aria-labelledby
+        attribute somewhere that refers to this text e.g. aria-labelledby='sampleId'
+      </span>
     </section>
   );
 };

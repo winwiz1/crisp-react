@@ -74,7 +74,10 @@ const getWebpackConfig = (env, argv) => {
                 // file selector names used as the keys and mangled ones being
                 // the values) are injected into the default export object. We
                 // import it as 'styles'.
-                modules: true
+                // 'false' means class selector names are left intact.
+                modules: {
+                  auto: (filepath) => filepath.endsWith("-style.css"),
+                }
               }
             }
           ],
@@ -102,7 +105,7 @@ const getWebpackConfig = (env, argv) => {
             chunks: "initial",
             name: "vendor",
             enforce: true,
-            maxInitialSize: 1000000
+            maxInitialSize: isProduction ? 1000000 : undefined
           },
           styles: {
             name: "styles",

@@ -4,9 +4,10 @@
   meant to be used sparingly. Hence using this component to process
   unexpected and hopefully rare exceptions.
 */
+/** @jsx jsx */
+import { jsx, css } from "@emotion/react";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { style } from "typestyle";
 import { isCustomError } from "../utils/typeguards";
 import logger from "../utils/logger";
 import { isServer } from "../utils/postprocess/misc";
@@ -48,7 +49,11 @@ export class ErrorBoundary extends React.PureComponent<{}, ErrorBoundaryState> {
   public render() {
     if (this.state.hasError) {
       return isServer() ?
-        (console.error(this.state.errDescription!), <>{`SSR Error: ${this.state.errDescription!}`}</>) :
+        ( console.error(this.state.errDescription!),
+          <React.Fragment>
+            {`SSR Error: ${this.state.errDescription!}`}
+          </React.Fragment>
+        ) :
         (
           <PortalCreator
             onClose={this.onClick}
@@ -90,7 +95,7 @@ class PortalCreator extends React.Component<IPortalCreatorProps, {}> {
 
   public render() {
     return ReactDOM.createPortal(
-      <section className={PortalCreator.s_cssOverlay}>
+      <section css={PortalCreator.s_cssOverlay}>
         <h3>{this.props.errorHeader}</h3>
         <div className="textWrapper">{this.props.errorText}</div>
         <div className="buttonWrapper">
@@ -102,23 +107,20 @@ class PortalCreator extends React.Component<IPortalCreatorProps, {}> {
   }
 
   private readonly m_overlayContainer: HTMLDivElement = document.createElement("div");
-  public static readonly s_cssOverlay: string = style({
-    $debugName: "overlayErrorBox",
-    $nest: {
-      "& button": {
-        padding: "0.3em 0.8em 0.3em 0.8em"
-      },
-      "& div.buttonWrapper": {
-        margin: "1em",
-        textAlign: "center"
+  public static readonly s_cssOverlay = css({
+    "& button": {
+      padding: "0.3em 0.8em 0.3em 0.8em"
+    },
+    "& div.buttonWrapper": {
+      margin: "1em",
+      textAlign: "center"
 
-      },
-      "& div.textWrapper": {
-        whiteSpace: "pre-wrap"
-      },
-      "& h3": {
-        textAlign: "center",
-      }
+    },
+    "& div.textWrapper": {
+      whiteSpace: "pre-wrap"
+    },
+    "& h3": {
+      textAlign: "center",
     },
     backgroundColor: "linen",
     border: "thick solid darkred",
