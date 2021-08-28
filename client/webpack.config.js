@@ -149,18 +149,30 @@ const getWebpackConfig = (env, argv) => {
       })
     ],
     devServer: {
-      index: `/${configuredSPAs.getRedirectName()}.html`,
-      publicPath: "/static/",
-      contentBase: path.join(__dirname, "dist"),
-      compress: false,
+      allowedHosts: "localhost",
+      bonjour: false,
+      client: {
+        logging: "info",
+        overlay: { errors: true, warnings: false },
+        progress: true,
+      },
+      devMiddleware: {
+        index: `/${configuredSPAs.getRedirectName()}.html`,
+        publicPath: "/static/",
+        serverSideRender: false,
+        writeToDisk: true,
+      },
+      static: {
+        directory: path.join(__dirname, "dist"),
+      },
       hot: true,
-      inline: true,
+      liveReload: true,
       port: 8080,
-      writeToDisk: true,
       historyApiFallback: {
         index: `${configuredSPAs.getRedirectName()}.html`,
         rewrites: configuredSPAs.getRewriteRules()
-      }
+      },
+      watchFiles: ["src/**", `${path.join(__dirname, "dist")}`],
     },
     context: path.resolve(__dirname),
   };
