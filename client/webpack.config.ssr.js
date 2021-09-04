@@ -42,11 +42,35 @@ module.exports = {
             {
               loader: "css-loader",
               options: {
-                modules: true
+                modules: {
+                  auto: (filename) => /\.module\.css$/i.test(filename),
+                }
               }
             }
           ],
         },
+        {
+          test: /\.less$/i,
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                emit: true,
+              },
+            },
+            {
+              loader: "css-loader",
+              options: {
+                modules: {
+                  auto: false,
+                }
+              }
+            },
+            {
+              loader: "less-loader",
+            },
+          ],
+        }
       ]
     },
     resolve: {

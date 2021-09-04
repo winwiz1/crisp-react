@@ -11,7 +11,7 @@
  * other.
  **/
 import * as React from "react";
-import styles from "../css/base-component-style.css";
+import styles from "../css/base-component.module.css";
 
 const cssStyle: Record<string, string> = {
   container: styles["component_container"],

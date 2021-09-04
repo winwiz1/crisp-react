@@ -1,0 +1,9 @@
+/*
+This file will be treated as CSS Module so simple
+names (without dashes or underscores) can be used
+in class selectors. No name collisions with third
+party libraries or other components.
+*/
+.msg {
+  margin-top: 0 !important;
+}

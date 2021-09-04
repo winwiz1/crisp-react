@@ -19,13 +19,15 @@ import { ErrorBoundary } from "../components/ErrorBoundary";
 // import { renderToString } from "react-dom/server";
 import * as SPAs from "../../config/spa.config";
 import { isServer } from "../utils/postprocess/misc";
+import "../css/app.css";       // import plain CSS file once in any source file.
+import "../css/app.less";      // import LESS file once in any source file.
 
 const Second: React.FC = _props => {
   return (
     <>
       <ErrorBoundary>
         <Helmet title={SPAs.appTitle} />
-        <div style={{ textAlign: "center", marginTop: "2rem", marginBottom: "3rem" }}>
+        <div className="welcome">
           <h2>Welcome to {SPAs.appTitle}</h2>
         </div>
         <ComponentB />

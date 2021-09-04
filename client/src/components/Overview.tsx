@@ -17,6 +17,11 @@ import {
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
 import { getAnchorCSS } from "../css/common-styles";
+import styles from "../css/overview.module.css";
+
+const cssStyle: Record<string, string> = {
+  msg: styles["msg"],
+};
 
 const cssIcon = css({
   float: "left",
@@ -30,7 +35,7 @@ const cssMessage = css(
 const Description: React.FC = _props => {
   return (
     <Container text textAlign="justified">
-      <Message css={cssMessage}>
+      <Message css={cssMessage} className={cssStyle.msg}>
         <Icon css={cssIcon}
           name="info circle"
           color="blue"

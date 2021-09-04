@@ -6,7 +6,6 @@ import * as React from "react";
 import { Header, Container, Menu } from "semantic-ui-react";
 import { BaseComponent } from "./BaseComponent";
 import * as SPAs from "../../config/spa.config";
-import "../css/app.css";       // import plain CSS file once in any source file.
 
 const Description: React.FC = _props => {
   return (
@@ -43,7 +42,7 @@ const Description: React.FC = _props => {
 const Navigation: React.FC = _props => {
   return (
     <nav>
-      <Menu vertical compact borderless>
+      <Menu vertical compact borderless className="nav_menu">
         <Menu.Item>
           <Menu.Header>Go back to</Menu.Header>
           <Menu.Menu>

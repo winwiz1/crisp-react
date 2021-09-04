@@ -10,7 +10,10 @@ following two steps would be required:
 @import "react-day-picker/lib/style.css";
 */
 
-/* Optionally use this CSS to adjust style: 
+
+
+/* Optionally use this CSS to adjust style:
+
 .DayPicker-Weekday {
   color: dimgrey !important;
 }

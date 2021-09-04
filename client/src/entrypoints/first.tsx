@@ -23,6 +23,8 @@ import { ErrorBoundary } from "../components/ErrorBoundary";
 import { renderToString } from "react-dom/server";                 // used for SSR
 import * as SPAs from "../../config/spa.config";
 import { isServer, getHistory } from "../utils/postprocess/misc";
+import "../css/app.css";
+import "../css/app.less";
 
 const First: React.FC = _props => {
   return (
@@ -30,7 +32,7 @@ const First: React.FC = _props => {
       <Router history={getHistory()}>
         <ErrorBoundary>
           <Helmet title={SPAs.appTitle} />
-          <div style={{ textAlign: "center", marginTop: "2rem", marginBottom: "3rem" }}>
+          <div className="welcome">
             <h2>Welcome to {SPAs.appTitle}</h2>
           </div>
           <Switch>

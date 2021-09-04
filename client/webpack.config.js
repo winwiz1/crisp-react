@@ -54,32 +54,61 @@ const getWebpackConfig = (env, argv) => {
           test: /\.css$/,
           use: [
             isProduction?
-              {
-                loader: MiniCssExtractPlugin.loader,
-                options: {
-                  emit: true,
-                },
-              } :
-              {
-                loader: "style-loader",
-                options: {
-                  injectType: "singletonStyleTag",
-                },
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                emit: true,
               },
+            } :
+            {
+              loader: "style-loader",
+              options: {
+                injectType: "singletonStyleTag",
+              },
+            },
             {
               loader: "css-loader",
               options: {
-                // 'true' ensures class selector names are mangled to be unique.
-                // The key-value pairs (with non-mangled e.g. taken from the .css
+                // Regex match ensures the .css file is treated as CSS Module 
+                // and class selector names are mangled to be unique. The
+                // key-value pairs (with non-mangled e.g. taken from the .css
                 // file selector names used as the keys and mangled ones being
                 // the values) are injected into the default export object. We
-                // import it as 'styles'.
-                // 'false' means class selector names are left intact.
+                // import it as 'styles' object.
                 modules: {
-                  auto: (filepath) => filepath.endsWith("-style.css"),
+                  auto: (filename) => /\.module\.css$/i.test(filename),
                 }
               }
             }
+          ],
+        },
+        {
+          test: /\.less$/i,
+          use: [
+            isProduction?
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                emit: true,
+              },
+            } :
+            {
+              loader: "style-loader",
+              options: {
+                injectType: "singletonStyleTag",
+              },
+            },
+            {
+              loader: "css-loader",
+              options: {
+                modules: {
+                  auto: false,
+                }
+              }
+            },
+            {
+              loader: "less-loader",
+            },
           ],
         },
       ]

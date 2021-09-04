@@ -9,3 +9,9 @@ that remains unmangled.
   height: 1px;
   overflow: hidden;
 }
+
+.welcome {
+  text-align: center;
+  margin-top: 2em;
+  margin-bottom: 3em;
+}

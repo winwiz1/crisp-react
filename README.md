@@ -46,15 +46,17 @@
 
 * Overall simplicity. For any starter project or boilerplate, the probability of having bugs/issues down the track increases along with the amount of code. It is shown by the code size badge and can be checked for any GitHub repository using the link: `https://img.shields.io/github/languages/code-size/<user-name>/<repo-name>`. For Crisp React, the React client and the Express backend each contribute ~50% of the codebase.<br/>The code size of other starter projects was a main motivation to develop this solution. The other projects were enjoyable for learning purposes however the amount of code was percieved to be excessive for use in production.
 
-* CSS Handling. The following three CSS handling approaches can be used:
+* CSS Handling. The following four CSS handling approaches can be used:
 
- 1. Plain CSS: Simple and performant with the burden to track name collisions created by multiple components using rulesets with similarly named class selectors.
+ 1. Plain CSS: Simple and performant with the burden to track name collisions created by multiple components using rules with similarly named class selectors.
 
- 2. CSS Modules:  Performant with convenience of name collisions resolved automatically and drawback of possible rule repetition leading to an increase in size of the resulting stylesheet.
+ 2. CSS Modules:  Performant with convenience of name collisions resolved automatically and drawback of possible rule repetition leading to an increase in size of the resulting stylesheet. Supports rule reuse via composition.
 
- 3. CSS-in-JS: Developer’s convenience with more flexible CSS adjusted if needed during its construction at run-time. The application logic that drives CSS adjustments (for example, driven by the shape of data received) can be sophisticated and challenging to be expressed via CSS created at build time. Overall this approach translates into self-contained and self-adjusting components, development speed and better codebase maintainability (especially when multiple developers or teams are involved). The advantages come at the price of possible rule repetition along with a performance penalty caused by dependency on script bundles download, parsing and execution.
+ 3. LESS: Like Plain CSS but with extended CSS syntax and rich additional functionality.
 
-    The solution allows to use each approach as a sole CSS handling technique or combine it with any or both of the remaining two approaches - with no configuration effort. More details are available under the [CSS Handling](#css-handling) heading.
+ 4. CSS-in-JS: Developer’s convenience with more flexible CSS adjusted if needed during its construction at run-time. The application logic that drives CSS adjustments (for example, driven by the shape of data received) can be sophisticated and challenging to be expressed via CSS created at build time. Overall this approach translates into self-contained and self-adjusting components, development speed and better codebase maintainability (especially when multiple developers or teams are involved). The advantages come at the price of possible rule repetition along with a performance penalty caused by dependency on script bundles download, parsing and execution. There are other, more subtle drawbacks mentioned later.
+
+    The solution allows to use each approach as a sole CSS handling technique or combine it with any or all of the remaining three approaches - with no configuration effort. More details are available under the [CSS Handling](#css-handling) heading.
 
 * API. The backend communicates with a cloud service on behalf of clients and makes data available via an API endpoint. It's consumed by the clients. The Name Lookup API is used as a sample:
     ![API Screenshot](docs/screenshots/api.png)
@@ -92,6 +94,10 @@ It can be conveniently executed from the Cloud Shell session opened during the d
   - [Backend Usage Scenarios](#backend-usage-scenarios)
 - [SSR](#ssr)
 - [CSS Handling](#css-handling)
+  - [Plain CSS](#plain-css)
+  - [CSS Modules](#css-modules)
+  - [LESS](#less)
+  - [CSS-in-JS](#css-in-js)
 - [Containerisation](#containerisation)
   - [Using Docker](#using-docker)
   - [Using Heroku](#using-heroku)
@@ -367,28 +373,36 @@ SSR is enabled for production builds. In order to turn it off rename the `postbu
 ### Turning On and Off on the SPA Level
 By default SSR is enabled for the [`first`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/first.tsx) SPA and disabled for the [`second`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/second.tsx) SPA. To toggle this setting follow the instructions provided in the respective file comments.
 ## CSS Handling
-1. ### Plain CSS
-    To take this approach create a file with the `.css` extension and a name that doesn’t end with `-style`, for example `abc.css`. Place it anywhere under the [`src/`](https://github.com/winwiz1/crisp-react/blob/master/client/src) subdirectory, for instance under `src/css/` or next to your component under `src/components/`.
+### Plain CSS
+To take this approach create a file with the `.css` extension and a name that doesn’t end with `.module.css`. Place it anywhere under the [`src/`](https://github.com/winwiz1/crisp-react/blob/master/client/src) subdirectory, for instance under `src/css/` or next to your component under `src/components/`.
 
-    Multiple files can be created. At the build time all [imported](https://github.com/winwiz1/crisp-react/blob/master/client/src/components/ComponentB.tsx#L9) `.css` files will be combined into a single stylesheet with class selectors left intact. The stylesheet, created under `client/dist/`, will be downloaded and cached by a browser.
+Multiple files can be created. At the build time all [imported](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/first.tsx#L26) `.css` files will be combined into a single stylesheet with class selectors left intact. The stylesheet, created under `client/dist/`, will be downloaded and cached by a browser.
 
-    The solution uses this approach for two purposes:
-    - To put frequently used CSS rules on the global scope and share it among components to avoid duplication caused by each component having its own similar rule.
+The solution uses this approach for two purposes:
+- To put frequently used CSS rules on the global scope and share it among components to avoid duplication caused by each component having its own similar rule.
     Suppose you are creating an accessible webapp so each component has lots of `<span>` elements with various screen reader prompts and the same class name: `class=’sr-only’`. The relevant CSS rule in a plain CSS file like [this](https://github.com/winwiz1/crisp-react/blob/master/client/src/css/app.css) one can be easily shared.
 
-    - To modify styling of an existing or third party library component that expects predefined class selectors. For example, like in [that](https://github.com/winwiz1/crisp-react/blob/master/client/src/css/react-day-picker.css) file.
-2. ### CSS Modules.
-    The only difference from plain CSS files is the file name - it must end with `-style`. For example, [`base-component-style.css`](https://github.com/winwiz1/crisp-react/blob/master/client/src/css/base-component-style.css). At the build time all such files will be combined into the single stylesheet mentioned above, but with class selectors mangled to ensure uniqueness.
+- To modify styling of an existing or third party library component that expects predefined class selectors. For example, like in [that](https://github.com/winwiz1/crisp-react/blob/master/client/src/css/react-day-picker.css) file.
+### CSS Modules
+The filename of a module must end with `.module.css`. At the build time all such files will be combined into the single stylesheet mentioned above with class selectors mangled to ensure uniqueness.
 
-    To embed class selectors into JSX code the mangled names are required. These names are not available until a build is completed. Therefore [this](https://github.com/winwiz1/crisp-react/blob/master/client/src/components/BaseComponent.tsx#L16-L20) helper object is used to map unmangled class selectors (e.g. `.left_component`) into the mangled ones (returned by `cssStyle.left`).
+To embed class selectors into JSX code the mangled names are required. These names are not available until a build is completed. Therefore [this](https://github.com/winwiz1/crisp-react/blob/master/client/src/components/BaseComponent.tsx#L16-L20) helper object is used to map unmangled class selectors (e.g. `.left_component`) into the mangled ones (returned by `cssStyle.left`).
 
-    In order to improve loading performance the solution uses this approach for the CSS that determines the overall layout of a page (or a major component) while leaving more subtle/detailed and numerous CSS rules for the CSS-in-JS library.
-3. ### CSS-in-JS
-    The `@emotion/react` package of the Emotion library is used. To take this approach follow the [documentation](https://emotion.sh/docs/css-prop#object-styles) and search for the  `css({` pattern in `.tsx` files located under `src/components/`.
+In order to improve loading performance, the solution [uses](https://github.com/winwiz1/crisp-react/blob/master/client/src/css/base-component.module.css) this approach for the CSS that determines the overall layout of a page (or a major component) while leaving more subtle/detailed and numerous CSS rules for the CSS-in-JS library.
 
-    The class selectors are generated at run-time in browser's memory and combined into a separate stylesheet. The stylesheet is then programmatically inserted into the `<head>` element of the DOM tree.
+> Letting CSS-in-JS handle a rule that determines page's layout could introduce unwanted CLS (Cumulative Layout Shift). The CLS will likely be delayed due to the typical CSS-in-JS delay and visible to users as a sudden and unpleasant jerk movement.
 
-    The insertion is delayed by script bundles processing and execution. Another drawback of this approach is loss of JSX code portability. Also the Emotion library is not Atomic (see the [review](https://github.com/andreipfeiffer/css-in-js#11-atomic-css)) so rule duplication is an issue.
+### LESS
+LESS is like plain CSS but on steroids. Lots of extra [features](https://lesscss.org/features/) are available. The solution [uses](https://github.com/winwiz1/crisp-react/blob/master/client/src/css/app.less) one such feature: 'parent selector' denoted by ampersand.
+
+Multiple `.less` files can be created. At the build time all [imported](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/first.tsx#L27) `.less` files will be combined into the single stylesheet along with the rules produced by plain CSS files and CSS modules.
+
+### CSS-in-JS
+The `@emotion/react` package of the Emotion library is used. To take this approach follow the [documentation](https://emotion.sh/docs/css-prop#object-styles) and search for the  `css({` pattern in `.tsx` files located under `src/components/`.
+
+The class selectors are generated at run-time in browser's memory and combined into a separate stylesheet. The stylesheet is then programmatically inserted into the `<head>` element of the DOM tree.
+
+The insertion is delayed by script bundles processing and execution. Other drawbacks of this approach include possible CLS and loss of JSX code portability. Also the Emotion library is not Atomic (see the [review](https://github.com/andreipfeiffer/css-in-js#11-atomic-css)) so rule duplication is an issue.
 ## Containerisation
 Assuming the deployment demo in the [Project Highlights](#project-highlights) section has been completed, a container has already been built in the cloud and deployed to Google Cloud Run. In this section we will build the container locally and expect it to run in two other deployments (in the local environment facilitated by Docker and the cloud one provided by Heroku)  without any further adjustments.
 ### Using Docker
