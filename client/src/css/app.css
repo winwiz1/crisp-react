@@ -15,3 +15,9 @@ that remains unmangled.
   margin-top: 2em;
   margin-bottom: 3em;
 }
+
+@media only screen and (max-width: 767px) {
+  .ui.text.justified.container {
+    margin-left: 0 !important;
+  }
+}

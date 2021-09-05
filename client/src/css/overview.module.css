@@ -6,4 +6,5 @@ party libraries or other components.
 */
 .msg {
   margin-top: 0 !important;
+  hyphens: manual;
 }

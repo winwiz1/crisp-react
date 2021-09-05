@@ -2,10 +2,21 @@
  * ComponentC is a sample component.
  * It is the only component of the Second SPA.
  */
+/** @jsx jsx */
+import { jsx, css } from "@emotion/react";
 import * as React from "react";
-import { Header, Container, Menu } from "semantic-ui-react";
+import { Header, Icon, Container, Menu } from "semantic-ui-react";
 import { BaseComponent } from "./BaseComponent";
 import * as SPAs from "../../config/spa.config";
+
+const cssNav = css({
+  marginRight: "2em",
+});
+
+const cssIcon = css({
+  transform: "translate(0%, -30%)",
+});
+
 
 const Description: React.FC = _props => {
   return (
@@ -41,12 +52,23 @@ const Description: React.FC = _props => {
 
 const Navigation: React.FC = _props => {
   return (
-    <nav>
-      <Menu vertical compact borderless className="nav_menu">
+    <nav css={cssNav}>
+      <Menu
+        vertical
+        size="large"
+        className="nav_menu"
+      >
         <Menu.Item>
           <Menu.Header>Go back to</Menu.Header>
           <Menu.Menu>
-            <Menu.Item href={`/${SPAs.getNames()[0]}.html`}>First SPA</Menu.Item>
+            <Menu.Item href={`/${SPAs.getNames()[0]}.html`}>
+              First SPA
+              <Icon
+                name="object group outline"
+                size="big"
+                css={cssIcon}
+              />
+            </Menu.Item>
           </Menu.Menu>
         </Menu.Item>
       </Menu>

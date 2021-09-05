@@ -6,24 +6,24 @@ code {
 
 .component_container {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   align-items: flex-start;
-}
-
-@media only screen and (max-width: 550px) {
-  .component_container {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: flex-start;
-  }
 }
 
 .left_component {
   flex: initial;
-  margin-bottom: 1rem;
-  margin-left: 2rem;
+  margin-bottom: 1em;
+  margin-left: 2em;
 }
 
 .right_component {
-  flex: auto;
+  flex: 0 1 auto;
+  margin-left: 2em;
+}
+
+@media only screen and (min-width: 1024px) {
+  .right_component {
+    flex: auto;
+    margin-left: 2em;
+  }
 }
