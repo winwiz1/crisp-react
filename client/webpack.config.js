@@ -28,6 +28,7 @@ delete process.env.TS_NODE_PROJECT;
 
 const getWebpackConfig = (env, argv) => {
   const isProduction = (env && env.prod) ? true : false;
+  const isJamstack = (env && env.jamstack) ? true : false;
 
   const config = {
     mode: isProduction ? "production" : "development",
@@ -123,7 +124,7 @@ const getWebpackConfig = (env, argv) => {
       filename: "[name].[fullhash].bundle.js",
       chunkFilename: "[name].[fullhash].bundle.js",
       path: path.resolve(__dirname, "dist"),
-      publicPath: "/static/",
+      publicPath: isJamstack? "/" : "/static/",
       crossOriginLoading: "anonymous",
     },
     optimization: {
@@ -169,7 +170,8 @@ const getWebpackConfig = (env, argv) => {
     plugins: [
       new CleanWebpackPlugin(),
       new webpack.DefinePlugin({
-        "process.env.DEVELOPMENT": JSON.stringify(isProduction === false)
+        "process.env.DEVELOPMENT": JSON.stringify(isProduction === false),
+        "CF_PAGES": !!process.env.CF_PAGES,
       }),
       new ForkTsCheckerWebpackPlugin({
         typescript: true,
@@ -187,7 +189,7 @@ const getWebpackConfig = (env, argv) => {
       },
       devMiddleware: {
         index: `/${configuredSPAs.getRedirectName()}.html`,
-        publicPath: "/static/",
+        publicPath: isJamstack? "/" : "/static/",
         serverSideRender: false,
         writeToDisk: true,
       },

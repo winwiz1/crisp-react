@@ -46,7 +46,8 @@
     "postbuild:prod": "cd server && yarn prestart",
     "start:prod": "cd client && yarn build:prod",
     "poststart:prod": "cd server && yarn start:prod",
-    "run:prod": "cd server && yarn run:prod"
+    "run:prod": "cd server && yarn run:prod",
+    "build:jamstack": "cd client && yarn && yarn build:jamstack"
   },
   "engines" : {
     "node" : ">=10.17"

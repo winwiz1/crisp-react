@@ -1,12 +1,15 @@
 /*
-  BackendManager calls the API endpoint exposed by the backend and not the
-  actual API provided by a cloud service. This arrangement ensures:
+  1. In fullstack build (yarn build, yarn build:prod) BackendManager calls
+  the API endpoint exposed by the backend and not the API provided by a cloud
+  service. This arrangement ensures:
     - There is no room for CORS security violations (and therefore no need to
       relax the security by using CORS HTTP headers) because the script bundle
       with this code was downloaded from the same backend.
     - The client doesn't have the credentials required by the cloud service.
     - The API call limit imposed on the client can be implemented independently
       from the client.
+  2. In Jamstack build (yarn build:jamstack) the backend is not built and
+  BackendManager calls the API endpoint provided by the cloud service directly.
 */
 import { fetchAdapter, IFetch } from "../utils/fetch";
 import { CustomError } from "../utils/error";
@@ -65,12 +68,14 @@ export class BackendManager implements IBackendClient {
   private fetchData = async (): Promise<void> => {
     const fetchProps: IFetch = {
       abortSignal: this.m_signal,
-      body: this.m_queryParams.toString(),
+      body: CF_PAGES? undefined : this.m_queryParams.toString(),
       errorHandler: this.errorHandler,
-      isJson: true,
-      method: "POST",
+      isJson: CF_PAGES? false : true,
+      method: CF_PAGES? "GET" : "POST",
       successHandler: this.successHandler,
-      targetPath: BackendManager.s_targetPath,
+      targetPath: CF_PAGES?
+        "https://api.genderize.io/?name=" + this.m_queryParams.toString() :
+        BackendManager.s_targetPath,
     };
 
     await fetchAdapter(fetchProps);
@@ -106,7 +111,7 @@ export class BackendManager implements IBackendClient {
 
   private static parser = (inputObj: Record<string, unknown>): SampleRetrievalResult | undefined => {
     const obj: SampleRetrievalResult = Object.create(SampleRetrievalResult.prototype);
-    const ret = Object.assign(obj, inputObj);
+    const ret = Object.assign(obj, CF_PAGES? { response: inputObj } : inputObj);
     const propNames = ["response"];
     // eslint-disable-next-line no-prototype-builtins
     const hasProps = propNames.every(prop => ret.hasOwnProperty(prop));

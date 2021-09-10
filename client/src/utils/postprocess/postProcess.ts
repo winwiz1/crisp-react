@@ -64,13 +64,25 @@ export async function postProcess(): Promise<void> {
     const writeFile = promisify(fs.writeFile);
 
     try {
-      await writeFile('./dist/' + tp[0], asString());
+      await writeFile("./dist/" + tp[0], asString());
       await postProcessSSR();
     } catch (e) {
       console.error(`Failed to create pre-built SSR file, exception: ${e}`);
       process.exit(1);
     }
   } //if (ssrSpaName)
+
+  if (process.env.CF_PAGES) {
+    const writeFile = promisify(fs.writeFile);
+    const redirectName = require("../../../config/spa.config").getRedirectName();
+
+    try {
+      await writeFile("./dist/_redirects", `/ ${redirectName} 301`);
+    } catch (e) {
+      console.error(`Failed to create redirect file, exception: ${e}`);
+      process.exit(1);
+    }
+  }
 
   try {
     await postProcessCSS();

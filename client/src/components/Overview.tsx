@@ -32,6 +32,24 @@ const cssMessage = css(
   getAnchorCSS()
 );
 
+const Msg: React.FC = _props => {
+  if (CF_PAGES) {
+    return (
+      <React.Fragment>
+        deploying to <a target="_blank" rel="noopener noreferrer"
+        href="https://pages.cloudflare.com/">Cloudflare Pages</a>.
+      </React.Fragment>
+    );
+  } else {
+    return (
+      <React.Fragment>
+        executing <code>&nbsp;yarn build:prod</code>&nbsp; command.
+      </React.Fragment>
+    );
+  }
+
+}
+
 const Description: React.FC = _props => {
   return (
     <Container text textAlign="justified">
@@ -44,8 +62,7 @@ const Description: React.FC = _props => {
         This demo webapp was built by cloning <a target="_blank"
         rel="noopener noreferrer"
         href="https://github.com/winwiz1/crisp-react">Crisp React
-        </a> repository and executing <code>&nbsp;yarn build:prod
-        </code>&nbsp; command.
+        </a> repository and <Msg />
       </Message>
       <Header as="h3">
         The First Single Page Application (SPA) - Overview

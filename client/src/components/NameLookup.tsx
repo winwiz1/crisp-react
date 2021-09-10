@@ -168,12 +168,13 @@ const NameLookupContent: React.FC = _props => {
           bundle, except for components under <code>node_modules/</code> separated
           into the 'vendor' bundle.
         </p>
-        <p>
+        { !CF_PAGES && <p>
           <code>NameLookup</code> asks the backend to perform API calls. The backend
           queries a cloud service: Name Lookup service in this project or Google
           BigQuery in the sibling Crisp BigQuery project. The credentials (if any)
           required to access the cloud service are held by the backend.
         </p>
+        }
         <Divider horizontal css={cssDivider}>API</Divider>
         <div css={cssFlexContainer}>
           <Segment compact basic css={cssFlexItem}>

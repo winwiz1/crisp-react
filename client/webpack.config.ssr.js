@@ -82,7 +82,8 @@ module.exports = {
     plugins: [
       new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ["dist-ssr"]}),
       new webpack.DefinePlugin({
-        "process.env.DEVELOPMENT": JSON.stringify(isProduction === false)
+        "process.env.DEVELOPMENT": JSON.stringify(isProduction === false),
+        "CF_PAGES": !!process.env.CF_PAGES,
       }),
       new ForkTsCheckerWebpackPlugin({
         typescript: true,

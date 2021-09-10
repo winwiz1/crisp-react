@@ -29,12 +29,12 @@ export const fetchAdapter = async (props: IFetch): Promise<void> => {
   let responseStatus: number | undefined;
 
   await fetch(props.targetPath, {
-    credentials: "same-origin",
+    credentials: props.isJson? "same-origin" : undefined,
     method: props.method,
-    mode: "same-origin",
-    ...(props.isJson && { headers: { "Content-Type": "application/json" } }),
+    mode: props.isJson? "same-origin" : undefined,
+    headers: { "Content-Type": props.isJson? "application/json": "text/plain" },
     signal: props.abortSignal,
-    ...(props.body && { body: props.body }),
+    ...(!!props.body && { body: props.body }),
   })
     .then(resp => {
       const contentType = resp.headers.get("Content-Type");
@@ -74,7 +74,8 @@ export const fetchAdapter = async (props: IFetch): Promise<void> => {
         let errMsg = props.exceptionMessage ?? "Failed to get data from the backend.";
         if (isResponseOk === undefined) {
           errMsg += (props.exceptionExtraMessageNetwork ?? " Please check the Internet connection.");
-          const detailMsg = `Fetch exception for URL ${props.targetPath} likely due to network connectivity`;
+          let detailMsg = `Fetch exception for URL ${props.targetPath} likely due to network connectivity`;
+          isError(err) && (detailMsg += `. Error: ${err.message ?? "<undefined>"}`);
           props.errorHandler(new CustomError(errMsg, detailMsg));
         } else {
           let detailMsg: string;

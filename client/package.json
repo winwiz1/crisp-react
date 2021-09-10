@@ -37,7 +37,9 @@
     "postbuild:prod-debug": "yarn copy",
     "precopy": "rimraf ../server/build/client && mkdirp ../server/build/client",
     "copy": "copyfiles -f dist/* ../server/build/client/",
-    "prettier": "prettier --no-config --write ./dist/*.html"
+    "prettier": "prettier --no-config --write ./dist/*.html",
+    "build:jamstack": "webpack --env prod --env jamstack",
+    "postbuild:jamstack": "yarn postbuild:prod"
   },
   "dependencies": {
     "@emotion/react": "^11.4.1",

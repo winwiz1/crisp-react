@@ -14,7 +14,7 @@ export class BackendRequest {
    }
 
    public readonly toString = (): string => {
-      return JSON.stringify({
+      return CF_PAGES? this.requestData.name : JSON.stringify({
          name: this.requestData.name
       });
    }
