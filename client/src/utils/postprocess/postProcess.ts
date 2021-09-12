@@ -1,8 +1,11 @@
 import * as fs from "fs";
+import * as path from "path";
 import { promisify } from "util";
 import { webpack } from "webpack";
 import { postProcess as postProcessSSR } from "./postProcessSSR";
 import { postProcess as postProcessCSS } from "./postProcessCSS";
+
+const workDir = "./dist/";
 
 export async function postProcess(): Promise<void> {
   const ssrSpaName = require("../../../config/spa.config").getSsrName();
@@ -64,7 +67,7 @@ export async function postProcess(): Promise<void> {
     const writeFile = promisify(fs.writeFile);
 
     try {
-      await writeFile("./dist/" + tp[0], asString());
+      await writeFile(path.join(workDir, tp[0]), asString());
       await postProcessSSR();
     } catch (e) {
       console.error(`Failed to create pre-built SSR file, exception: ${e}`);
@@ -75,12 +78,16 @@ export async function postProcess(): Promise<void> {
   if (process.env.CF_PAGES) {
     const writeFile = promisify(fs.writeFile);
     const redirectName = require("../../../config/spa.config").getRedirectName();
+    const stapleName = "index";
+    const redirectFile = path.join(workDir, "_redirects");
 
-    try {
-      await writeFile("./dist/_redirects", `/ ${redirectName} 301`);
-    } catch (e) {
-      console.error(`Failed to create redirect file, exception: ${e}`);
-      process.exit(1);
+    if (redirectName.toLowerCase() !== stapleName) {
+      try {
+        await writeFile(redirectFile, `/ ${redirectName} 301`);
+      } catch (e) {
+        console.error(`Failed to create redirect file, exception: ${e}`);
+        process.exit(1);
+      }
     }
   }
 

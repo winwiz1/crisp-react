@@ -43,7 +43,7 @@ export const Navigation: React.FC = _props => {
             </Menu.Item>
           </Menu.Menu>
         </Menu.Item>
-        <Menu.Item>
+        {SPAs.getNames().length > 1 && <Menu.Item>
           <Menu.Header>Second SPA</Menu.Header>
           <Menu.Menu>
             <Menu.Item href={`/${SPAs.getNames()[1]}.html`}>
@@ -52,6 +52,7 @@ export const Navigation: React.FC = _props => {
             </Menu.Item>
           </Menu.Menu>
         </Menu.Item>
+        }
       </Menu>
     </nav>
   );

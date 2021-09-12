@@ -36,7 +36,7 @@
 
     - Implementation complexity that results in a larger and more knotty codebase to maintain. That in turn leads to more potential problems while implementing the required functionality, writing test cases and resolving support issues.
 
-    - Run-time computing overhead causing [server delays](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-vs-static) (for run-time SSR) thus defeating or partially offsetting the performance benefits of SSR.
+    - Run-time computing overhead causing [server delays](https://developers.google.com/web/updates/2019/02/rendering-on-the-web#server-vs-static) (for run-time SSR) that defeat or partially offset the performance benefits of SSR.
 
     - Run-time computing overhead reducing the ability to sustain workloads (for run-time SSR coupled with complex or long HTML markup) which makes it easier to mount DoS attack aimed at webserver CPU exhaustion. In a case of cloud deployment, the frequency of malicious requests could be low enough to avoid triggering DDoS protection offered by the cloud vendor yet sufficient to saturate the server CPU and trigger autoscaling thus increasing the monetary cost. This challenge can be mitigated using a rate limiter which arguably should be an integral part of run-time SSR offerings.
 
@@ -45,6 +45,15 @@
     Only the SPA landing page is prerendered. Other SPA pages are not prerendered because these are the internal SPA pages. Switch to the internal pages is performed by SPA without spending time on network trips and hitting the webserver thus lowering its workload and letting it serve more clients simultaneously.
 
 * Overall simplicity. For any starter project or boilerplate, the probability of having bugs/issues down the track increases along with the amount of code. It is shown by the code size badge and can be checked for any GitHub repository using the link: `https://img.shields.io/github/languages/code-size/<user-name>/<repo-name>`. For Crisp React, the React client and the Express backend each contribute ~50% of the codebase.<br/>The code size of other starter projects was a main motivation to develop this solution. The other projects were enjoyable for learning purposes however the amount of code was percieved to be excessive for use in production.
+
+* Full stack and Jamstack builds.
+
+    | Build option | What it does | How to build and deploy  |
+    | :--- |:---| :---|
+    | Full stack | Builds React app and backend.  The latter serves static app files and API responses to end users. Although in many production deployments static files would be served to a CDN instead. Having one server instead of two (one for frontend, another for backend) reduces the attack surface of the deployment, brings down its costs, complexity and delivers other benefits like CORS avoidance. | Build a container using the supplied Dockerfile and deploy it to any cloud vendor that supports containers. Simple and free deployments for Google Cloud Run, Google Compute Engine and Heroku are provided below. There is a separate section with detailed instructions aimed at getting static files (but not API responses) cached by a CDN. Yet at the other end of the deployment spectrum are Kubernetes deployments of the same container that are not considered here. |
+    | Jamstack | Builds React app only. The build artifacts are served to end users by the webserver supplied by Jamstack vendor. Since the demo project has no backend, the API calls go directly to the cloud service. In real life scenarios the API calls could target some API service(s) like AWS API Gateway. | Execute the relevant build command either locally or as a part of your cloud build and pass the React app build artifacts to a Jamstack vendor like AWS S3. Alternatively pass the same command to Cloudflare Pages to get it executed in the cloud. Details are provided in the separate section. |
+
+    Switching between the two options doesn’t require configuration changes though with Jamstack it could be easier (and in the spirit of Jamstack inspired simplicity) to have only one SPA named 'index'. This arrangement ensures the automatically generated HTML file is called `index.html` which makes integration with some vendors more straightforward.
 
 * CSS Handling. The following four CSS handling approaches can be used:
 
@@ -58,7 +67,7 @@
 
     The solution allows to use each approach as a sole CSS handling technique or combine it with any or all of the remaining three approaches - with no configuration effort. More details are available under the [CSS Handling](#css-handling) heading.
 
-* API. The backend communicates with a cloud service on behalf of clients and makes data available via an API endpoint. It's consumed by the clients. The Name Lookup API is used as a sample:
+* API. In the full stack build the backend communicates with a cloud service on behalf of clients and makes data available via an API endpoint. It's consumed by the clients. The Name Lookup API is used as a sample:
     ![API Screenshot](docs/screenshots/api.png)
 
     The implementation provides reusable code, both client-side and backend, making it easier to switch to another API. In fact this approach has been taken by the sibling Crisp BigQuery repository created by cloning and renaming this solution - it uses Google BigQuery API instead.<br/>
@@ -89,7 +98,10 @@ It can be conveniently executed from the Cloud Shell session opened during the d
   - [Client and Backend Subprojects](#client-and-backend-subprojects)
   - [SPA Configuration](#spa-configuration)
   - [Testing](#testing)
-- [Usage](#usage)
+- [Usage - Jamstack](#usage---jamstack)
+  - [Using Cloudflare Pages](#using-cloudflare-pages)
+  - [Using AWS S3](#using-aws-s3)
+- [Usage - Full Stack](#usage---full-stack)
   - [Client Usage Scenarios](#client-usage-scenarios)
   - [Backend Usage Scenarios](#backend-usage-scenarios)
 - [SSR](#ssr)
@@ -101,6 +113,7 @@ It can be conveniently executed from the Cloud Shell session opened during the d
 - [Containerisation](#containerisation)
   - [Using Docker](#using-docker)
   - [Using Heroku](#using-heroku)
+  - [Using Google Compute Engine](#using-google-compute-engine)
   - [Cloud Run Considerations](#cloud-run-considerations)
 - [Custom Domain and CDN](#custom-domain-and-cdn)
 - [What's Next](#whats-next)
@@ -109,6 +122,7 @@ It can be conveniently executed from the Cloud Shell session opened during the d
 - [License](#license)
 
 ## Getting Started
+### Full Stack
 Install `yarn` if not already installed: `npm install yarn -g`
 
 <div>
@@ -167,7 +181,8 @@ Install `yarn` if not already installed: `npm install yarn -g`
 </div>
 
 The section can be concluded by optionally renaming the solution. Rename the top-level directory from `crisp-react` to `your-project` and set the `SPAs.appTitle` variable in the [`spa.config.js`](https://github.com/winwiz1/crisp-react/blob/master/client/config/spa.config.js) file accordingly. Ignore the rest of the file for a moment, it's covered in depth in the [SPA Configuration](#spa-configuration) section.
-
+### Jamstack
+Use the configuration page presented by Cloudflare Pages to let Cloudflare build and deploy the solution. The details are provided under [Using Cloudflare Pages](#using-cloudflare-pages) heading.
 ## Features
 ### Client and Backend Subprojects
 Each subproject supports execution of the following commands/scripts:
@@ -177,7 +192,7 @@ yarn lint
 yarn test
 yarn dev
 ```
-along with additional commands described in [Usage](#usage).
+along with additional commands described in [Usage - Full Stack](#usage---full-stack).
 
 The client subproject:
  * Starts webpack-dev-server listening on port 8080 in the development mode.
@@ -258,12 +273,48 @@ To turn off code splitting using multiple SPAs simply leave one SPA in the SPA C
 > Tip: Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can focus on a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application out of the testing scope.
 
 ### Testing
-Debuggable test cases written in TypeScript. Integration with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) on the client and [Supertest](https://github.com/visionmedia/supertest) on the backend. Both using [Jest](https://jestjs.io/) as an engine.<br/>
+The solution contains debuggable test cases written in TypeScript. Provides integration with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) on the client and [Supertest](https://github.com/visionmedia/supertest) on the backend. Both using [Jest](https://jestjs.io/) as an engine.<br/>
 The client and backend can be tested independently by executing the `yarn test` command. Alternatively the same command can be executed at the workspace level.
 
 The repository is integrated with Travis CI and the test outcome is reflected by the test badge.
 
-## Usage
+## Usage - Jamstack
+As already mentioned, you might prefer to simplify the Jamstack build by having one SPA called "index". This is achieved by having the SPA configuration block:
+
+```js
+/****************** Start SPA Configuration ******************/
+  var SPAs = [
+    new SPA({
+      name: "index",
+      entryPoint: "./src/entrypoints/first.tsx",
+      ssr: true,
+      redirect: true
+    }),
+  ];
+  SPAs.appTitle = "Crisp React";
+/****************** End SPA Configuration ******************/
+```
+Such a simplification is optional.
+
+The following command is used to build Jamstack client:
+```
+yarn build:jamstack
+```
+After the command finishes, the build artifacts are located in the `client/dist/` directory ready to be served by the webserver supplied by a Jamstack provider.
+
+Use the `yarn dev` and `yarn lint` commands executed from the `client/` directory to debug and lint Jamstack client.
+
+### Using Cloudflare Pages
+Under construction.
+
+### Using AWS S3
+Follow the steps described in the [AWS document](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html).
+
+The "index document name" (mentioned at the steps 2.7 and 5) depends on the name of the SPA that has the `redirect` flag set to `true`. If the simplified SPA configuration block shown at the beginning of this section is used, then the "index document name" is `index.html` otherwise (in case the SPA block was left intact) the name resolves to `first.html`.
+
+Execute the build command shown at the beginning of this section and copy all the files from the `client/dist/` directory (except for maps) to the cloud bucket at the steps 5.6 and 5.7.
+
+## Usage - Full Stack
 The Usage Scenarios below are grouped depending on whether  the client or the backend subproject is used. 
 >:bulb: This section can be skipped at first reading. You can proceed to the [next](#containerisation) section.
 
@@ -421,6 +472,8 @@ heroku container:release web -a <app-name>
 Replace the  `<app-name>` placeholder with your Heroku app name.  The app will have the URL: `<app-name>.herokuapp.com`.
 
 If you own a domain name and intend to implement the optional steps described in the [Custom Domain and CDN](#custom-domain-and-cdn) section, then you can improve security by making the app name random, for example `my-crisp-app-XXXXXXXXXXXX` where the last part represents a random pattern. The app name can be changed at any time using the Settings page at `https://dashboard.heroku.com/apps/<app-name>/settings`.
+### Using Google Compute Engine
+Under construction.
 ### Cloud Run Considerations
 The remainder of this section contains additional considerations that apply to deploying the solution on Cloud Run. The considerations are not specific to this solution and would be relevant for any React SPA.
 
