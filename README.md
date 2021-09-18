@@ -105,8 +105,8 @@ This arrangement brings a security benefit: The clients running inside a browser
 * Seamless debugging. Debug a minified/obfuscated, compressed production bundle and put breakpoints in its TypeScript code using both VS Code and Chrome DevTools. Development build debugging: put breakpoints in the client and backend code and debug both simultaneously using a single instance of VS Code.
 
 * Sample websites.
-    * [Demo - Full stack](https://crisp-react.winwiz1.com). Manual build.
-    * [Demo - Jamstack](https://crisp-react.pages.dev). Automated build.
+    * [Demo - Full stack](https://crisp-react.winwiz1.com). Automated build performed by Heroku.
+    * [Demo - Jamstack](https://crisp-react.pages.dev). Automated build performed by Cloudflare Pages.
     * [Production](https://virusquery.com). Based on Crisp React.
 
 ## Table of Contents

@@ -45,7 +45,10 @@ const Msg: React.FC = _props => {
   } else {
     return (
       <React.Fragment>
-        'Full stack' build option.
+        'Full stack' build option. It was deployed automatically
+        by a CD pipeline created by <a target="_blank" rel="noopener noreferrer"
+        href="https://heroku.com/">Heroku</a> in
+        response to a push into the repository.
       </React.Fragment>
     );
   }
