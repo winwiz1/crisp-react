@@ -36,14 +36,16 @@ const Msg: React.FC = _props => {
   if (CF_PAGES) {
     return (
       <React.Fragment>
-        deploying to <a target="_blank" rel="noopener noreferrer"
-        href="https://pages.cloudflare.com/">Cloudflare Pages</a>.
+        'Jamstack' build option. It was deployed automatically
+        by a CD pipeline created by <a target="_blank" rel="noopener noreferrer"
+        href="https://pages.cloudflare.com/">Cloudflare&nbsp;Pages</a> in
+        response to a push into the repository.
       </React.Fragment>
     );
   } else {
     return (
       <React.Fragment>
-        executing <code>&nbsp;yarn build:prod</code>&nbsp; command.
+        'Full stack' build option.
       </React.Fragment>
     );
   }
@@ -59,10 +61,10 @@ const Description: React.FC = _props => {
           color="blue"
           size="big"
         />
-        This demo webapp was built by cloning <a target="_blank"
+        This demo webapp was built from <a target="_blank"
         rel="noopener noreferrer"
         href="https://github.com/winwiz1/crisp-react">Crisp React
-        </a> repository and <Msg />
+        </a> repository by choosing the <Msg />
       </Message>
       <Header as="h3">
         The First Single Page Application (SPA) - Overview

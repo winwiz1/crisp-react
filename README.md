@@ -15,11 +15,11 @@
 </div>
 
 ## Project Highlights
-* Code splitting. Based on innovative ability to optionally split your React Application into multiple Single Page Applications (SPA). For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA. This approach would be beneficial for medium-to-large React applications that can be split into several domains of functionality, development and testing.
+* Code splitting. Based on the innovative ability to optionally split your React Application into multiple Single Page Applications (SPA). For example, one SPA can offer an introductory set of screens for the first-time user or handle login. Another SPA could implement the rest of the application, except for Auditing or Reporting that can be catered for by yet another SPA. This approach would be beneficial for medium-to-large React applications that can be split into several domains of functionality, development and testing.
 
     To achieve better performance it's recommended to split when the size of a production bundle reaches 100 KB. In enterprise environment it's recommended to split regardless of bundle size to protect Intellectual Property (by having a Login SPA and making other bundles available for download to authenticated users only) and augment Role Based Access Security (for example, make the Audit bundle available to users who have either Management or Finance role attested in their JWT token) while parallelizing development among several teams.
 
-* Performance. Achieved by webpack tree shaking, script bundle minification and compression (gzip and Brotli).  Complimented by server-side caching and bundle size containment.
+* Performance. Achieved by webpack tree shaking, script bundle minification and compression (gzip and Brotli).  Complemented by server-side caching and bundle size containment.
 
     | Benchmarking Tool | Result | Throttling  |
     | :--- |:---:| :---:|
@@ -47,35 +47,43 @@
 * Overall simplicity. For any starter project or boilerplate, the probability of having bugs/issues down the track increases along with the amount of code. It is shown by the code size badge and can be checked for any GitHub repository using the link: `https://img.shields.io/github/languages/code-size/<user-name>/<repo-name>`. For Crisp React, the React client and the Express backend each contribute ~50% of the codebase.<br/>The code size of other starter projects was a main motivation to develop this solution. The other projects were enjoyable for learning purposes however the amount of code was percieved to be excessive for use in production.
 
 * Full stack and Jamstack builds.
-
-    | Build option | What it does | How to build and deploy  |
-    | :--- |:---| :---|
-    | Full stack | Builds React app and backend.  The latter serves static app files and API responses to end users. Although in many production deployments static files would be served to a CDN instead. Having one server instead of two (one for frontend, another for backend) reduces the attack surface of the deployment, brings down its costs, complexity and delivers other benefits like CORS avoidance. | Build a container using the supplied Dockerfile and deploy it to any cloud vendor that supports containers. Simple and free deployments for Google Cloud Run, Google Compute Engine and Heroku are provided below. There is a separate section with detailed instructions aimed at getting static files (but not API responses) cached by a CDN. Yet at the other end of the deployment spectrum are Kubernetes deployments of the same container that are not considered here. |
-    | Jamstack | Builds React app only. The build artifacts are served to end users by the webserver supplied by Jamstack vendor. Since the demo project has no backend, the API calls go directly to the cloud service. In real life scenarios the API calls could target some API service(s) like AWS API Gateway. | Execute the relevant build command either locally or as a part of your cloud build and pass the React app build artifacts to a Jamstack vendor like AWS S3. Alternatively pass the same command to Cloudflare Pages to get it executed in the cloud. Details are provided in the separate section. |
-
-    Switching between the two options doesn’t require configuration changes though with Jamstack it could be easier (and in the spirit of Jamstack inspired simplicity) to have only one SPA named 'index'. This arrangement ensures the automatically generated HTML file is called `index.html` which makes integration with some vendors more straightforward.
+    <table width=100%>
+      <tr>
+        <th width=15%>Build option</th>
+        <th width=35%>What it does</th>
+        <th width=50%>Sample builds</th>
+      </tr>
+      <tr>
+        <td>Full stack</td>
+        <td>Builds React app and backend.  The latter serves static app files and API responses to end users.<br/> Although in many production deployments the static files would be served to a CDN instead.<br/>Having one server instead of two (one for frontend, another for backend) reduces the attack surface of the deployment, brings down its costs, complexity and delivers other benefits like CORS avoidance.</td>
+        <td>Build a container using the supplied Dockerfile and deploy it to any cloud vendor that supports containers including:<ul><li>Google Cloud Run: Single click on the button located below in this section.  Then wait until the build finishes in the cloud and access a website. Fast :clock2: and simple build.</li><li>Heroku: Execute 5 commands from command line and get a website running. Simple build but takes :clock5: a while. Free :coffee: deployment option.</li><li>Google Compute Engine: More complex :scroll: deployment with a series of commands to execute and without any software that needs to be installed.</li></ul></td>
+    </tr>
+    <tr>
+      <td>Jamstack</td>
+     <td>Builds the React app only. The build artifacts are served to end users by the webserver supplied by a Jamstack vendor. Since the demo project has no backend, the API calls go directly to the cloud service.<br/> In real life scenarios the API calls could target endpoints implemented by AWS API Gateway or similar infrastructure.</td>
+      <td>Build the React app either in the cloud or locally:<ul><li>Cloudflare Pages: Type in 4 simple pieces of data on the configuration screen presented by Pages. Then get a website built and deployed in the cloud. Fast :clock2: and simple build with free :coffee: deployment option.</li><li>AWS S3: More complex :scroll: deployment. Build the website locally and copy build artifacts to a cloud bucket while completing a series of manual deployment steps.</li></ul></td>
+      </tr>
+    </table>
+    Switching between the two options doesn’t require configuration changes though with Jamstack it could be easier (and in the spirit of Jamstack inspired simplicity) to have only one SPA named 'index'. This arrangement ensures the automatically generated HTML file is called `index.html`. It makes integration with some vendors more straightforward.
 
 * CSS Handling. The following four CSS handling approaches can be used:
 
- 1. Plain CSS: Simple and performant with the burden to track name collisions created by multiple components using rules with similarly named class selectors.
-
- 2. CSS Modules:  Performant with convenience of name collisions resolved automatically and drawback of possible rule repetition leading to an increase in size of the resulting stylesheet. Supports rule reuse via composition.
-
- 3. LESS: Like Plain CSS but with extended CSS syntax and rich additional functionality.
-
- 4. CSS-in-JS: Developer’s convenience with more flexible CSS adjusted if needed during its construction at run-time. The application logic that drives CSS adjustments (for example, driven by the shape of data received) can be sophisticated and challenging to be expressed via CSS created at build time. Overall this approach translates into self-contained and self-adjusting components, development speed and better codebase maintainability (especially when multiple developers or teams are involved). The advantages come at the price of possible rule repetition along with a performance penalty caused by dependency on script bundles download, parsing and execution. There are other, more subtle drawbacks mentioned later.
+    <ul>
+      <li>Plain CSS: Simple and performant with the burden to track name collisions created by multiple components using rules with similarly named class selectors.
+      </li>
+      <li>CSS Modules:  Performant with convenience of name collisions resolved automatically and drawback of possible rule repetition leading to an increase in size of the resulting stylesheet. Supports rule reuse via composition.
+      </li>
+      <li>LESS: Like Plain CSS but with extended CSS syntax and rich additional functionality.
+      </li>
+      <li>CSS-in-JS: Developer’s convenience with more flexible CSS adjusted if needed during its construction at run-time. The application logic that drives CSS adjustments (for example, driven by the shape of data received) can be sophisticated and challenging to be expressed via CSS created at build time. Overall this approach translates into self-contained and self-adjusting components, development speed and better codebase maintainability (especially when multiple developers or teams are involved). The advantages come at the price of possible rule repetition along with a performance penalty caused by dependency on script bundles download, parsing and execution. There are other, more subtle drawbacks mentioned later.
+      </li>
+    </ul>
 
     The solution allows to use each approach as a sole CSS handling technique or combine it with any or all of the remaining three approaches - with no configuration effort. More details are available under the [CSS Handling](#css-handling) heading.
 
-* API. In the full stack build the backend communicates with a cloud service on behalf of clients and makes data available via an API endpoint. It's consumed by the clients. The Name Lookup API is used as a sample:
-    ![API Screenshot](docs/screenshots/api.png)
+* Containerisation. Used to build and deply full stack builds. A container acts as a mini operating system providing your code with the same run-time dependencies no matter where the container runs. One of the benefits of this approach is that your programs are less likely to break during deployments due to differences between your run-time environment and the one supplied by hosting provider. It makes a container (represented by the sequence of build instructions in `Dockerfile`) to be a robust deployment vehicle.
 
-    The implementation provides reusable code, both client-side and backend, making it easier to switch to another API. In fact this approach has been taken by the sibling Crisp BigQuery repository created by cloning and renaming this solution - it uses Google BigQuery API instead.<br/>
-This arrangement brings a security benefit: The clients running inside a browser in a non-trusted environment do not have credentials to access a cloud service that holds sensitive data. The backend runs in the trusted environment you control and does have the credentials.
-
-* Containerisation. A container acts as a mini operating system providing your code with the same run-time dependencies no matter where the container runs. One of the benefits of this approach is that your programs are less likely to break during deployments due to differences between your run-time environment and the one supplied by hosting provider. It makes a container (represented by the sequence of build instructions in `Dockerfile`) to be a robust deployment vehicle.
-
-    Another benefit is vendor lock-in avoidance: All cloud vendors including AWS, Azure, GCP, Heroku and others accept containers.
+    Another benefit is vendor lock-in avoidance: Many cloud vendors including AWS, Azure, GCP, Heroku and others accept containers.
 
     Yet another benefit is the simplicity of deployment. For example, a click on the button shown below will deploy a container on GCP whereas few simple commands provided under the [Using Heroku](#using-heroku) heading will achieve the same for Heroku.
 
@@ -88,9 +96,18 @@ The build will take a while due to free Cloud Shell using a free cloud VM with m
 `gcloud run services delete crisp-react --platform=managed --region=us-central1 --project=<project-name>`<br/>
 It can be conveniently executed from the Cloud Shell session opened during the deployment. Update the `region` with the one chosen during the deployment and replace `<project-name>` with your project name. Alternatively delete the service using Cloud Run [Console](https://console.cloud.google.com/run).
 
+* API. In the full stack build the backend communicates with a cloud service on behalf of clients and makes data available via an API endpoint. It's consumed by the clients. The Name Lookup API is used as a sample:
+    ![API Screenshot](docs/screenshots/api.png)
+
+    The implementation provides reusable code, both client-side and backend, making it easier to switch to another API. In fact this approach has been taken by the sibling Crisp BigQuery repository created by cloning and renaming this solution - it uses Google BigQuery API instead.<br/>
+This arrangement brings a security benefit: The clients running inside a browser in a non-trusted environment do not have credentials to access a cloud service that holds sensitive data. The backend runs in the trusted environment you control and does have the credentials.
+
 * Seamless debugging. Debug a minified/obfuscated, compressed production bundle and put breakpoints in its TypeScript code using both VS Code and Chrome DevTools. Development build debugging: put breakpoints in the client and backend code and debug both simultaneously using a single instance of VS Code.
 
-* Sample websites. [Skeleton](https://crisp-react.winwiz1.com/), [production](https://virusquery.com/).
+* Sample websites.
+    * [Demo - Full stack](https://crisp-react.winwiz1.com). Manual build.
+    * [Demo - Jamstack](https://crisp-react.pages.dev). Automated build.
+    * [Production](https://virusquery.com). Based on Crisp React.
 
 ## Table of Contents
 - [Getting Started](#getting-started) 
@@ -102,6 +119,11 @@ It can be conveniently executed from the Cloud Shell session opened during the d
   - [Using Cloudflare Pages](#using-cloudflare-pages)
   - [Using AWS S3](#using-aws-s3)
 - [Usage - Full Stack](#usage---full-stack)
+  - [Using Docker](#using-docker)
+  - [Using Heroku](#using-heroku)
+  - [Using Google Compute Engine](#using-google-compute-engine)
+  - [Cloud Run Considerations](#cloud-run-considerations)
+- [Scenarios](#scenarios)
   - [Client Usage Scenarios](#client-usage-scenarios)
   - [Backend Usage Scenarios](#backend-usage-scenarios)
 - [SSR](#ssr)
@@ -110,11 +132,6 @@ It can be conveniently executed from the Cloud Shell session opened during the d
   - [CSS Modules](#css-modules)
   - [LESS](#less)
   - [CSS-in-JS](#css-in-js)
-- [Containerisation](#containerisation)
-  - [Using Docker](#using-docker)
-  - [Using Heroku](#using-heroku)
-  - [Using Google Compute Engine](#using-google-compute-engine)
-  - [Cloud Run Considerations](#cloud-run-considerations)
 - [Custom Domain and CDN](#custom-domain-and-cdn)
 - [What's Next](#whats-next)
 - [Pitfall Avoidance](#pitfall-avoidance)
@@ -192,7 +209,7 @@ yarn lint
 yarn test
 yarn dev
 ```
-along with additional commands described in [Usage - Full Stack](#usage---full-stack).
+along with additional commands described in [Scenarios](#scenarios).
 
 The client subproject:
  * Starts webpack-dev-server listening on port 8080 in the development mode.
@@ -273,16 +290,19 @@ To turn off code splitting using multiple SPAs simply leave one SPA in the SPA C
 > Tip: Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can focus on a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application out of the testing scope.
 
 ### Testing
-The solution contains debuggable test cases written in TypeScript. Provides integration with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) on the client and [Supertest](https://github.com/visionmedia/supertest) on the backend. Both using [Jest](https://jestjs.io/) as an engine.<br/>
-The client and backend can be tested independently by executing the `yarn test` command. Alternatively the same command can be executed at the workspace level.
+The solution contains debuggable test cases written in TypeScript. Provides integration with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) on the client and [Supertest](https://github.com/visionmedia/supertest) on the backend. Both using [Jest](https://jestjs.io/) as an engine.
 
-The repository is integrated with Travis CI and the test outcome is reflected by the test badge.
+Both client and backend can be tested independently by executing the `yarn test` command from their respective subdirectories. Alternatively the same command can be executed at the workspace level.
+
+The repository is integrated with [Travis CI](https://travis-ci.com) for Continuous Integration (CI) and with [Cloudflare Pages](https://pages.cloudflare.com) for  Continuous Deployment (CD). Every push to the repository causes Travis and Pages to start a VM, clone the repository and perform a build. Then Travis runs tests while Pages deploys the build to `xxxxx.crisp-react.pages.dev` and also makes it available on [crisp-react.pages.dev](https://crisp-react.pages.dev).
+
+ The test outcome is reflected by the test badge and is also shown by the icon (a check mark :heavy_check_mark: if CI/CD was successful) located after the last commit description and next to the last commit hash. To access more information, click on the icon.
 
 ## Usage - Jamstack
 As already mentioned, you might prefer to simplify the Jamstack build by having one SPA called "index". This is achieved by having the SPA configuration block:
 
 ```js
-/****************** Start SPA Configuration ******************/
+/****************** Start single SPA Configuration ******************/
   var SPAs = [
     new SPA({
       name: "index",
@@ -292,11 +312,11 @@ As already mentioned, you might prefer to simplify the Jamstack build by having 
     }),
   ];
   SPAs.appTitle = "Crisp React";
-/****************** End SPA Configuration ******************/
+/****************** End single SPA Configuration ******************/
 ```
-Such a simplification is optional.
+This simplification is optional, Jamstack build supports multiple SPAs.
 
-The following command is used to build Jamstack client:
+The following command is used to build a Jamstack client:
 ```
 yarn build:jamstack
 ```
@@ -305,18 +325,208 @@ After the command finishes, the build artifacts are located in the `client/dist/
 Use the `yarn dev` and `yarn lint` commands executed from the `client/` directory to debug and lint Jamstack client.
 
 ### Using Cloudflare Pages
-Under construction.
+Cloudflare Pages can build the client in the cloud, then create and deploy a website for it. This is done automatically provided the preparatory and configuration steps are completed:
 
+1. Clone Crisp React repository.
+    ```
+    git clone https://github.com/winwiz1/crisp-react.git
+    cd crisp-react
+    ```
+2. Create a new GitHub repository by visiting [repo.new](https://repo.new).
+3. Point the cloned repository to the newly created one and push it there.
+    ```
+    git remote set-url origin https://github.com/your-github-username/your-newly-created-repo
+    git push
+    ```
+4.  Deploy to Cloudflare Pages by logging into the [Cloudflare dashboard](https://dash.cloudflare.com). Use Menu > Pages > Create a project. You will be asked to authorize read-only access to your GitHub repositories with an option to narrow the access to specific repositories.
+
+    Select the new repository and in the "Set up builds and deployments" section, provide the following information:
+    | Configuration option | Value |
+    | :--- |:---|
+    | Production branch  | `master`  |
+    | Build command  | `yarn build:jamstack` |
+    | Build output directory  | `/client/dist`  |
+
+    Add the following environment variable:
+
+    | Environment variable | Value |
+    | :-------------------- | :----- |
+    | NODE_VERSION | `14.17.5` |
+
+    Optionally, you can customize the "Project name" field. It defaults to the GitHub repository name, but it does not need to match. The "Project name" value is used to create a unique per-project `*.pages.dev` subdomain.
+
+    After completing the configuration, click "Save and Deploy" button. You will see the deployment pipeline in progress. When it finishes, the website can be found on the above unique subdomain.
+
+Each subsequent push into the repository will trigger the pipeline. If it finishes successfully, a new website deployment is created and made available on both per-deployment URL and per-project subdomain. You can rollback to any of the earlier deployments anytime. Those are still available to users at the older per-deployment URLs. A rollback ensures that a website available at the created earlier per-deployment URL becomes accessible on the per-project subdomain as well.
+
+Getting the metrics (performance, SEO and others) of the new website is only few clicks away with the cloud instance of Lighthouse ran by Google and available at [this page](https://web.dev/measure/). The metrics should be similar to `crisp-react.pages.dev`:
+
+<div align="center">
+  <img alt="Jamstack build - Lighthouse scores" src="docs/benchmarks/jamstack.png" width="40%" />
+</div>
+
+> The report generated by web.dev has "CPU/Memory Power" metric at the bottom. It reflects the power of the hardware used by Lighthouse to emulate Moto G4. This metric affects the performance score. Cloud instance of Lighthouse at web.dev runs on a shared cloud VM and the metric reflects the current workload. It varies from time to time.
+
+> The SEO score of your website will be less than 100. You can improve it by changing the domain portion of the [`jamStackDeploymentUrl`](https://github.com/winwiz1/crisp-react/blob/master/client/webpack.config.js#L21) variable's value. Just point it to your per-project subdomain.
 ### Using AWS S3
 Follow the steps described in the [AWS document](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html).
 
-The "index document name" (mentioned at the steps 2.7 and 5) depends on the name of the SPA that has the `redirect` flag set to `true`. If the simplified SPA configuration block shown at the beginning of this section is used, then the "index document name" is `index.html` otherwise (in case the SPA block was left intact) the name resolves to `first.html`.
+The "index document name" (mentioned at the steps 2.7 and 5) depends on the name of the SPA that has the `redirect` flag set to `true`. If the simplified SPA configuration block shown at the beginning of this section was used, then the "index document name" is `index.html` otherwise (in case the SPA block was left intact) the name resolves to `first.html`.
 
 Execute the build command shown at the beginning of this section and copy all the files from the `client/dist/` directory (except for maps) to the cloud bucket at the steps 5.6 and 5.7.
 
 ## Usage - Full Stack
-The Usage Scenarios below are grouped depending on whether  the client or the backend subproject is used. 
->:bulb: This section can be skipped at first reading. You can proceed to the [next](#containerisation) section.
+Assuming the deployment demo in the [Project Highlights](#project-highlights) section has been completed, a container has already been built in the cloud and deployed to Google Cloud Run. In the current section we will build and run the container locally using Docker. This is followed by cloud deployments to Heroku and Google Compute Engine (GCE).
+### Using Docker
+Install [Docker](https://docs.docker.com/get-docker/). To perform full stack build of Crisp React as a Docker image and start a container, execute Windows command file [`start-container.cmd`](https://github.com/winwiz1/crisp-react/blob/master/start-container.cmd) or Linux shell script [`start-container.sh`](https://github.com/winwiz1/crisp-react/blob/master/start-container.sh). Then point a browser to `localhost:3000`.
+
+> Both the command file and the shell script can also be executed from an empty directory in which case uncomment the two lines at the top of each file. Moreover, the files can be copied to a computer or VM that doesn't have NodeJS installed. The only prerequisites are Docker and Git.
+
+> Pre-built Docker image is available at [Docker Hub](https://hub.docker.com/repository/docker/winwiz1/crisp-react).
+### Using Heroku
+Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install).  Then execute `heroku login` command.
+
+Clone the repository:
+```
+git clone https://github.com/winwiz1/crisp-react.git
+cd crisp-react
+```
+Finally perform full stack build of Crisp React as a Docker image and deploy it to Heroku:
+```
+heroku container:login
+heroku create <app-name>
+heroku stack:set container -a <app-name>
+heroku container:push web -a <app-name>
+heroku container:release web -a <app-name>
+```
+Replace the  `<app-name>` placeholder with your Heroku app name.  The app will have the URL: `<app-name>.herokuapp.com`.
+
+If you own a domain name, then it's recommended to add a CDN by implementing the optional steps described in the [Custom Domain and CDN](#custom-domain-and-cdn) section. It will significantly boost performance and improve security to some extent. The extent is limited due to the fact that the DNS record for your app e.g.`xxxxxx.herokudns.com` is public so the CDN can be bypassed with a potential attacker accessing your app directly.
+### Using Google Compute Engine
+In this section we are going to create a VM instance with OS optimised by Google (performance and security wise) to run a container. More specifically, the instance will run a container built using Crisp React code taken from GitHub repository and optionally modified by you before the build.
+
+> This section can be completed without installing any software.
+
+#### Costs
+Currently a single `e2-micro` VM instance is conditionally free. That is, there is no charge for one such VM per billing account provided it has been deployed in one of the few selected regions including `us-west1`. We will deploy in this region.
+
+The cost of a static IP address and charges for egress (network traffic from our VM to Internet) are specified [there](https://cloud.google.com/vpc/pricing). The static IP address cost is around $3 USD per month and will initially be charged against 90 days, $300 [free credit](https://cloud.google.com/free/docs/gcp-free-tier/#free-trial) offered to new customers. The egress charges are perceptible if there are Gigabytes of traffic which is unlikely   for our trial deployment with Cloudflare CDN - it offers unlimited cache bandwidth and free DDoS protection on all plans including the Free Plan.
+
+As an extra precautionary measure against an unexpected bill, you can create a throw-away project at the first Deployment step described below and dispose of the project at the end of this section.
+#### Deployment
+* To get started with GCE complete the _Before you begin_ [section](https://cloud.google.com/compute/docs/quickstart-linux#before-you-begin). Accept the suggestion to create a throw-away project at the step 1 and ensure this project is selected as the default.
+* If you prefer to work with your local development environment then install Cloud SDK by following instructions on this [page](https://cloud.google.com/sdk/install). Alternatively start [Cloud Shell](https://cloud.google.com/shell/docs/launching-cloud-shell) which is a free VM with Cloud SDK and other software preinstalled.
+* Enable Artifact Registry and Cloud Build for your project by executing the commands:
+    ```
+    gcloud services enable artifactregistry.googleapis.com
+    gcloud services enable cloudbuild.googleapis.com
+    ```
+* Ask Artifact Registry to create a Docker repository called `crisp-react-repo`:
+    ```
+    gcloud artifacts repositories create crisp-react-repo --repository-format=docker --location=us-west1 --description="My test Docker repository"
+    ```
+* Give `docker` access to this repository and all other repositories (if any) in the `us-west1` region:
+    ```
+    gcloud auth configure-docker us-west1-docker.pkg.dev
+    ```
+ * Clone Crisp React repository:
+    ```
+    git clone https://github.com/winwiz1/crisp-react.git
+    cd crisp-react
+    ```
+    > The subsequent commands have to be executed from `crisp-react/` directory.
+
+    Optionally make some code changes.
+    > Since containers facilitate full stack builds, consider various building and debugging scenarios provided under the [Scenarios](#scenarious) heading. As a very minimum, consider `yarn start:prod` followed by pointing a browser to http://localhost:3000 to check the React app is working.
+
+* Decide if you prefer to build a Docker image locally or in the cloud. For the local option, the following commands will build the image and push it to  `crisp-react-repo` repository:
+    ```
+    docker build -t us-west1-docker.pkg.dev/your-throw-away-project-name/crisp-react-repo/crisp-react-image:1.0 .
+    docker push us-west1-docker.pkg.dev/your-throw-away-project-name/crisp-react-repo/crisp-react-image:1.0
+    ```
+    Alternatively achieve the same in the cloud (Docker doesn't need to be installed):
+    ```
+    gcloud builds submit --tag=us-west1-docker.pkg.dev/your-throw-away-project-name/crisp-react-repo/crisp-react-image:1.0 .
+    ```
+* Create a static IP address `crisp-react-ip`:
+    ```
+    gcloud compute addresses create crisp-react-ip --network-tier STANDARD --region us-west1
+    ```
+    > Note there is a charge (it was mentioned above) for the address that is higher if the address is not assigned to a VM.
+
+* Create a [Container-Optimized OS](https://cloud.google.com/container-optimized-os/docs) VM instance `crisp-react-vm` to run a container created from our Docker image held in `crisp-react-repo` repository:
+    ```
+    gcloud compute instances create-with-container crisp-react-vm \
+    --project your-throw-away-project-name \
+    --container-image us-west1-docker.pkg.dev/your-throw-away-project-name/crisp-react-repo/crisp-react-image:1.0 \
+    --container-stdin \
+	 --container-tty \
+	 --machine-type=e2-micro \
+	 --zone=us-west1-b \
+	 --scopes=cloud-platform \
+	 --tags=crisp-react-tag \
+	 --network-interface=network-tier=STANDARD,address=crisp-react-ip \
+	 --metadata=cos-update-strategy=update_disabled,google-logging-enabled=false \
+	 --metadata-from-file=startup-script=./deployments/gcp/startup.sh
+    ```   
+* Create a firewall rule to allow incoming HTTP traffic:
+    ```
+    gcloud compute firewall-rules create crisp-react-rule \
+	--description="Allow incoming HTTP traffic" \
+	--direction=INGRESS \
+	--allow tcp:80 \
+    --target-tags=crisp-react-tag \
+	--priority=1000 \
+	--enable-logging
+	```
+* Find out the external IP address (referred to below as `external-address`):
+    ```
+    gcloud compute addresses describe crisp-react-ip --region us-west1
+    ```
+    Use a browser to check if the React app is working: `http://external-address`. You should see a page similar to [this](https://crisp-react.winwiz1.com).
+#### Cloudflare CDN
+If you own a domain name, then it’s highly recommended to add a CDN. It will significantly boost both performance and security. The steps are:
+
+* Login to Cloudflare dashboard and [add a site](https://support.cloudflare.com/hc/en-us/articles/201720164-Creating-a-Cloudflare-account-and-adding-a-website). In response, Cloudflare will provide you with the names of two DNS nameservers.
+
+* Login to the domain registrar account and change the nameservers from the ones supplied by the registrar to the nameservers provided at the previous step.
+
+* In Cloudflare dashboard add a DNS record:
+    | Type | Name | IPv4 address |
+    | :---:| :---:|:---|
+    | `A` | `your-domain` | `external-address` |
+    
+    Ensure "Proxy status" of this record is set to "Proxied".
+
+* Perform the Step 6 located under the [Custom Domain and CDN](#custom-domain-and-cdn) heading to exempt API calls and responses from caching.
+
+#### Final Steps
+* Verify that integration with Cloudflare was successful by checking the page `https:/your-domain/cdn-cgi/trace`. It should resemble the content of  `https:/crisp-react.winwiz1.com/cdn-cgi/trace`.
+
+* Whitelist the IP addresses used by Cloudflare to ensure that CDN cannot be bypassed and no one can access the `external-address` directly. To effect this restriction add the `--source-ranges=<csv-list>`    command-line option to the `gcloud compute firewall-rules create` command shown before. The `<csv-list>` placeholder needs to be replaced by the comma-separated list of [IP ranges](https://www.cloudflare.com/ips) used by Cloudflare.
+
+* The `crisp-react-vm` impersonates the default GCE service account and uses the default VPC. Consider replacing both resources with their non-default counterparts to improve security.
+
+* The  `crisp-react-vm` has its logging disabled to save memory and reduce workload on CPU. Consider upgrading the VM from `e2-micro` to a more potent type in order to enable COS updates and logging.
+
+* Despite of having the CDN and GCE firewalls effectively chained,  it's still imperative to have a reverse proxy (in front of Express server) that has been specifically hardened to be exposed to Internet directly or via a firewall. Nginx is written in C and would be a good candidate being available as a Docker image. A container created from this image should sanitise all the API requests before it hit Express and clamp down on HTTP verbs, request size, limit ingress rate (in addition to rate limiting already implemented in Express) etc.
+
+    > As for Express, its code is executed by V8 engine. It compiles JS into CPU instructions at run-time further optimising the compiled code, again at run-time. The compilation is more or less predictable but the optimisation is not because in order to achieve the best performance it depends on run-time inputs. This lack of predictability (e.g. non-deterministic code optimisation) makes a comprehensive security audit of V8 impossible and results in zero day vulnerabilities.
+
+* Delete the throw-away project created earlier. This will clean up the VM and other resources created throughout this section.
+
+### Cloud Run Considerations
+The remainder of this section contains additional considerations that apply to deploying the solution on Cloud Run. The considerations are not specific to this solution and would be relevant for any React SPA.
+
+Although Cloud Run provides an ample free tier usage in terms of bandwidth and number of requests, you are billed for the incoming requests once the free usage threshold, 2 million calls per month, is exceeded. This scenario wouldn’t be infeasible if the service URL is discovered and used to mount a Layer 7 DDoS attack (or come close to it by emulating a significant workload). There is an additional cost for the running time exceeding its free threshold which can be exacerbated by the service scaling itself up under attack.
+
+Therefore adding a firewall with IP address black/whitelisting and rate limiting or deleting the service promptly after a demonstration helps to mitigate this risk. Alternatively a Cloud Run service can be deployed in non-public access [mode](https://cloud.google.com/run/docs/securing/ingress) (`--ingress internal`), however this is outside of our scope aimed at a public website creation.
+
+It would appear that using ingress control or rate limiting was [not possible](https://stackoverflow.com/questions/59014001/ip-filtering-on-google-cloud-run) in the past with Cloud Run  in public access mode. This functionality is currently available however it's not added directly to Cloud Run.  Rather it requires a serverless network endpoint group ([NEG](https://cloud.google.com/load-balancing/docs/negs/serverless-neg-concepts)). Once a NEG has been created, you can use other GCP products e.g. external HTTPS [load balancer](https://cloud.google.com/load-balancing/docs/https/traffic-management) to implement rate limiting or [Cloud Armor](https://cloud.google.com/armor/docs/integrating-cloud-armor#serverless) to control ingress. You might want to check if the price of either product fits into your budget.
+
+## Scenarios
+The Usage Scenarios below are grouped depending on whether  the client or the backend subproject is used. The Client Usage Scenarios apply to both Jamstack and full stack builds. The Backend Usage Scenarios apply to the full stack buld only.
+>:bulb: This section can be skipped at first reading. You can proceed to the [next](#ssr) section.
 
 In case there are any changes made to the SPA Configuration block and the changes are recent (e.g. no client and backend builds have been performed since then), execute the `yarn build` command at the workspace level before starting the debugging configurations described below in the Client and Server Usage sections.
 > Tip: The commands executed in VS Code Terminal can also be executed from a command or shell prompt in the relevant directory and vice versa.
@@ -454,39 +664,12 @@ The `@emotion/react` package of the Emotion library is used. To take this approa
 The class selectors are generated at run-time in browser's memory and combined into a separate stylesheet. The stylesheet is then programmatically inserted into the `<head>` element of the DOM tree.
 
 The insertion is delayed by script bundles processing and execution. Other drawbacks of this approach include possible CLS and loss of JSX code portability. Also the Emotion library is not Atomic (see the [review](https://github.com/andreipfeiffer/css-in-js#11-atomic-css)) so rule duplication is an issue.
-## Containerisation
-Assuming the deployment demo in the [Project Highlights](#project-highlights) section has been completed, a container has already been built in the cloud and deployed to Google Cloud Run. In this section we will build the container locally and expect it to run in two other deployments (in the local environment facilitated by Docker and the cloud one provided by Heroku)  without any further adjustments.
-### Using Docker
-Install [Docker](https://docs.docker.com/get-docker/). To build a Docker container and start it, execute [`start-container.cmd`](https://github.com/winwiz1/crisp-react/blob/master/start-container.cmd) or [`start-container.sh`](https://github.com/winwiz1/crisp-react/blob/master/start-container.sh). Then point a browser to `localhost:3000`. Both files can also be executed from an empty directory in which case uncomment the two lines at the top. Moreover, it can be copied to a computer or VM that doesn't have NodeJS installed. The only prerequisites are Docker and Git.
-### Using Heroku
-Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install).  Then log to Heroku using the `heroku login` command. Execute the following commands to build and deploy a container:
-```
-git clone https://github.com/winwiz1/crisp-react.git
-cd crisp-react
-heroku container:login
-heroku create <app-name>
-heroku stack:set container -a <app-name>
-heroku container:push web -a <app-name>
-heroku container:release web -a <app-name>
-```
-Replace the  `<app-name>` placeholder with your Heroku app name.  The app will have the URL: `<app-name>.herokuapp.com`.
 
-If you own a domain name and intend to implement the optional steps described in the [Custom Domain and CDN](#custom-domain-and-cdn) section, then you can improve security by making the app name random, for example `my-crisp-app-XXXXXXXXXXXX` where the last part represents a random pattern. The app name can be changed at any time using the Settings page at `https://dashboard.heroku.com/apps/<app-name>/settings`.
-### Using Google Compute Engine
-Under construction.
-### Cloud Run Considerations
-The remainder of this section contains additional considerations that apply to deploying the solution on Cloud Run. The considerations are not specific to this solution and would be relevant for any React SPA.
-
-Although Cloud Run provides an ample free tier usage in terms of bandwidth and number of requests, you are billed for the incoming requests once the free usage threshold, 2 million calls per month, is exceeded. This scenario wouldn’t be infeasible if the service URL is discovered and used to mount a Layer 7 DDoS attack (or come close to it by emulating a significant workload). There is an additional cost for the running time exceeding its free threshold which can be exacerbated by the service scaling itself up under attack.
-
-Therefore adding a firewall with IP address black/whitelisting and rate limiting or deleting the service promptly after a demonstration helps to mitigate this risk. Alternatively a Cloud Run service can be deployed in non-public access [mode](https://cloud.google.com/run/docs/securing/ingress) (`--ingress internal`), however this is outside of our scope aimed at a public website creation.
-
-It would appear that using ingress control or rate limiting was [not possible](https://stackoverflow.com/questions/59014001/ip-filtering-on-google-cloud-run) in the past with Cloud Run  in public access mode. This functionality is currently available however it's not added directly to Cloud Run.  Rather it requires a serverless network endpoint group ([NEG](https://cloud.google.com/load-balancing/docs/negs/serverless-neg-concepts)). Once a NEG has been created, you can use other GCP products e.g. external HTTPS [load balancer](https://cloud.google.com/load-balancing/docs/https/traffic-management) to implement rate limiting or [Cloud Armor](https://cloud.google.com/armor/docs/integrating-cloud-armor#serverless) to control ingress. You might want to check if the price of either product fits into your budget.
 ## Custom Domain and CDN
-This section compliments the deployment described under the [Using Heroku](#using-heroku) heading. It maps Heroku app URL to a custom domain you own. After that, Cloudflare CDN is added to Heroku servers<br/>
+This section complements the deployment described under the [Using Heroku](#using-heroku) heading. It maps Heroku app URL to a custom domain you own. After that, Cloudflare CDN is added in front of Heroku servers<br/>
 ![Deploy](docs/deploy.png)
 
-to take advantage of the distributed cache provided by Cloudflare and achieve better performance with improved security. Both custom domain and CDN are optional. If you haven't used Cloudflare previously this [answer](https://www.quora.com/Cloudflare-product/How-does-Cloudflare-work-Does-Cloudflare-just-divert-malicious-traffic) could be useful.
+to take advantage of the distributed cache provided by Cloudflare and achieve much better performance with improved security. Both custom domain and CDN are optional. If you haven't used Cloudflare previously this [answer](https://www.quora.com/Cloudflare-product/How-does-Cloudflare-work-Does-Cloudflare-just-divert-malicious-traffic) could be useful.
 
 Prerequisites:
 - Custom domain name ownership,
@@ -533,9 +716,13 @@ You can test DNS resolution for `crisp-react.yourdomain.com` using tools like `n
 
 ## What's Next
 Consider the following steps to add the desired functionality:
+### Full stack build
 * Start with [Client Usage Scenarios](#client-usage-scenarios) to develop UI in absence of API data. For example, develop the initial look and feel of the login page. Take advantage of the Live Reloading to speed up the development. The client scenarios ensure the backend is not started needlessly.
-*  Implement an API endpoint in the backend, in addition or instead the existing sample API endpoint. For example, a login endpoint. Technically it can be done by renaming the `SampleXxx` pattern in the names of source files and classes with `LoginXxx`, then modifying the classes as needed. This approach can be observed in the sibling [Crisp BigQuery](https://github.com/winwiz1/crisp-bigquery) repository, the `SampleXxx` pattern was replaced with `BigQueryXxx`.
+*  Implement an API endpoint in the backend, in addition or instead of the existing sample API endpoint. For example, a login endpoint. Technically it can be done by renaming the `SampleXxx` pattern in the names of source files and classes with `LoginXxx`, then modifying the classes as needed. This approach can be observed in the sibling [Crisp BigQuery](https://github.com/winwiz1/crisp-bigquery) repository, the `SampleXxx` pattern was replaced with `BigQueryXxx`.
 *  Switch to [Backend Usage Scenarios](#backend-usage-scenarios) to consume the API endpoint in the client.  Modify the API related classes `BackendManager` and `BackendRequest` as needed. Keep taking advantage of Live Reloading that is supported for client and backend code.
+### Jamstack build
+* Start with Client Usage Scenarios as described above for Full stack build.
+* Implement a 3rd party API endpoint(s) and consume it.
 ## Pitfall Avoidance
 One of the goals pursued by the [Backend Usage Scenarios](#backend-usage-scenarios) is to avoid the following common pitfalls:
 - :fire: Running the webpack-dev-server in production.
@@ -585,7 +772,7 @@ Remember to change the settings in `tsconfig.json`:
 In case you have a utility class used infrequently, it can also be imported dynamically. This can be done using `await import` and without `Suspense/lazy`. The sibling [Crisp BigQuery](https://github.com/winwiz1/crisp-bigquery) repository (derived from Crisp React)  [provides](https://github.com/winwiz1/crisp-bigquery/search?q=%22await+import%22) a working example.
 
 Q: Do dynamic imports negate the need to have multiple SPAs.<br/>
-A: It depends. These two are complimentary techniques. Obviously once a bundle grows larger, it starts affecting performance as its loading time increases. But the reverse is also true, having too many small bundles could result in more network round-trips and the bundle compression will become less efficient. It can also complicate attempts to scrutinise network traffic including requests for bundles.
+A: It depends. These two are complementary techniques. Obviously once a bundle grows larger, it starts affecting performance as its loading time increases. But the reverse is also true, having too many small bundles could result in more network round-trips and the bundle compression will become less efficient. It can also complicate attempts to scrutinise network traffic including requests for bundles.
 
 Q: How can I add my own HTML including polyfills etc. to the generated .html files?<br/>
 A: Use react-helmet to add additional HTML tags to the `<head>` element and modify the existing ones. Alternatively use the `client\src\entrypoints\head-snippet.html` file. Its content is inserted into the `<head>` element. You can add a [bodyHtmlSnippet](https://github.com/jaketrent/html-webpack-template) by changing the `HtmlWebpackPlugin` configuration in `webpack.config.js` (search for `headHtmlSnippet` and add similar code).

@@ -6,6 +6,8 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlWebpackHarddiskPlugin = require("html-webpack-harddisk-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const configuredSPAs = require("./config/spa.config");
 const verifier = require("./config/verifySpaParameters");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
@@ -15,10 +17,9 @@ const headHtmlSnippet = fs.existsSync(headHtmlSnippetPath) ?
 const metaDescription = "Skeleton website built using Crisp React \
 boilerplate. Consists of two sample React SPAs with optional build-time \
 SSR turned on for the first SPA.";
-const metaKeywords = "React,Express,TypeScript,boilerplate,SSR,Docker";
-const metaOwnUrl = "https://crisp-react.winwiz1.com/";
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const metaKeywords = "React,Express,TypeScript,boilerplate,SSR,Docker,Jamstack";
+const jamStackDeploymentUrl = "https://crisp-react.pages.dev/first";
+const fullStackDeploymentUrl = "https://crisp-react.winwiz1.com/";
 
 configuredSPAs.verifyParameters(verifier);
 
@@ -29,6 +30,7 @@ delete process.env.TS_NODE_PROJECT;
 const getWebpackConfig = (env, argv) => {
   const isProduction = (env && env.prod) ? true : false;
   const isJamstack = (env && env.jamstack) ? true : false;
+  const metaOwnUrl = !!process.env.CF_PAGES? jamStackDeploymentUrl : fullStackDeploymentUrl;
 
   const config = {
     mode: isProduction ? "production" : "development",
