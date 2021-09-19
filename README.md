@@ -384,14 +384,18 @@ Install [Docker](https://docs.docker.com/get-docker/). To perform full stack bui
 
 > Pre-built Docker image is available at [Docker Hub](https://hub.docker.com/repository/docker/winwiz1/crisp-react).
 ### Using Heroku
-Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install).  Then execute `heroku login` command.
-
 Clone the repository:
 ```
 git clone https://github.com/winwiz1/crisp-react.git
 cd crisp-react
 ```
-Finally perform full stack build of Crisp React as a Docker image and deploy it to Heroku:
+Now decide which of the following two options to choose.
+#### Option 1 - Build images locally
+Recommended if you have fast Internet and a powerful development machine or notebook and want to reduce the build time.
+
+Install Docker and [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli#download-and-install).  Then execute `heroku login` command.
+
+Perform a full stack build to create a Docker image and deploy it to Heroku:
 ```
 heroku container:login
 heroku create <app-name>
@@ -400,6 +404,18 @@ heroku container:push web -a <app-name>
 heroku container:release web -a <app-name>
 ```
 Replace the  `<app-name>` placeholder with your Heroku app name.  The app will have the URL: `<app-name>.herokuapp.com`.
+#### Option 2 - Build images in the cloud
+Recommended if you don't have a powerful development machine and/or cannot install Docker and Heroku CLI. It takes much longer than other build options.
+
+Perform the following steps after having cloned the repository:
+
+1. Create a new GitHub repository by visiting [repo.new](https://repo.new).
+2. Point the cloned repository to the newly created one and push it there.
+    ```
+    git remote set-url origin https://github.com/your-github-username/your-newly-created-repo
+    git push
+    ```
+3. Login to Heroku and create a new app. At this stage it has no content. Use the Settings tab to set the app's stack to 'container'. Then switch to the Deploy tab and choose GitHub as the deployment method. Finally trigger a manual build. Optionally enable automated builds.
 
 If you own a domain name, then it's recommended to add a CDN by implementing the optional steps described in the [Custom Domain and CDN](#custom-domain-and-cdn) section. It will significantly boost performance and improve security to some extent. The extent is limited due to the fact that the DNS record for your app e.g.`xxxxxx.herokudns.com` is public so the CDN can be bypassed with a potential attacker accessing your app directly.
 ### Using Google Compute Engine
@@ -525,7 +541,7 @@ Therefore adding a firewall with IP address black/whitelisting and rate limiting
 It would appear that using ingress control or rate limiting was [not possible](https://stackoverflow.com/questions/59014001/ip-filtering-on-google-cloud-run) in the past with Cloud Run  in public access mode. This functionality is currently available however it's not added directly to Cloud Run.  Rather it requires a serverless network endpoint group ([NEG](https://cloud.google.com/load-balancing/docs/negs/serverless-neg-concepts)). Once a NEG has been created, you can use other GCP products e.g. external HTTPS [load balancer](https://cloud.google.com/load-balancing/docs/https/traffic-management) to implement rate limiting or [Cloud Armor](https://cloud.google.com/armor/docs/integrating-cloud-armor#serverless) to control ingress. You might want to check if the price of either product fits into your budget.
 
 ## Scenarios
-The Usage Scenarios below are grouped depending on whether  the client or the backend subproject is used. The Client Usage Scenarios apply to both Jamstack and full stack builds. The Backend Usage Scenarios apply to the full stack buld only.
+The scenarios below are grouped depending on whether  the client or the backend subproject is used. The Client Usage Scenarios apply to both Jamstack and full stack builds. The Backend Usage Scenarios apply to the full stack buld only.
 >:bulb: This section can be skipped at first reading. You can proceed to the [next](#ssr) section.
 
 In case there are any changes made to the SPA Configuration block and the changes are recent (e.g. no client and backend builds have been performed since then), execute the `yarn build` command at the workspace level before starting the debugging configurations described below in the Client and Server Usage sections.
@@ -712,8 +728,7 @@ The steps:
 
 After the steps are completed the Heroku app will be using distributed caching and a free SSL certificate for the custom domain. Also the cache related statistics, monitoring and the breakdown of incoming requests by country will be available from Cloudflare even on the Free plan.
 
-You can test DNS resolution for `crisp-react.yourdomain.com` using tools like `nslookup` or `dig` to check it resolves to IP addresses that belong to Cloudflare, similarly to the demo [site](https://crisp-react.winwiz1.com/).
-
+Verify that integration with Cloudflare was successful by checking the page `https:/crisp-react.yourdomain.com/cdn-cgi/trace`. It should resemble the content of  `https:/crisp-react.winwiz1.com/cdn-cgi/trace`.
 ## What's Next
 Consider the following steps to add the desired functionality:
 ### Full stack build
