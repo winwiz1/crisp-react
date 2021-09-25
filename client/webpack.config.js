@@ -14,10 +14,9 @@ const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const headHtmlSnippetPath = path.join("src", "entrypoints", "head-snippet.html");
 const headHtmlSnippet = fs.existsSync(headHtmlSnippetPath) ?
   fs.readFileSync(headHtmlSnippetPath, "utf8") : undefined;
-const metaDescription = "Skeleton website built using Crisp React \
-boilerplate. Consists of two sample React SPAs with optional build-time \
-SSR turned on for the first SPA.";
-const metaKeywords = "React,Express,TypeScript,boilerplate,SSR,Docker,Jamstack";
+const metaDescription = "React boilerplate written in TypeScript with a variety \
+of Jamstack and full stack deployments";
+const metaKeywords = "React,TypeScript,boilerplate,SSR,Docker,Jamstack,Fullstack";
 const jamStackDeploymentUrl = "https://crisp-react.pages.dev/first";
 const fullStackDeploymentUrl = "https://crisp-react.winwiz1.com/";
 

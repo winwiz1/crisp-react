@@ -56,12 +56,12 @@
       <tr>
         <td>Full stack</td>
         <td>Builds React app and backend.  The latter serves static app files and API responses to end users.<br/> Although in many production deployments the static files would be served to a CDN instead.<br/>Having one server instead of two (one for frontend, another for backend) reduces the attack surface of the deployment, brings down its costs, complexity and delivers other benefits like CORS avoidance.</td>
-        <td>Build a container using the supplied Dockerfile and deploy it to any cloud vendor that supports containers including:<ul><li>Google Cloud Run: Single click on the button located below in this section.  Then wait until the build finishes in the cloud and access a website. Fast :clock2: and simple build.</li><li>Heroku: Execute 5 commands from command line and get a website running. Simple build but takes :clock5: a while. Free :coffee: deployment option.</li><li>Google Compute Engine: More complex :scroll: deployment with a series of commands to execute and without any software that needs to be installed.</li></ul></td>
+        <td>Build a container using the supplied Dockerfile and deploy it to any cloud vendor that supports containers including:<ul><li>Google Cloud Run: Single click on the button located below in this section.  Then wait until the build finishes in the cloud and access a website. Fast :clock2: and simple build.</li><li>Heroku: Execute several commands from your Terminal and get a website running. Simple build but takes :clock5: a while. Free :coffee: deployment option.</li><li>Google Compute Engine: More complex :scroll: deployment with a series of commands to execute and without any software that needs to be installed.</li></ul></td>
     </tr>
     <tr>
       <td>Jamstack</td>
-     <td>Builds the React app only. The build artifacts are served to end users by the webserver supplied by a Jamstack vendor. Since the demo project has no backend, the API calls go directly to the cloud service.<br/> In real life scenarios the API calls could target endpoints implemented by AWS API Gateway or similar infrastructure.</td>
-      <td>Build the React app either in the cloud or locally:<ul><li>Cloudflare Pages: Type in 4 simple pieces of data on the configuration screen presented by Pages. Then get a website built and deployed in the cloud. Fast :clock2: and simple build with free :coffee: deployment option.</li><li>AWS S3: More complex :scroll: deployment. Build the website locally and copy build artifacts to a cloud bucket while completing a series of manual deployment steps.</li></ul></td>
+     <td>Builds the React app only. The build artifacts are served to end users by the webserver supplied by a Jamstack vendor.<br/>Since the demo project has no backend, the API calls go directly to the cloud service.<br/> In real life scenarios the API calls could target endpoints implemented by AWS API Gateway or similar infrastructure.</td>
+      <td>Build the React app either in the cloud or locally:<ul><li>Cloudflare Pages: Provide just a few simple pieces of data using the configuration screen presented by Pages. Then get a website built and deployed in the cloud. Fast :clock2: and simple build with free :coffee: deployment option.</li><li>AWS S3: More complex :scroll: deployment. Build the website locally and copy build artifacts to a cloud bucket while completing a series of manual deployment steps.</li></ul></td>
       </tr>
     </table>
     Switching between the two options doesn’t require configuration changes though with Jamstack it could be easier (and in the spirit of Jamstack inspired simplicity) to have only one SPA named 'index'. This arrangement ensures the automatically generated HTML file is called `index.html`. It makes integration with some vendors more straightforward.
@@ -81,7 +81,7 @@
 
     The solution allows to use each approach as a sole CSS handling technique or combine it with any or all of the remaining three approaches - with no configuration effort. More details are available under the [CSS Handling](#css-handling) heading.
 
-* Containerisation. Used to build and deply full stack builds. A container acts as a mini operating system providing your code with the same run-time dependencies no matter where the container runs. One of the benefits of this approach is that your programs are less likely to break during deployments due to differences between your run-time environment and the one supplied by hosting provider. It makes a container (represented by the sequence of build instructions in `Dockerfile`) to be a robust deployment vehicle.
+* Containerisation. Used to build and deply full stack builds. A container acts as a mini operating system providing your code with the same run-time dependencies no matter where the container runs. One of the benefits of this approach is that your programs are less likely to break during deployments due to differences between your run-time environment and the one supplied by hosting provider. It makes a container (represented by the sequence of build instructions in [`Dockerfile`](https://github.com/winwiz1/crisp-react/blob/master/Dockerfile) to be a robust deployment vehicle.
 
     Another benefit is vendor lock-in avoidance: Many cloud vendors including AWS, Azure, GCP, Heroku and others accept containers.
 
@@ -290,14 +290,13 @@ To turn off code splitting using multiple SPAs simply leave one SPA in the SPA C
 > Tip: Let's assume over the time the application has grown and acquired extensive reporting capabilities, perhaps with a reporting dashboard that imports many components. In this case the third SPA and its entry point `reporting.tsx` can be added to the SPA Configuration block. The entry point would import the dashboard and use it for rendering. Such an addition would take little time but bring performance and development/testing benefits. For example, some tests can focus on a React application which has the reporting SPA as the only entry in the SPA Configuration block thus taking the rest of the application out of the testing scope.
 
 ### Testing
-The solution contains debuggable test cases written in TypeScript. Provides integration with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) on the client and [Supertest](https://github.com/visionmedia/supertest) on the backend. Both using [Jest](https://jestjs.io/) as an engine.
+The solution contains debuggable test cases written in TypeScript. Provides integration with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) on the client and [Supertest](https://github.com/visionmedia/supertest) on the backend. Both using [Jest](https://jestjs.io/) as the test engine.
 
-Both client and backend can be tested independently by executing the `yarn test` command from their respective subdirectories. Alternatively the same command can be executed at the workspace level.
+The client and the backend can be tested independently by executing the `yarn test` command from their respective subdirectories. Alternatively the same command can be executed at the workspace level.
 
-The repository is integrated with [Travis CI](https://travis-ci.com) for Continuous Integration (CI) and with [Cloudflare Pages](https://pages.cloudflare.com) for  Continuous Deployment (CD). Every push to the repository causes Travis and Pages to start a VM, clone the repository and perform a build. Then Travis runs tests while Pages deploys the build to `xxxxx.crisp-react.pages.dev` and also makes it available on [crisp-react.pages.dev](https://crisp-react.pages.dev).
+The repository is integrated with [Travis CI](https://travis-ci.com) and Heroku for CI/CD and with [Cloudflare Pages](https://pages.cloudflare.com) for  CD. Every push to the repository causes Travis and Pages to start a VM, clone the repository and perform a build. Then Travis runs tests while Pages deploys the build to `xxxxx.crisp-react.pages.dev` and also makes it available on [crisp-react.pages.dev](https://crisp-react.pages.dev). This is followed by Heroku deployment, also automated and delayed until Travis tests finish successfully.
 
- The test outcome is reflected by the test badge and is also shown by the icon (a check mark :heavy_check_mark: if CI/CD was successful) located after the last commit description and next to the last commit hash. To access more information, click on the icon.
-
+ The test outcome is reflected by the test badge and is also shown by the icon located after the last commit description and next to the last commit hash. To access more information, click on the icon. The icon is rendered as the check mark :heavy_check_mark: only if all the CI/CD activities performed by Travis CI, Heroku and Cloudflare Pages were successful. Otherwise an icon with the cross mark :x: is shown.
 ## Usage - Jamstack
 As already mentioned, you might prefer to simplify the Jamstack build by having one SPA called "index". This is achieved by having the SPA configuration block:
 
@@ -375,6 +374,8 @@ The "index document name" (mentioned at the steps 2.7 and 5) depends on the name
 
 Execute the build command shown at the beginning of this section and copy all the files from the `client/dist/` directory (except for maps) to the cloud bucket at the steps 5.6 and 5.7.
 
+AWS CloudFront or Cloudflare CDN can optionally be used in front of the S3 bucket. In this case it's essential to ensure the CDN cannot by bypassed. The Stack Overflow [answer](https://stackoverflow.com/questions/47966890) shows how to restrict access to Cloudflare only.
+
 ## Usage - Full Stack
 Assuming the deployment demo in the [Project Highlights](#project-highlights) section has been completed, a container has already been built in the cloud and deployed to Google Cloud Run. In the current section we will build and run the container locally using Docker. This is followed by cloud deployments to Heroku and Google Compute Engine (GCE).
 ### Using Docker
@@ -417,9 +418,10 @@ Perform the following steps after having cloned the repository:
     ```
 3. Login to Heroku and create a new app. At this stage it has no content. Use the Settings tab to set the app's stack to 'container'. Then switch to the Deploy tab and choose GitHub as the deployment method. Finally trigger a manual build. Optionally enable automated builds.
 
+#### Cloudflare CDN
 If you own a domain name, then it's recommended to add a CDN by implementing the optional steps described in the [Custom Domain and CDN](#custom-domain-and-cdn) section. It will significantly boost performance and improve security to some extent. The extent is limited due to the fact that the DNS record for your app e.g.`xxxxxx.herokudns.com` is public so the CDN can be bypassed with a potential attacker accessing your app directly.
 ### Using Google Compute Engine
-In this section we are going to create a VM instance with OS optimised by Google (performance and security wise) to run a container. More specifically, the instance will run a container built using Crisp React code taken from GitHub repository and optionally modified by you before the build.
+In this section we are going to create a VM instance with OS optimised by Google (performance and security wise) to run a container. The container will be built using the [`Dockerfile`](https://github.com/winwiz1/crisp-react/blob/master/Dockerfile).
 
 > This section can be completed without installing any software.
 
