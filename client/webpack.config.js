@@ -1,7 +1,6 @@
 const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack")
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlWebpackHarddiskPlugin = require("html-webpack-harddisk-plugin");
@@ -127,6 +126,8 @@ const getWebpackConfig = (env, argv) => {
       path: path.resolve(__dirname, "dist"),
       publicPath: isJamstack? "/" : "/static/",
       crossOriginLoading: "anonymous",
+      clean: true,
+      compareBeforeEmit: false,
     },
     optimization: {
       splitChunks: {
@@ -169,7 +170,6 @@ const getWebpackConfig = (env, argv) => {
       }),
     },
     plugins: [
-      new CleanWebpackPlugin(),
       new webpack.DefinePlugin({
         "process.env.DEVELOPMENT": JSON.stringify(isProduction === false),
         "CF_PAGES": !!process.env.CF_PAGES,

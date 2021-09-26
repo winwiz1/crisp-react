@@ -2,30 +2,22 @@ import * as fs from "fs";
 import * as path from "path";
 import { promisify } from "util";
 
-const workDir = "./dist/";
-
-export async function postProcess(): Promise<void> {
+export async function postProcess(workDir: string, filePattern: string): Promise<void> {
   const readdir = promisify(fs.readdir);
   const files = await readdir(workDir);
-  const txtFiles = files.filter(file => path.extname(file) === ".txt");
-  const htmlFiles = files.filter(file => path.extname(file) === ".html");
-  const ar = new Array<[string, string]>();
+  const txtFiles = files.filter(file =>
+    path.extname(file) === ".txt" && path.basename(file).startsWith(filePattern));
+  const htmlFiles = files.filter(file =>
+    path.extname(file) === ".html" && path.basename(file).startsWith(filePattern));
 
-  htmlFiles.forEach(file => {
-    const fileFound = txtFiles.find(txt => txt.startsWith(file.replace(/\.[^/.]+$/, "")));
-    if (fileFound) {
-      ar.push([file, fileFound]);
-    }
-  });
+  if (txtFiles.length !== 1 || htmlFiles.length !== 1) {
+    throw new Error("Unexpected count of SSR related files");
+  }
 
-  await Promise.all(ar.map(([k, v]) => {
-    return postProcessFile(k, v);
-  }));
-
-  console.log("Finished SSR post-processing")
+  await postProcessFile(workDir, htmlFiles[0], txtFiles[0]);
 }
 
-async function postProcessFile(htmlFile: string, ssrFile: string): Promise<void> {
+async function postProcessFile(workDir: string, htmlFile: string, ssrFile: string): Promise<void> {
   const readFile = promisify(fs.readFile);
   const htmlFilePath = path.join(workDir, htmlFile);
   const ssrFilePath = path.join(workDir, ssrFile);

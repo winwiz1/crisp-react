@@ -15,21 +15,24 @@ Each SPA has:
 - SSR flag. If set to true, the SPA landing page will be prerendered at the
   build time e.g. its HTML will be generated and inserted into the <body> of
   the .html file.
-  Only one SPA can have this flag set. When the flag is not set, the <body>
+  Any SPA can have this flag set. When the flag is not set, the <body>
   contains mainly references to the script bundles with very little HTML markup.
 
 You can customize SPAs by modifying the SPA Configuration block below. It will
-reconfigure client, backend and the tests. You'll need to adjust 3 lines
-"http://localhost:<port>/first.html" in the ../.vscode/launch.json file.
-If the first SPA is called 'login' then change these lines to:
-"http://localhost:<port>/login.html".
+reconfigure client, backend and the tests.
 
 Note: Page transitions within an SPA are performed as usual using <Link>,
   <NavLink> and other means (like history.push if enabled) customary to all
   SPAs. Transitions from one SPA to another should be performed using HTML
   anchor element (or its replacement provided by the UI library) targeting the
-  other SPA landing page:
+  other SPA landing page. For example:
   <a href="/first.html"> or <Menu.Item href="/second.html">.
+
+Note: To facilitate debugging, edit the ../.vscode/launch.json file to reflect
+  the SPA Configuration block changes. You'll need to adjust the three lines
+  with the text "http://localhost:<port>/first.html".
+  For example, if you renamed the first SPA from 'first' to 'login' then
+  change these three lines to: "http://localhost:<port>/login.html".
 
 To turn off code splitting using multiple SPAs simply leave one SPA in the
 SPA Configuration block.
@@ -76,13 +79,16 @@ var ConfiguredSPAs = function() {
       throw new RangeError("One and only one SPA must have 'redirect: true'");
     }
 
-    num = SPAs.reduce(function(acc, item) {
-      return item.params.ssr ? acc + 1 : acc;
-    }, 0);
+    SPAs.forEach(function(spa) {
+      var spaName = spa.params.name.toLowerCase();
+      var spas = SPAs.filter(function(item) {
+        return item.params.name.toLowerCase().startsWith(spaName);
+      });
 
-    if (num > 1) {
-      throw new RangeError("At most one SPA can have 'ssr: true'");
-    }
+      if (spas.length !== 1) {
+        throw new RangeError("SPAs have names that are not distinct enough");
+      }
+    });
   };
 
   SPAs.getEntrypoints = function() {
@@ -99,12 +105,13 @@ var ConfiguredSPAs = function() {
     }).params.name;
   };
 
-  SPAs.getSsrName = function() {
-    var spa = SPAs.find(function(spa) {
+  SPAs.getSsrNames = function() {
+    var spas = SPAs.filter(function(spa) {
       return spa.params.ssr;
     });
-    // eslint-disable-next-line
-    return !!spa? spa.params.name : undefined;
+    return spas.map(function(spa) {
+      return spa.params.name;
+    });
   };
 
   SPAs.getNames = function() {

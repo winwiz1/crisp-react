@@ -1,7 +1,6 @@
 const path = require("path");
 const webpack = require("webpack")
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const nodeExternals = require("webpack-node-externals");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -80,7 +79,6 @@ module.exports = {
       ]
     },
     plugins: [
-      new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ["dist-ssr"]}),
       new webpack.DefinePlugin({
         "process.env.DEVELOPMENT": JSON.stringify(isProduction === false),
         "CF_PAGES": !!process.env.CF_PAGES,
@@ -101,6 +99,8 @@ module.exports = {
       filename: "ssr-library.js",
       library: "ssrLibrary",
       libraryTarget: "commonjs",
+      clean: true,
+      compareBeforeEmit: false,
     },
     externals: [nodeExternals()],
   };
