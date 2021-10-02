@@ -6,6 +6,7 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
 import * as React from "react";
+import { Helmet } from "react-helmet";
 import {
   Header,
   Divider,
@@ -15,6 +16,7 @@ import {
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
 import { getAnchorCSS } from "../css/common-styles";
+import { getTitle, getCanonical } from "../utils/misc";
 
 const cssContainer = css(
   getAnchorCSS()
@@ -30,6 +32,10 @@ const cssIcon = css({
 const Description: React.FC = _props => {
   return (
     <section>
+      <Helmet>
+        <title>{getTitle("Lighthouse")}</title>
+        <link rel="canonical" href={getCanonical("lighthouse")} />
+      </Helmet>
       <Container text textAlign="justified" css={cssContainer}>
         <Header as="h3">Hello from the Lighthouse component</Header>
         <p>

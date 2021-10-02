@@ -6,6 +6,7 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
 import * as React from "react";
+import { Helmet } from "react-helmet";
 import {
   Header,
   Message,
@@ -18,6 +19,7 @@ import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
 import { getAnchorCSS } from "../css/common-styles";
 import styles from "../css/overview.module.css";
+import { getTitle, getCanonical } from "../utils/misc";
 
 const cssStyle: Record<string, string> = {
   msg: styles["msg"],
@@ -58,6 +60,10 @@ const Msg: React.FC = _props => {
 const Description: React.FC = _props => {
   return (
     <Container text textAlign="justified">
+      <Helmet>
+        <title>{getTitle("Overview")}</title>
+        <link rel="canonical" href={getCanonical("first")} />
+      </Helmet>
       <Message css={cssMessage} className={cssStyle.msg}>
         <Icon css={cssIcon}
           name="info circle"

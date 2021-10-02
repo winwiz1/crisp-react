@@ -31,7 +31,9 @@ const First: React.FC = _props => {
     <>
       <Router history={getHistory()}>
         <ErrorBoundary>
-          <Helmet title={SPAs.appTitle} />
+          <Helmet>
+            <meta charSet="utf-8" />
+         </Helmet>
           <div className="welcome">
             <h2>Welcome to {SPAs.appTitle}</h2>
           </div>

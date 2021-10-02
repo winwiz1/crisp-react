@@ -15,9 +15,6 @@ const headHtmlSnippet = fs.existsSync(headHtmlSnippetPath) ?
   fs.readFileSync(headHtmlSnippetPath, "utf8") : undefined;
 const metaDescription = "React boilerplate written in TypeScript with a variety \
 of Jamstack and full stack deployments";
-const metaKeywords = "React,TypeScript,boilerplate,SSR,Docker,Jamstack,Fullstack";
-const jamStackDeploymentUrl = "https://crisp-react.pages.dev/first";
-const fullStackDeploymentUrl = "https://crisp-react.winwiz1.com/";
 
 configuredSPAs.verifyParameters(verifier);
 
@@ -28,7 +25,6 @@ delete process.env.TS_NODE_PROJECT;
 const getWebpackConfig = (env, argv) => {
   const isProduction = (env && env.prod) ? true : false;
   const isJamstack = (env && env.jamstack) ? true : false;
-  const metaOwnUrl = !!process.env.CF_PAGES? jamStackDeploymentUrl : fullStackDeploymentUrl;
 
   const config = {
     mode: isProduction ? "production" : "development",
@@ -239,10 +235,6 @@ const getWebpackConfig = (env, argv) => {
             crossorigin: "anonymous"
           },
           {
-            href: metaOwnUrl,
-            rel: "canonical"
-          },
-          {
             href: "/apple-touch-icon.png",
             rel: "apple-touch-icon",
             sizes: "180x180"
@@ -251,7 +243,6 @@ const getWebpackConfig = (env, argv) => {
         meta: {
           viewport:    "width=device-width, initial-scale=1.0",
           description: metaDescription,
-          keywords:    metaKeywords,
           robots:      "index, follow",
         },
         minify: false,

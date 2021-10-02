@@ -5,6 +5,7 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
 import * as React from "react";
+import { Helmet } from "react-helmet";
 import {
   Button,
   Card,
@@ -31,6 +32,7 @@ import {
   isError,
   isCustomError,
 } from "../utils/typeguards";
+import { getTitle, getCanonical } from "../utils/misc";
 
 //#region CSS
 
@@ -158,6 +160,10 @@ const NameLookupContent: React.FC = _props => {
 
   return (
     <section>
+      <Helmet>
+        <title>{getTitle("Namelookup")}</title>
+        <link rel="canonical" href={getCanonical("namelookup")} />
+      </Helmet>
       <Container text textAlign="justified">
         <Header as="h3">Hello from NameLookup</Header>
         <p>

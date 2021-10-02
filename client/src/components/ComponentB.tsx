@@ -5,9 +5,11 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
 import * as React from "react";
+import { Helmet } from "react-helmet";
 import { Header, Icon, Container, Menu } from "semantic-ui-react";
 import { BaseComponent } from "./BaseComponent";
 import * as SPAs from "../../config/spa.config";
+import { getTitle, getCanonical } from "../utils/misc";
 
 const cssNav = css({
   marginRight: "2em",
@@ -78,6 +80,12 @@ const Navigation: React.FC = _props => {
 
 export const ComponentB: React.FC = _props => {
   return (
-    <BaseComponent leftComponent={Navigation} rightComponent={Description} />
+    <React.Fragment>
+      <Helmet>
+        <title>{getTitle("ComponentB")}</title>
+        <link rel="canonical" href={getCanonical("second")} />
+      </Helmet>
+      <BaseComponent leftComponent={Navigation} rightComponent={Description} />
+    </React.Fragment>
   );
 };

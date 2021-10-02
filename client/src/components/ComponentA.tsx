@@ -4,13 +4,19 @@
  * to render self.
  */
 import * as React from "react";
+import { Helmet } from "react-helmet";
 import { Header, Container } from "semantic-ui-react";
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
+import { getTitle, getCanonical } from "../utils/misc";
 
 const Description: React.FC = _props => {
   return (
     <section>
+      <Helmet>
+        <title>{getTitle("ComponentA")}</title>
+        <link rel="canonical" href={getCanonical("a")} />
+      </Helmet>
       <Container text textAlign="justified">
         <Header as="h3">Hello from ComponentA</Header>
         <p>
