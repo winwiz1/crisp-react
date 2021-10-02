@@ -69,7 +69,19 @@ module.exports = {
               loader: "less-loader",
             },
           ],
-        }
+        },
+        {
+          test: /\.(png|jpg|gif|mp3|woff|woff2|eot|ttf|svg)$/i,
+          type: "asset",
+          parser: {
+            dataUrlCondition: {
+              maxSize: 10 * 1024
+            }
+          },
+          generator: {
+            filename: "img/[hash][ext]"
+          }
+        },
       ]
     },
     resolve: {
