@@ -1,4 +1,5 @@
-﻿## Performance
+﻿
+## Performance
 This section can be skipped at first reading. You might prefer go back to the [README](../../README.md).
 ### Benchmarks
 To benchmark the solution perform the following steps:
@@ -67,7 +68,8 @@ No substantial impact on the performance can be anticipated until the `first` bu
 
 > Code splitting using multiple SPAs can be introduced much earlier due to considerations related to distributing the development workload among several teams, IP rights protection and security (e.g. to ensure that non-authenticated users can download the Login bundle only).
 
-The conclusion is that with multiple SPAs you can grow the functionality and codebase while maintaining the top performance due to bundle size containment.
+The conclusion is that with multiple SPAs you can grow the functionality and codebase while maintaining the top performance thanks to bundle size containment.
 
 ---
 Back to the [README](../../README.md).
+
