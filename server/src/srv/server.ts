@@ -11,11 +11,15 @@ import nodeFetch from "node-fetch";
 import * as helmet from "helmet";
 import * as nocache from "nocache";
 import * as expressStaticGzip from "express-static-gzip";
+import { ServerResponse } from "http";
 import favicon = require("serve-favicon");
 import * as SPAs from "../../config/spa.config";
 import { CustomError, handleErrors } from "../utils/error";
 import { logger } from "../utils/logger";
-import { useProxy, isProduction } from "../utils/misc"
+import {
+  useProxy,
+  isProduction
+} from "../utils/misc"
 import { SampleController } from "../api/controllers/SampleController";
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
@@ -48,6 +52,15 @@ class Server {
   /********************** private methods and data ************************/
 
   private config(): void {
+    this.m_app.use((req, res, next) => {
+      const path = req.originalUrl;
+      if (path.length > 1 && path.length <= 64 && path[0] === "/") {
+        res.locals.matchRootLevel = Server.s_regexRootLevel.test(path);
+        res.locals.matchLandingPages = Server.s_regexLandingPages.test(path);
+      }
+      next();
+    });
+
     this.m_app.use([
       helmet(isProduction()? {
         contentSecurityPolicy: {
@@ -81,15 +94,14 @@ class Server {
         this.sendDevServerAsset(`/${SPAs.getRedirectName()}${Server.s_htmlExtension}`, res, next);
       } else {
         // Serve the static asset from disk
-        res.sendFile(path.resolve(this.getAssetPath(), `${SPAs.getRedirectName()}${Server.s_htmlExtension}`),
-          { etag: false });
+        this.sendProductionAsset(SPAs.getRedirectName() + Server.s_htmlExtension, res);
       }
     });
 
-    this.m_app.get("/:entryPoint([\\w.]+)", (req, res, next) => {
+    this.m_app.get("/:entryPoint([\\w\\.-]{1,64})", (req, res, next) => {
       // eslint-disable-next-line prefer-const
       let entryPoint: string|undefined = req.params.entryPoint;
-      const match = Server.s_regexLandingPages.test(entryPoint || "");
+      const match = Server.isLandingPagesMatch(res);
 
       if (match) {
         // Serve SPA landing page
@@ -99,7 +111,7 @@ class Server {
           this.sendDevServerAsset(`/${entryPoint}`, res, next);
         } else {
           // Serve the static asset from disk
-          res.sendFile(path.resolve(this.getAssetPath(), entryPoint!), { etag: false });
+          this.sendProductionAsset(entryPoint!, res);
         }
       } else {
         if (entryPoint === Server.s_robotsName) {
@@ -107,8 +119,12 @@ class Server {
           res.type("text/plain");
           res.send("User-agent: *\nAllow: /");
         } else {
-          // Emulate historyApiFallback in webpack-dev-server
-          res.redirect(303, "/");
+          const match = Server.isRootLevelMatch(res);
+          if (match) {
+            this.sendProductionAsset(SPAs.getRedirectName() + Server.s_htmlExtension, res);
+          } else {
+            return next();
+          }
         }
       }
     });
@@ -139,6 +155,10 @@ class Server {
       err.unobscuredMessage = "Invalid resource requested";
       return next(err);
     });
+  }
+
+  private sendProductionAsset(page: string, res: express.Response) {
+    res.sendFile(path.resolve(this.getAssetPath(), page), { etag: false });
   }
 
   private sendDevServerAsset(page: string, res: express.Response, next: express.NextFunction) {
@@ -200,8 +220,12 @@ class Server {
   // If there are two SPAs in spa.config.js called 'first and 'second',
   // then returns RegExp similar to:  /^((first)|(second))(\.html)?$/;
   private static getLandingPagesRegex(): RegExp {
-    // eslint-disable-next-line no-useless-escape
-    return new RegExp(`^(${Server.getLandingPages()})(\.html)?$`);
+    return new RegExp(`^/?(${Server.getLandingPages()})(\\.html)?$`);
+  }
+
+  // Returns regex to match simple requests.
+  private static getRootLevelRequestRegex(): RegExp {
+    return new RegExp("^/?[\\w-]{1,64}$");
   }
 
   // Returns regex to match the requests for the client's build artifacts.
@@ -209,10 +233,20 @@ class Server {
   // then returns RegExp similar to:
   //   /^((first)|(second)|(runtime)|(vendor))\.\w{16,32}\.bundle\.js((\.map)|(\.gz)|(\.br))?$/
   private static getClientBuildArtifactsRegex(): RegExp {
-    return new RegExp(`^(${Server.getLandingPages()}|(runtime)|(vendor)|(styles))\\.\\w{16,32}((\\.bundle\\.js((\\.map)|(\\.gz)|(\\.br))?)|(.css(.map)?))$`);
+    return new RegExp(`^(${Server.getLandingPages()}|(runtime)|(vendor)|(styles)|(csv)|(shr)|(ovw)|(abt)|(que)|(\\d{3}))(-\\w{8})?\\.\\w{16,32}((\\.bundle\\.js)|(.css))((\\.map)|(\\.gz)|(\\.br))?$`);
   }
 
-  private static setCacheHeaders (res: express.Response): void {
+  private static isRootLevelMatch(res: ServerResponse): boolean {
+    type ExtendedServerResponce = ServerResponse & { locals?: any};
+    return (res as ExtendedServerResponce)?.locals?.matchRootLevel?? false;
+  }
+
+  private static isLandingPagesMatch(res: ServerResponse): boolean {
+    type ExtendedServerResponce = ServerResponse & { locals?: any};
+    return (res as ExtendedServerResponce)?.locals?.matchLandingPages?? false;
+  }
+
+  private static setCacheHeaders(res: express.Response): void {
     res.removeHeader("Surrogate-Control");
     res.removeHeader("Pragma");
     res.removeHeader("Expires");
@@ -230,6 +264,7 @@ class Server {
   // Regex must be either simple or constructed using a library that provides DoS protection.
   private static readonly s_regexLandingPages = Server.getLandingPagesRegex();
   private static readonly s_regexArtifacts = Server.getClientBuildArtifactsRegex();
+  private static readonly s_regexRootLevel = Server.getRootLevelRequestRegex();
   private static readonly s_expressStaticConfig: expressStaticGzip.ExpressStaticGzipOptions = {
     enableBrotli: true,
     index: false,

@@ -34,7 +34,7 @@ const Description: React.FC = _props => {
     <section>
       <Helmet>
         <title>{getTitle("Lighthouse")}</title>
-        <link rel="canonical" href={getCanonical("lighthouse")} />
+        <link rel="canonical" href={getCanonical()} />
       </Helmet>
       <Container text textAlign="justified" css={cssContainer}>
         <Header as="h3">Hello from the Lighthouse component</Header>

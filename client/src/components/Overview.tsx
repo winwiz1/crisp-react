@@ -61,8 +61,8 @@ const Description: React.FC = _props => {
   return (
     <Container text textAlign="justified">
       <Helmet>
-        <title>{getTitle("Overview")}</title>
-        <link rel="canonical" href={getCanonical("first")} />
+        <title>{getTitle()}</title>
+        <link rel="canonical" href={getCanonical("/")} />
       </Helmet>
       <Message css={cssMessage} className={cssStyle.msg}>
         <Icon css={cssIcon}
@@ -111,6 +111,8 @@ const Description: React.FC = _props => {
 
 export const Overview: React.FC = _props => {
   return (
-    <BaseComponent leftComponent={Navigation} rightComponent={Description} />
+    <React.Fragment>
+      <BaseComponent leftComponent={Navigation} rightComponent={Description} />
+    </React.Fragment>
   );
 };

@@ -18,6 +18,7 @@ import { Router, Route, Switch } from "react-router-dom";
 import { ComponentA } from "../components/ComponentA";
 import { Lighthouse } from "../components/Lighthouse";
 import { Overview } from "../components/Overview";
+import { NotFound } from "../components/NotFound";
 import { NameLookup } from "../components/NameLookup";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { renderToString } from "react-dom/server";                 // used for SSR
@@ -27,6 +28,17 @@ import "../css/app.css";
 import "../css/app.less";
 
 const First: React.FC = _props => {
+
+  const catchAll = () => {
+    const path = window.location.pathname.toLowerCase();
+
+    if (path === ("/" + SPAs.getRedirectName())) {
+      return <Overview/>
+    }
+
+    return  <NotFound/>;
+  }
+
   return (
     <>
       <Router history={getHistory()}>
@@ -42,7 +54,7 @@ const First: React.FC = _props => {
             <Route path="/a" component={ComponentA} />
             <Route path="/lighthouse" component={Lighthouse} />
             <Route path="/namelookup" component={NameLookup} />
-            <Route component={Overview} />
+            <Route render={catchAll} />
           </Switch>
         </ErrorBoundary>
       </Router>

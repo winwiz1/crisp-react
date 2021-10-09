@@ -15,7 +15,7 @@ const Description: React.FC = _props => {
     <section>
       <Helmet>
         <title>{getTitle("ComponentA")}</title>
-        <link rel="canonical" href={getCanonical("a")} />
+        <link rel="canonical" href={getCanonical()} />
       </Helmet>
       <Container text textAlign="justified">
         <Header as="h3">Hello from ComponentA</Header>

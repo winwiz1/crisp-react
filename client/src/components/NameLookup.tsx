@@ -162,7 +162,7 @@ const NameLookupContent: React.FC = _props => {
     <section>
       <Helmet>
         <title>{getTitle("Namelookup")}</title>
-        <link rel="canonical" href={getCanonical("namelookup")} />
+        <link rel="canonical" href={getCanonical()} />
       </Helmet>
       <Container text textAlign="justified">
         <Header as="h3">Hello from NameLookup</Header>

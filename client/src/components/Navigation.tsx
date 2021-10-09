@@ -46,7 +46,7 @@ export const Navigation: React.FC = _props => {
         {SPAs.getNames().length > 1 && <Menu.Item>
           <Menu.Header>Second SPA</Menu.Header>
           <Menu.Menu>
-            <Menu.Item href={`/${SPAs.getNames()[1]}.html`}>
+            <Menu.Item href={`/${SPAs.getNames()[1]}`}>
               ComponentB
               <Icon name="cube" size="large" />
             </Menu.Item>

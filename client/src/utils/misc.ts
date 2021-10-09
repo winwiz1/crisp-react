@@ -1,13 +1,15 @@
+import { isServer } from "./postprocess/misc";
 import * as SPAs from "../../config/spa.config";
 
-export const getCanonical = (pagePath: string): string => {
-  const jamStackDeploymentUrl = "https://crisp-react.pages.dev/";
-  const fullStackDeploymentUrl = "https://crisp-react.winwiz1.com/";
-  const metaUrl = CF_PAGES? jamStackDeploymentUrl : fullStackDeploymentUrl;
-
-  return !!pagePath? metaUrl + pagePath : metaUrl;
+export const getCanonical = (pagePath?: string): string|undefined => {
+  if (isServer()) {
+    return undefined;
+  }
+  // eslint-disable-next-line no-extra-boolean-cast
+  return !!pagePath? (window.location.origin + pagePath) : window.location.href;
 }
 
-export const getTitle = (pageTitle: string): string => {
+export const getTitle = (pageTitle?: string): string => {
+  // eslint-disable-next-line no-extra-boolean-cast
   return !!pageTitle? `${SPAs.appTitle} - ${pageTitle}` : SPAs.appTitle;
 }

@@ -14,10 +14,10 @@ export async function postProcess(workDir: string, filePattern: string): Promise
     throw new Error("Unexpected count of SSR related files");
   }
 
-  await postProcessFile(workDir, htmlFiles[0], txtFiles[0]);
+  await postProcessBody(workDir, htmlFiles[0], txtFiles[0]);
 }
 
-async function postProcessFile(workDir: string, htmlFile: string, ssrFile: string): Promise<void> {
+async function postProcessBody(workDir: string, htmlFile: string, ssrFile: string): Promise<void> {
   const readFile = promisify(fs.readFile);
   const htmlFilePath = path.join(workDir, htmlFile);
   const ssrFilePath = path.join(workDir, ssrFile);

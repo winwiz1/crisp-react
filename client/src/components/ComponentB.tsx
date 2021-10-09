@@ -63,7 +63,7 @@ const Navigation: React.FC = _props => {
         <Menu.Item>
           <Menu.Header>Go back to</Menu.Header>
           <Menu.Menu>
-            <Menu.Item href={`/${SPAs.getNames()[0]}.html`}>
+            <Menu.Item href={`/${SPAs.getNames()[0]}`}>
               First SPA
               <Icon
                 name="object group outline"
@@ -83,7 +83,7 @@ export const ComponentB: React.FC = _props => {
     <React.Fragment>
       <Helmet>
         <title>{getTitle("ComponentB")}</title>
-        <link rel="canonical" href={getCanonical("second")} />
+        <link rel="canonical" href={getCanonical()} />
       </Helmet>
       <BaseComponent leftComponent={Navigation} rightComponent={Description} />
     </React.Fragment>

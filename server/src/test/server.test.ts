@@ -43,13 +43,6 @@ beforeAll(() => {
 const statusCode200path = SPAs.getNames().map(name => "/" + name);
 statusCode200path.push("/");
 
-// Test that webserver implements fallback to the SPA landing page for
-// unknown (and presumably internal to SPA) pages. This is required from
-// any webserver that supports an SPA.
-const statusCode303path = [
-  "/a", "/b", "/ABC"
-];
-
 // Test that the fallback tolerance does have its limits.
 const statusCode404path = [
   "/abc%xyz;", "/images/logo123.png", "/static/invalid"
@@ -64,14 +57,6 @@ describe("Test Express routes", () => {
       const response = await request(server).get(path);
       expect(response.status).toBe(200);
       expect(response.text).toMatch(regexResponse);
-    });
-  });
-
-  it("test URLs causing fallback with HTTP status 303", () => {
-    statusCode303path.forEach(async (path) => {
-      const response = await request(server).get(path);
-      expect(response.status).toBe(303);
-      expect(response.get("Location")).toBe("/");
     });
   });
 
