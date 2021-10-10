@@ -8,6 +8,7 @@ import * as React from "react";
 import { Helmet } from "react-helmet";
 import { Header, Icon, Container, Menu } from "semantic-ui-react";
 import { BaseComponent } from "./BaseComponent";
+import { StructuredData } from "./StructuredData";
 import * as SPAs from "../../config/spa.config";
 import { getTitle, getCanonical } from "../utils/misc";
 
@@ -79,12 +80,19 @@ const Navigation: React.FC = _props => {
 };
 
 export const ComponentB: React.FC = _props => {
+  const pageName = "ComponentB";
+  const pageDescription = "Sample component called 'ComponentB'";
+
   return (
     <React.Fragment>
       <Helmet>
-        <title>{getTitle("ComponentB")}</title>
+        <title>{getTitle(pageName)}</title>
         <link rel="canonical" href={getCanonical()} />
       </Helmet>
+      <StructuredData
+        name={pageName}
+        description={pageDescription}
+      />
       <BaseComponent leftComponent={Navigation} rightComponent={Description} />
     </React.Fragment>
   );

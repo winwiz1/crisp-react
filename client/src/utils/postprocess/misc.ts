@@ -1,12 +1,16 @@
-import { createMemoryHistory, createBrowserHistory } from "history";
+import {
+  createMemoryHistory,
+  createBrowserHistory,
+  History
+}
+from "history";
 
 export const isServer = (): boolean => {
   return typeof window === "undefined";
 }
 
 // https://stackoverflow.com/a/51511967/12005425
-// eslint-disable-next-line
-export const getHistory = (url = "/") => {
+export const getHistory = (url = "/"): History<unknown> => {
   const history = isServer() ?
     createMemoryHistory({
       initialEntries: [url]
@@ -14,3 +18,13 @@ export const getHistory = (url = "/") => {
 
   return history;
 }
+
+type PromiseCallback = () => void;
+
+export class CallbackWrapper {
+    constructor(readonly callback: PromiseCallback) {
+    }
+    readonly invoke = (): void => {
+      this.callback();
+    }
+  }

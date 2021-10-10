@@ -1,6 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 import { promisify } from "util";
+import { JSDOM } from "jsdom";
+import { CallbackWrapper } from "./misc"
+import * as SPAs from "../../../config/spa.config";
 
 export async function postProcess(workDir: string, filePattern: string): Promise<void> {
   const readdir = promisify(fs.readdir);
@@ -15,6 +18,7 @@ export async function postProcess(workDir: string, filePattern: string): Promise
   }
 
   await postProcessBody(workDir, htmlFiles[0], txtFiles[0]);
+  await postProcessHeader(workDir, htmlFiles[0]);
 }
 
 async function postProcessBody(workDir: string, htmlFile: string, ssrFile: string): Promise<void> {
@@ -41,5 +45,47 @@ async function postProcessBody(workDir: string, htmlFile: string, ssrFile: strin
     console.error(`Failed to write to file ${htmlFilePath}, error: ${err}`)
   });
   out.forEach(str => { stream.write(str); });
+
   stream.end();
+
+  let cbWrapper: CallbackWrapper|undefined;
+  const waitForBufferFlush = new Promise<void>((resolve) => { cbWrapper = new CallbackWrapper(resolve); });
+
+  stream.on("close", function() {
+    cbWrapper?.invoke();
+  });
+
+  await waitForBufferFlush;
 }
+
+async function postProcessHeader(workDir: string, htmlFile: string): Promise<void> {
+  const htmlFilePath = path.join(workDir, htmlFile);
+  const jsdom = await JSDOM.fromFile(htmlFilePath);
+
+  if (!jsdom) {
+    throw "JSDOM creation failure";
+  }
+
+  const writeFile = promisify(fs.writeFile);
+  const hdr: HTMLHeadElement = jsdom.window.document.head;
+  const script = jsdom.window.document.createElement("script");
+  // Replace with data specific to your site, then test using
+  // https://validator.schema.org/ and
+  // https://search.google.com/test/rich-results. The second
+  // test will effectively fail because 'WebSite' is not
+  // specific enough for Google. And so is 'WebPage'.
+  // See https://developers.google.com/search/docs/advanced/structured-data/sd-policies#specificity
+  const structuredData = `{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "${SPAs.appTitle}",
+    "datePublished": "${new Date().toISOString().split("T")[0]}",
+  }`;
+
+  script.setAttribute("type", "application/ld+json");
+  script.textContent = structuredData;
+  hdr.appendChild(script);
+  await writeFile(htmlFilePath, jsdom.serialize());
+}
+
+

@@ -17,6 +17,7 @@ import {
 } from "semantic-ui-react";
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
+import { StructuredData } from "./StructuredData";
 import { getAnchorCSS } from "../css/common-styles";
 import styles from "../css/overview.module.css";
 import { getTitle, getCanonical } from "../utils/misc";
@@ -58,12 +59,19 @@ const Msg: React.FC = _props => {
 }
 
 const Description: React.FC = _props => {
+  const pageName = "Overview";
+  const pageDescription = "Sample component called 'Overview'";
+
   return (
     <Container text textAlign="justified">
       <Helmet>
         <title>{getTitle()}</title>
         <link rel="canonical" href={getCanonical("/")} />
       </Helmet>
+      <StructuredData
+        name={pageName}
+        description={pageDescription}
+      />
       <Message css={cssMessage} className={cssStyle.msg}>
         <Icon css={cssIcon}
           name="info circle"
@@ -111,8 +119,6 @@ const Description: React.FC = _props => {
 
 export const Overview: React.FC = _props => {
   return (
-    <React.Fragment>
-      <BaseComponent leftComponent={Navigation} rightComponent={Description} />
-    </React.Fragment>
+    <BaseComponent leftComponent={Navigation} rightComponent={Description} />
   );
 };

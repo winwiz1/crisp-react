@@ -15,6 +15,7 @@ import {
 } from "semantic-ui-react";
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
+import { StructuredData } from "./StructuredData";
 import { getAnchorCSS } from "../css/common-styles";
 import { getTitle, getCanonical } from "../utils/misc";
 
@@ -30,12 +31,19 @@ const cssIcon = css({
 });
 
 const Description: React.FC = _props => {
+  const pageName = "Lighthouse";
+  const pageDescription = "Sample component called 'Lighthouse'";
+
   return (
     <section>
       <Helmet>
-        <title>{getTitle("Lighthouse")}</title>
+        <title>{getTitle(pageName)}</title>
         <link rel="canonical" href={getCanonical()} />
       </Helmet>
+      <StructuredData
+        name={pageName}
+        description={pageDescription}
+      />
       <Container text textAlign="justified" css={cssContainer}>
         <Header as="h3">Hello from the Lighthouse component</Header>
         <p>

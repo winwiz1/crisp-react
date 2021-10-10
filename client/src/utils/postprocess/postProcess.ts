@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { promisify } from "util";
 import { webpack } from "webpack";
+import { CallbackWrapper } from "./misc"
 import { postProcess as postProcessSSR } from "./postProcessSSR";
 import { postProcess as postProcessCSS } from "./postProcessCSS";
 
@@ -38,16 +39,6 @@ export async function postProcess(): Promise<void> {
 
       const webpackConfig = require("../../../webpack.config.ssr.js");
       const compiler = webpack({...webpackConfig, entry: tp[1]});
-
-      type PromiseCallback = () => void;
-
-      class CallbackWrapper {
-        constructor(readonly callback: PromiseCallback) {
-        }
-        readonly invoke = (): void => {
-          this.callback();
-        }
-      }
 
       let cbWrapper: CallbackWrapper|undefined;
       const waitForCompiler = new Promise<void>((resolve) => { cbWrapper = new CallbackWrapper(resolve)});

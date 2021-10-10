@@ -20,6 +20,7 @@ import {
 } from "semantic-ui-react";
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
+import { StructuredData } from "./StructuredData";
 import {
   SampleRetrieval,
   SampleRetrievalData,
@@ -84,6 +85,9 @@ const cssDivider = css({
 //#endregion
 
 const NameLookupContent: React.FC = _props => {
+  const pageName = "NameLookup";
+  const pageDescription = "Sample component called 'NameLookup'";
+
   // API call is in progress
   const [inFlight, setInFlight] = React.useState<boolean>(false);
 
@@ -161,9 +165,13 @@ const NameLookupContent: React.FC = _props => {
   return (
     <section>
       <Helmet>
-        <title>{getTitle("Namelookup")}</title>
+        <title>{getTitle(pageName)}</title>
         <link rel="canonical" href={getCanonical()} />
       </Helmet>
+      <StructuredData
+        name={pageName}
+        description={pageDescription}
+      />
       <Container text textAlign="justified">
         <Header as="h3">Hello from NameLookup</Header>
         <p>

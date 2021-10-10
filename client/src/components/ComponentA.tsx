@@ -8,15 +8,23 @@ import { Helmet } from "react-helmet";
 import { Header, Container } from "semantic-ui-react";
 import { Navigation } from "./Navigation";
 import { BaseComponent } from "./BaseComponent";
+import { StructuredData } from "./StructuredData";
 import { getTitle, getCanonical } from "../utils/misc";
 
 const Description: React.FC = _props => {
+  const pageName = "ComponentA";
+  const pageDescription = "Sample component called 'ComponentA'";
+
   return (
     <section>
       <Helmet>
-        <title>{getTitle("ComponentA")}</title>
+        <title>{getTitle(pageName)}</title>
         <link rel="canonical" href={getCanonical()} />
       </Helmet>
+      <StructuredData
+        name={pageName}
+        description={pageDescription}
+      />
       <Container text textAlign="justified">
         <Header as="h3">Hello from ComponentA</Header>
         <p>
