@@ -2,7 +2,6 @@ import * as fs from "fs";
 import * as path from "path";
 import { promisify } from "util";
 import { JSDOM } from "jsdom";
-import { CallbackWrapper } from "./misc"
 import * as SPAs from "../../../config/spa.config";
 
 export async function postProcess(workDir: string, filePattern: string): Promise<void> {
@@ -23,39 +22,27 @@ export async function postProcess(workDir: string, filePattern: string): Promise
 
 async function postProcessBody(workDir: string, htmlFile: string, ssrFile: string): Promise<void> {
   const readFile = promisify(fs.readFile);
+  const writeFile = promisify(fs.writeFile);
+
   const htmlFilePath = path.join(workDir, htmlFile);
   const ssrFilePath = path.join(workDir, ssrFile);
 
-  const dataHtml = await readFile(htmlFilePath);
+  const jsdom = await JSDOM.fromFile(htmlFilePath);
+
+  if (!jsdom) {
+    throw "JSDOM creation failure";
+  }
+
   const dataSsr = (await readFile(ssrFilePath)).toString();
-  const reReact = /^\s*<div\s+id="app-root">/;
-  const ar: string[] = dataHtml.toString().replace(/\r\n?/g, "\n").split("\n");
+  const fragment = JSDOM.fragment(dataSsr);
+  const appRoot = jsdom.window.document.querySelector("div[id='app-root']");
 
-  const out = ar.map(str => {
-    if (reReact.test(str)) {
-      str += "\n";
-      str += dataSsr;
-    }
-    str += "\n";
-    return str;
-  });
+  if (!appRoot) {
+    throw "JSDOM - 'app-root' not found";
+  }
 
-  const stream = fs.createWriteStream(htmlFilePath);
-  stream.on("error", err => {
-    console.error(`Failed to write to file ${htmlFilePath}, error: ${err}`)
-  });
-  out.forEach(str => { stream.write(str); });
-
-  stream.end();
-
-  let cbWrapper: CallbackWrapper|undefined;
-  const waitForBufferFlush = new Promise<void>((resolve) => { cbWrapper = new CallbackWrapper(resolve); });
-
-  stream.on("close", function() {
-    cbWrapper?.invoke();
-  });
-
-  await waitForBufferFlush;
+  appRoot.appendChild(fragment);
+  await writeFile(htmlFilePath, jsdom.serialize());
 }
 
 async function postProcessHeader(workDir: string, htmlFile: string): Promise<void> {

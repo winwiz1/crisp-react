@@ -9,7 +9,6 @@ import { Helmet } from "react-helmet";
 import { Header, Icon, Container, Menu } from "semantic-ui-react";
 import { BaseComponent } from "./BaseComponent";
 import { StructuredData } from "./StructuredData";
-import * as SPAs from "../../config/spa.config";
 import { getTitle, getCanonical } from "../utils/misc";
 
 const cssNav = css({
@@ -64,7 +63,7 @@ const Navigation: React.FC = _props => {
         <Menu.Item>
           <Menu.Header>Go back to</Menu.Header>
           <Menu.Menu>
-            <Menu.Item href={`/${SPAs.getNames()[0]}`}>
+            <Menu.Item href="/">
               First SPA
               <Icon
                 name="object group outline"

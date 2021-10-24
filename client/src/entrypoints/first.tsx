@@ -13,7 +13,6 @@
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Helmet } from "react-helmet";
 import { Router, Route, Switch } from "react-router-dom";
 import { ComponentA } from "../components/ComponentA";
 import { Lighthouse } from "../components/Lighthouse";
@@ -43,9 +42,6 @@ const First: React.FC = _props => {
     <>
       <Router history={getHistory()}>
         <ErrorBoundary>
-          <Helmet>
-            <meta charSet="utf-8" />
-         </Helmet>
           <div className="welcome">
             <h2>Welcome to {SPAs.appTitle}</h2>
           </div>

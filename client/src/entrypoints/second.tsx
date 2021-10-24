@@ -13,7 +13,6 @@
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Helmet } from "react-helmet";
 import { ComponentB } from "../components/ComponentB";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 // import { renderToString } from "react-dom/server";
@@ -26,9 +25,6 @@ const Second: React.FC = _props => {
   return (
     <>
       <ErrorBoundary>
-        <Helmet>
-          <meta charSet="utf-8" />
-        </Helmet>
         <div className="welcome">
           <h2>Welcome to {SPAs.appTitle}</h2>
         </div>
