@@ -280,7 +280,7 @@ Cloudflare Pages can build the client in the cloud, then create and deploy a web
 
     | Environment variable | Value |
     | :-------------------- | :----- |
-    | NODE_VERSION | `14.18.0` |
+    | NODE_VERSION | `16.13.0` |
 
     Optionally, you can customize the "Project name" field. It defaults to the GitHub repository name, but it does not need to match. The "Project name" value is used to create a unique per-project `*.pages.dev` subdomain.
 
