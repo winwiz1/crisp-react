@@ -1,6 +1,6 @@
 ﻿## Scenarios
 
->:bulb: This section can be skipped at first reading. You can proceed to the [next](../README.md#ssr) section.
+>:bulb: This section can be skipped at first reading. You can proceed to the [next](https://github.com/winwiz1/crisp-react#custom-domain-and-cdn) section.
 
 The [client](https://github.com/winwiz1/crisp-react/blob/master/client) and [backend](https://github.com/winwiz1/crisp-react/blob/master/server) subprojects are described below. Each subproject supports execution of the following commands/scripts:
 ```
@@ -120,5 +120,5 @@ Start the debugging configuration  `Debug Production Client and Backend (workspa
 Wait until an instance of Chrome starts. You should see the overview page. Now you can use VS Code to set breakpoints in both client and backend provided the relevant process is highlighted/selected as explained in the previous scenario. You can also use Chrome DevTools to debug the client application as shown above.<br/>
 To finish, stop the running debugging configuration (use the Debugging toolbar or press  `Control+F5`  once).
 
-Back to the [README](../README.md).
+Back to the [README](https://github.com/winwiz1/crisp-react#scenarios).
 

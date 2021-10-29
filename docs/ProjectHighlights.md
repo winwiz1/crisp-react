@@ -63,20 +63,20 @@
       </li>
     </ul>
 
-    The solution allows to use each approach as a sole CSS handling technique or combine it with any or all of the remaining three approaches - with no configuration effort. More details are available under the [CSS Handling](../README.md#css-handling) heading.
+    The solution allows to use each approach as a sole CSS handling technique or combine it with any or all of the remaining three approaches - with no configuration effort. More details are available under the [CSS Handling](https://github.com/winwiz1/crisp-react#css-handling) heading.
 
 * Containerisation. Used to build and deploy full stack builds. A container acts as a mini operating system providing your code with the same run-time dependencies no matter where the container runs. One of the benefits of this approach is that your programs are less likely to break during deployments due to differences between your run-time environment and the one supplied by hosting provider. It makes a container (represented by the sequence of build instructions in [`Dockerfile`](https://github.com/winwiz1/crisp-react/blob/master/Dockerfile) to be a robust deployment vehicle.
 
     Another benefit is vendor lock-in avoidance: Many cloud vendors including AWS, Azure, GCP, Heroku and others accept containers.
 
-    Yet another benefit is the simplicity of deployment. For example, a click on the button shown below will deploy a container on GCP whereas few simple commands provided under the [Using Heroku](../README.md#using-heroku) heading will achieve the same for Heroku.
+    Yet another benefit is the simplicity of deployment. For example, a click on the button shown below will deploy a container on GCP whereas few simple commands provided under the [Heroku](https://github.com/winwiz1/crisp-react#heroku) heading will achieve the same for Heroku.
 
     Docker multi-staged build is used to ensure the backend run-time environment doesn't contain the client build-time dependencies e.g. `client/node_modules/`. It improves security and reduces container's storage footprint.
 
     - As a single-click container deployment option, you can build and deploy the container on Cloud Run. The prerequisites are to have a Google Cloud account with at least one project created and billing enabled.<br/>
 [![Run on Google Cloud](./cloudrun.png)](https://deploy.cloud.run?git_repo=https://github.com/winwiz1/crisp-react)<br/>
 The build will take a while due to free Cloud Shell using a free cloud VM with modest specs. After the build and deployment are finished you can click on the provided link and see the page rendered by the client.<br/><br/>
-:heavy_exclamation_mark: It is highly recommended to either add a firewall protection to the created service or to delete it if the deployment was used as a demo/proof of concept. The explanation why this is needed can be found [there](../README.md#cloud-run-considerations). Delete the service using the command:<br/>
+:heavy_exclamation_mark: It is highly recommended to either add a firewall protection to the created service or to delete it if the deployment was used as a demo/proof of concept. The explanation why this is needed can be found [there](https://github.com/winwiz1/crisp-react#cloud-run-considerations). Delete the service using the command:<br/>
 `gcloud run services delete crisp-react --platform=managed --region=us-central1 --project=<project-name>`<br/>
 It can be conveniently executed from the Cloud Shell session opened during the deployment. Update the `region` with the one chosen during the deployment and replace `<project-name>` with your project name. Alternatively delete the service using Cloud Run [Console](https://console.cloud.google.com/run).
 
@@ -94,5 +94,5 @@ This arrangement brings a security benefit: The clients running inside a browser
     * [Production](https://virusquery.com). Based on Crisp React.
 
 
-Back to the [README](../README.md).
+Back to the [README](https://github.com/winwiz1/crisp-react#project-highlights).
 

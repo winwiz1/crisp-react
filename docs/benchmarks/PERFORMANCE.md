@@ -1,10 +1,10 @@
 ﻿
 ## Performance
-This section can be skipped at first reading. You might prefer go back to the [README](../../README.md).
+This section can be skipped at first reading. You might prefer go back to [Project Highlights](https://github.com/winwiz1/crisp-react/blob/master/docs/ProjectHighlights.md).
 ### Benchmarks
 To benchmark the solution perform the following steps:
 
-1. If the [Getting Started](../../README.md#getting-started) section has been completed, skip this step. Otherwise clone the repository and build the solution:
+1. If the [Getting Started](https://github.com/winwiz1/crisp-react#getting-started) section has been completed, skip this step. Otherwise clone the repository and build the solution:
     ```
     git clone https://github.com/winwiz1/crisp-react.git
     cd crisp-react
@@ -64,12 +64,12 @@ The solution has a limited amount of code, as a boilerplate should. It begs a qu
 
 Let's assume that at the beginning of the development the second SPA and its bundle were removed (by commenting it out in the SPA Configuration) so the React app contains a single SPA only called 'first'. With the anticipated application growth the `first` bundle is expected to grow rapidly to reflect the expanding functionality and codebase. The `vendor` bundle is expected to grow at much slower pace because it already contains the bulk of dependencies (project dependencies including the React library, its direct dependencies, dependencies of the dependencies and so forth).
 
-No substantial impact on the performance can be anticipated until the `first` bundle reaches the size and then outgrowths the `vendor` bundle. At this point it might be a good time to use code splitting and introduce another SPA. One of the goals of using multiple SPAs is to ensure each SPA is rendered by its own and smaller bundle thus reducing React application loading time. See [SPA Configuration](../../README.md#spa-configuration) section for more details.
+No substantial impact on the performance can be anticipated until the `first` bundle reaches the size and then outgrowths the `vendor` bundle. At this point it might be a good time to use code splitting and introduce another SPA. One of the goals of using multiple SPAs is to ensure each SPA is rendered by its own and smaller bundle thus reducing React application loading time. See [SPA Configuration](https://github.com/winwiz1/crisp-react#spa-configuration) section for more details.
 
 > Code splitting using multiple SPAs can be introduced much earlier due to considerations related to distributing the development workload among several teams, IP rights protection and security (e.g. to ensure that non-authenticated users can download the Login bundle only).
 
 The conclusion is that with multiple SPAs you can grow the functionality and codebase while maintaining the top performance thanks to bundle size containment.
 
 ---
-Back to the [README](../../README.md).
+Back to [Project Highlights](https://github.com/winwiz1/crisp-react/blob/master/docs/ProjectHighlights.md).
 

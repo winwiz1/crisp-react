@@ -41,4 +41,4 @@ Now we can switch back to "When to use". This solution could help if one or more
 
     Now PM steps in and says you need to avoid vendor lock-in. That makes you consider Kubernetes. You conclude that k8s clusters, scaled to handle API requests from end users, will barely notice a much lighter workload of serving React app build artifacts to the CDN datacenters. You note this is exactly what the full stack build does - it uses a single server to combine the frontend and backend roles. Which makes the cloud bucket unnecessary and helps to improve maintenance by keeping the code responsible for HTTP headers management largely in one place. This architecture gets a nod from SO who is additionally pleased with security not being watered down by using CORS.
 
-Back to the [README](../README.md).
+Back to the [README](https://github.com/winwiz1/crisp-react#when-to-use).
