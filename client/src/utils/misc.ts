@@ -17,5 +17,6 @@ export const getCanonical = (pagePath?: string): string|undefined => {
 
 export const getTitle = (pageTitle?: string): string => {
   // eslint-disable-next-line no-extra-boolean-cast
-  return !!pageTitle? `${SPAs.appTitle} - ${pageTitle}` : SPAs.appTitle;
+  const ret = !!pageTitle? `${SPAs.appTitle} - ${pageTitle}` : SPAs.appTitle;
+  return ret + (CF_PAGES? " (Jamstack build)" : " (Full stack build)");
 }

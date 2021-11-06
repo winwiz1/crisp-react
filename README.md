@@ -15,7 +15,18 @@
 </div>
 
 ## When To Use
-Crisp React offers innovative features to make your application more performant and potentially more secure. 
+Crisp React can split a monolithic React app into multiple Single Page Applications (SPAs) and selectively prerender the landing page of each SPA for the best performance while avoiding network trips for every page induced by SSR frameworks. The trips are frequently perceptible to users whereas the internal SPA page switches are not (more about it later).
+
+There is no need to use non-portable programming constructs in the React components you write and therefore no vendor lock-in. On contrary to popular belief that SEO requires SSR, this solution demonstrates how to get all SPA pages indexed by Google and specific, targeted SEO advice on how to achieve indexing is provided.
+
+The solution provides full stack deployments with several cloud vendors yet again avoids vendor lock-in. This is complimented by Jamstack deployments that aim for simplicity and speedy production release.
+
+Sample websites:
+* [Demo - Full stack](https://crisp-react.winwiz1.com). Automated build performed by Heroku from this  [repository](https://github.com/winwiz1/crisp-react). All pages, including internal SPA pages, are noted in [sitemap](https://crisp-react.winwiz1.com/sitemap.xml) and [indexed](https://www.google.com/search?q=site%3Acrisp-react.winwiz1.com) by Google.
+* [Demo - Jamstack](https://jamstack.winwiz1.com). Automated build performed by Cloudflare Pages from the same repository. All pages, including internal SPA pages, are mentioned in [sitemap](https://jamstack.winwiz1.com/sitemap.xml) and [indexed](https://www.google.com/search?q=site%3Ajamstack.winwiz1.com) by Google.
+* [Production](https://virusquery.com). Based on Crisp React. All pages, including internal SPA pages, are noted in [sitemap](https://virusquery.com/sitemap.xml) and [indexed](https://www.google.com/search?q=site%3Avirusquery.com) by Google.
+
+The list demonstrates that Google can index SPA provided it is correctly written and deployed.
 
 [This section](docs/WhenToUse.md) answers the question “When use this solution” and also addresses the opposite e.g. “When not to use it”.
 
@@ -47,6 +58,12 @@ The section lists the features that are unique/innovative and those implemented 
   - [Client Usage Scenarios](docs/Scenarios.md#client-usage-scenarios)
   - [Backend Usage Scenarios](docs/Scenarios.md#backend-usage-scenarios)
 - [Custom Domain and CDN](#custom-domain-and-cdn)
+- [SEO](#seo)
+  - [Goals](#goals)
+  - [Prerequisites](#prerequisites)
+  - [Groundwork](#groundwork)
+  - [Requesting To Be Indexed](#requesting-to-be-indexed)
+  - [Structured Data](#structured-data)
 - [What's Next](#whats-next)
 - [Pitfall Avoidance](#pitfall-avoidance)
 - [Q & A](#q--a)
@@ -224,11 +241,13 @@ The solution contains debuggable test cases written in TypeScript. It provides i
 
 The client and the backend can be tested independently by executing the `yarn test` command from their respective subdirectories. Alternatively the same command can be executed at the workspace level.
 
-The repository is integrated with [Travis CI](https://travis-ci.com) and [Heroku](https://heroku.com) for CI/CD and with [Cloudflare Pages](https://pages.cloudflare.com) for  CD. Every push to the repository causes Travis and Pages to start a VM, clone the repository and perform a build. Then Travis runs tests while Pages deploys the build to `xxxxx.crisp-react.pages.dev` and also makes it available on [crisp-react.pages.dev](https://crisp-react.pages.dev). This is followed by Heroku deployment, also automated and delayed until Travis tests finish successfully.
+The repository is integrated with [Travis CI](https://travis-ci.com) and [Heroku](https://heroku.com) for CI/CD and with [Cloudflare Pages](https://pages.cloudflare.com) for  CD. Every push to the repository causes Travis and Pages to start a VM, clone the repository and perform a build. Then Travis runs tests while Pages deploys the build to [jamstack.winwiz1.com](https://jamstack.winwiz1.com). This is followed by Heroku deployment, also automated and delayed until Travis tests finish successfully.
 
  The test outcome is reflected by the test badge and is also shown by the icon located after the last commit description and next to the last commit hash. To access more information, click on the icon. The icon is rendered as the check mark :heavy_check_mark: only if all the CI/CD activities performed by Travis CI, Heroku and Cloudflare Pages were successful. Otherwise an icon with the cross mark :x: is shown.
 ## Usage - Jamstack
-As already mentioned, you might prefer to simplify the Jamstack build by having one SPA called "index". This is achieved by having the SPA configuration block:
+Jamstack deployments do not use the Express backend. Static React files are served to clients by a server supplied by Jamstack provider. Therefore all Jamstack deployments are vendor-specific.
+
+As already mentioned, you might prefer to simplify deployments by having a single SPA called "index". This is achieved by having the following SPA configuration block:
 
 ```js
 /****************** Start single SPA Configuration ******************/
@@ -254,7 +273,9 @@ After the command finishes, the build artifacts are located in the `client/dist/
 Use the `yarn dev` and `yarn lint` commands executed from the `client/` directory to debug and lint Jamstack client.
 
 ### Cloudflare Pages
-Cloudflare Pages can build the client in the cloud, then create and deploy a website for it. This is done automatically provided the preparatory and configuration steps are completed:
+If you have the SPA configuration block as suggested at the beginning of this section, then a new website will be built and deployed to `*.pages.dev` domain after the steps listed below are completed. The follow-up [SEO](#seo) section is optional.
+
+If your SPA configuration block is different, then the newly built and deployed website will not work until the [SEO](#seo) section is completed.
 
 1. Clone Crisp React repository.
     ```
@@ -269,12 +290,12 @@ Cloudflare Pages can build the client in the cloud, then create and deploy a web
     ```
 4.  Deploy to Cloudflare Pages by logging into the [Cloudflare dashboard](https://dash.cloudflare.com). Use Menu > Pages > Create a project. You will be asked to authorize read-only access to your GitHub repositories with an option to narrow the access to specific repositories.
 
-    Select the repository which you pushed to GitHub at the previous step and in the "Set up builds and deployments" section, provide the following information:
+    Select the repository which you pushed to GitHub at the previous step and on the "Set up builds and deployments" screen, provide the following information:
     | Configuration option | Value |
     | :--- |:---|
     | Production branch  | `master`  |
     | Build command  | `yarn build:jamstack` |
-    | Build output directory  | `/client/dist`  |
+    | Build output directory  | `client/dist`  |
 
     Add the following environment variable:
 
@@ -282,19 +303,26 @@ Cloudflare Pages can build the client in the cloud, then create and deploy a web
     | :-------------------- | :----- |
     | NODE_VERSION | `16.13.0` |
 
-    Optionally, you can customize the "Project name" field. It defaults to the GitHub repository name, but it does not need to match. The "Project name" value is used to create a unique per-project `*.pages.dev` subdomain.
+    Optionally, you can customize the "Project name" field. It defaults to the GitHub repository name, but it does not need to match. The "Project name" is used to create a unique `*.pages.dev` subdomain. If the name is unique, it will be used as is, otherwise it will be altered a bit to ensure uniqueness. The resulting subdomain will be referred to as 'per-project subdomain' e.g. `<per-project>.pages.dev`.
 
-    After completing the configuration, click "Save and Deploy" button. You will see the deployment pipeline in progress. When it finishes, the website can be found on the above unique subdomain.
+    After completing the configuration, click on the "Save and Deploy" button. You will see the deployment pipeline in progress. When it finishes, a website similar to [this](https://jamstack.winwiz1.com) can be found on the per-project subdomain. If there is no SPA named "index", you will have to navigate to "/your-spa-name". In addition, you will have the new Project visible under the top level 'Pages' menu in Cloudflare dashboard.
 
-Each subsequent push into the repository will trigger the pipeline. If it finishes successfully, a new website deployment is created and made available on both per-deployment URL and per-project subdomain. You can rollback to any of the earlier deployments anytime. Those are still available to users at the older per-deployment URLs. A rollback ensures that a website available at the created earlier per-deployment URL becomes accessible on the per-project subdomain as well.
+5. Adding a domain that you own.<br/>
+It is recommended not to use the 'Custom Domain' tab available for your new Project. Follow the steps described under the [SEO](#seo) heading instead.
 
-Getting the metrics (performance, SEO and others) of the new website is only few clicks away with the cloud instance of Lighthouse ran by Google and available at [this page](https://web.dev/measure/). The metrics should be similar to `crisp-react.pages.dev`:
+Each subsequent push into the repository will trigger the pipeline. If it finishes successfully, a new website deployment is created and made available on both per-project and per-deployment subdomains. The latter comes in the form of `<per-deployment>.<per-project>.pages.dev`.
+
+You can rollback to any of the previous deployments anytime. Those are still available to users at the older per-deployment subdomains. A rollback ensures that a website available at the created earlier per-deployment subdomain becomes accessible on the per-project subdomain as well.
+
+If you have the SPA configuration block as suggested at the beginning of this section, then getting metrics for the new website is only a few clicks away with the cloud instance of Lighthouse ran by Google and available at [this page](https://web.dev/measure/). The metrics should be similar to `jamstack.winwiz1.com`:
 
 <div align="center">
   <img alt="Jamstack build - Lighthouse scores" src="docs/benchmarks/jamstack.png" width="40%" />
 </div>
 
 > The report generated by web.dev has "CPU/Memory Power" metric at the bottom. It reflects the power of the hardware used by Lighthouse to emulate Moto G4. This metric affects the performance score. Cloud instance of Lighthouse at web.dev runs on a shared cloud VM and the metric reflects the current workload. It varies from time to time.
+
+In case the SPA configuration block is different, the metrics can be obtained after completing the [SEO](#seo) section.
 
 ### AWS S3
 Follow the steps described in the [AWS document](https://docs.aws.amazon.com/AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.html).
@@ -306,6 +334,8 @@ Execute the build command shown at the beginning of this section and copy all th
 AWS CloudFront or Cloudflare CDN can optionally be used in front of the S3 bucket. In this case it's essential to ensure the CDN cannot by bypassed. The Stack Overflow [answer](https://stackoverflow.com/questions/47966890) shows how to restrict access to Cloudflare only.
 
 ## Usage - Full Stack
+All full stack deployments use the same Docker container to avoid vendor lock-in.
+
 Assuming the deployment demo in the [Project Highlights](#project-highlights) section has been completed, a container has already been built in the cloud and deployed to Google Cloud Run. In the current section we will build and run the container locally using Docker. This is followed by cloud deployments to Heroku and Google Compute Engine (GCE).
 ### Docker
 Install [Docker](https://docs.docker.com/get-docker/). To perform full stack build of Crisp React as a Docker image and start a container, execute Windows command file [`start-container.cmd`](https://github.com/winwiz1/crisp-react/blob/master/start-container.cmd) or Linux shell script [`start-container.sh`](https://github.com/winwiz1/crisp-react/blob/master/start-container.sh). Then point a browser to `localhost:3000`.
@@ -345,7 +375,7 @@ Perform the following steps after having cloned the repository:
     git remote set-url origin https://github.com/your-github-username/your-newly-created-repo
     git push
     ```
-3. Login to Heroku and create a new app. At this stage it has no content. Use the Settings tab to set the app's stack to 'container'. Then switch to the Deploy tab and choose GitHub as the deployment method. Finally trigger a manual build. Optionally enable automated builds.
+3. Login to Heroku and create a new app. At this stage it has no content. Use the Settings tab to set the app's stack to 'container'. Then switch to the Deploy tab and choose GitHub as the deployment method. Finally trigger a manual build. Optionally enable automated builds - this is how the [demo website](https://crisp-react.winwiz1.com) was deployed.
 
 #### Cloudflare CDN
 If you own a domain name, then it's recommended to add a CDN by implementing the optional steps described in the [Custom Domain and CDN](#custom-domain-and-cdn) section. It will significantly boost performance and improve security to some extent. The extent is limited due to the fact that the DNS record for your app e.g.`xxxxxx.herokudns.com` is public so the CDN can be bypassed with a potential attacker accessing your app directly.
@@ -443,7 +473,7 @@ If you own a domain name, then it’s highly recommended to add a CDN. It will s
     | :---:| :---:|:---|
     | `A` | `your-domain` | `external-address` |
     
-    Ensure "Proxy status" of this record is set to "Proxied".
+    Replace `your-domain` with either a subdomain name (e.g. `crisp-react` for [crisp-react.winwiz1.com](https://crisp-react.winwiz1.com)) or apex (e.g. `@`) if you use the root domain.  Ensure "Proxy status" of this record is set to "Proxied".
 
 * Perform the Step 6 located under the [Custom Domain and CDN](#custom-domain-and-cdn) heading to exempt API calls and responses from caching.
 
@@ -479,7 +509,7 @@ This section complements the deployment described under the [Heroku](#heroku) he
 to take advantage of the distributed cache provided by Cloudflare and achieve much better performance with improved security. Both custom domain and CDN are optional. If you haven't used Cloudflare previously this [answer](https://www.quora.com/Cloudflare-product/How-does-Cloudflare-work-Does-Cloudflare-just-divert-malicious-traffic) could be useful.
 
 Prerequisites:
-- Custom domain name ownership,
+- Domain name ownership,
 - Cloudflare account. It's free and can be created by following this [link](https://dash.cloudflare.com/sign-up).
 
 The steps:
@@ -520,6 +550,59 @@ The steps:
 After the steps are completed the Heroku app will be using distributed caching and a free SSL certificate for the custom domain. Also the cache related statistics, monitoring and the breakdown of incoming requests by country will be available from Cloudflare even on the Free plan.
 
 Verify that integration with Cloudflare was successful by checking the page `https:/crisp-react.yourdomain.com/cdn-cgi/trace`. It should resemble the content of  `https:/crisp-react.winwiz1.com/cdn-cgi/trace`.
+## SEO
+This topic has been debated at extraordinary length in countless articles and videos. In this section we are going to touch mostly on one facet: SPA and SEO. For a brief introduction, see [here](https://github.com/winwiz1/crisp-react/blob/master/docs/WhenToUse.md#case-seo).
+### Goals
+Claims that SPA is bad for SEO are common while proof and evidence are scarce. Let's reverse this trend by providing a specific technical advice on how to get Google to:
+ - Confirm that each SPA page can be indexed,
+ - Accept a request to index each SPA page.
+
+Both confirmation and acceptance will be obtained by using [Google URL Inspection Tool](https://support.google.com/webmasters/answer/9012289?hl=en) which is a part of [Google Search Console](https://support.google.com/webmasters/answer/9128668) (GSC). The tool will be used to Inspect a live URL (that points to a SPA page) and request it to be indexed.
+
+### Prerequisites
+- Domain name ownership.
+- Completing a deployment: either full stack (with [Heroku](#heroku) or [GCE](#google-compute-engine)) or Jamstack with [Cloudflare Pages](#cloudflare-pages).
+- Adding Cloudflare CDN as described earlier. Applies to full stack deployments only.
+- Creating an original content that meets Google requirements (e.g. [avoid duplicate](https://developers.google.com/search/docs/advanced/guidelines/duplicate-content) content etc.) and adding it to your website.
+
+### Groundwork
+#### Full Stack Build
+* Create a Cloudflare Worker (in simple terms it's a cloud function) by visiting [workers.new](https://workers.new) and replace the auto-generated code with the content of [this](https://github.com/winwiz1/crisp-react/blob/master/deployments/cloudflare/worker-fullstack.js) file. Modify the Worker Customisation block at the top of the code by following suggestions in the comments and click on the "Save and Deploy" button.
+* Unmap the worker from the `*.workers.dev` domain it was automatically deployed to.  Map it to your custom domain or subdomain instead to ensure the Worker is invoked to handle each request. For example, the Worker for the full stack demo [website](https://crisp-react.winwiz1.com) was mapped to the path `crisp-react.winwiz1.com/*`.
+#### Jamstack Build
+* Let Cloudflare manage DNS for the domain you own and want to use for the deployment. Login to Cloudflare dashboard and [add a site](https://support.cloudflare.com/hc/en-us/articles/201720164-Creating-a-Cloudflare-account-and-adding-a-website). In response, Cloudflare will provide you with the names of two DNS nameservers. Login to the domain registrar account and change the nameservers from the ones supplied by the registrar to the nameservers provided by Cloudflare.
+* In Cloudflare dashboard add a DNS record:
+    | Type | Name | IPv6 address |
+    | :---:| :---:|:---|
+    | `AAAA` | `your-domain` | `100::` |
+
+    Replace `your-domain` with either a subdomain name e.g. `jamstack` for [jamstack.winwiz1.com](https://jamstack.winwiz1.com) or apex e.g. `@` if you use the root domain.  Check the "Proxy status" of the record is set to "Proxied".
+    > The "Proxied" status ensures the DNS record won't become public. Cloudflare will create another public DNS record that ensures the requests for `your-domain` are routed to Cloudflare datacenters. Once handled there, the requests would have been dropped since the address `100::` falls under the discard prefix. But in reality the requests will be handled by the Worker we are about to create at the next step.
+* Create a Cloudflare Worker by visiting [workers.new](https://workers.new) and replace the auto-generated code with the content of [this](https://github.com/winwiz1/crisp-react/blob/master/deployments/cloudflare/worker-jamstack.js) file. Modify the Worker Customisation block at the top of the code by following suggestions in the comments and click on the "Save and Deploy" button.
+* Unmap the worker from the `*.workers.dev` domain it was automatically deployed to. Map it to your custom domain or subdomain instead to ensure the Worker is invoked to handle each request. For example, the Worker for the Jamstack demo [website](https://jamstack.winwiz1.com) was mapped to the `jamstack.winwiz1.com/*` path.
+
+### Requesting To Be Indexed
+* Review the codebase to ensure each page correctly sets the `<title>` HTML element and the canonical `<meta>` tag. This can be done by searching all `.tsx` files for the `<Helmet>` pattern and reviewing the relevant code.
+* [Add](https://support.google.com/webmasters/answer/34592) your custom domain to GSC using the "+ Add Property" menu.
+    >For example, the production [website](https://virusquery.com) was added as a domain property `virusquery.com` whereas for the demo websites the root domain was added first as a domain property `winwiz1.com`. Once Google has verified the domain ownership, both demo websites were added separately as a URL property each e.g. `https://crisp-react.winwiz1.com/` and `https://jamstack.winwiz1.com/`. 
+* Click on the "URL Inspection" menu to activate the  [URL Inspection Tool](https://support.google.com/webmasters/answer/9012289?hl=en) and type the path to the page you would like to index. You can copy the path from `sitemap.xml` and paste it. The response will state that "URL is not on Google" telling you the page hasn't been indexed yet.
+* Click on the `"TEST LIVE URL"` link to get a confirmation the page can be indexed. Optionally review the screenshot of the page rendered by GSC.
+* Request indexing for the page by clicking on the `"REQUEST INDEXING"` link. The response should say your request has been added to the priority crawl queue.
+
+The last 3 steps will have to be repeated for all the pages of each SPA. The pages should be listed in `sitemap.xml`.
+
+#### Follow-up
+You can use the "URL Inspection" menu to monitor if the page was indexed. It can take from a few days to a couple of weeks for the page to be added to Google index.  At which time the response will state: "URL is on Google". When that happens, you can double-check that the page was indexed by performing Google search for `site:<your-domain>.com`. The result should list the indexed page(s) similar to this [search](https://www.google.com/search?q=site%3Acrisp-react.winwiz1.com).
+
+Finally, it will take up to another week for the indexed pages to appear in the indexing report under the GSC "Coverage" menu.
+
+### Structured Data
+The following options to embed [Structured Data](https://developers.google.com/search/docs/advanced/structured-data/intro-structured-data) into the HTML `<head>` element are available and can be used independently or in conjunction with each other:
+* Append a static piece of structured data to the [`head-snippet`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/head-snippet.html) file. The data is visible in a browser using the "View page source" menu. This is how the structured data type `SoftwareApplication` was added to the [production](https://virusquery.com) website.
+* Modify the `postProcessHeader` function located in [this](https://github.com/winwiz1/crisp-react/blob/master/client/src/utils/postprocess/postProcessSSR.ts) file. The currently used type `WebSite` is not specific enough for Google to be taken into account and serves as a placeholder. You can replace it with another, less generic type and set some attributes dynamically during build-time. The data is present in both demo websites and is visible in a browser using the "View page source" menu.
+*  Add structured data at run-time using a [component](https://github.com/winwiz1/crisp-react/blob/master/client/src/components/StructuredData.tsx). The structured data type `WebPage` is added to the demo websites and can be observed in Chrome DevTools on the Elements tab next to the closing `</head>` tag. This type is also a placeholder that is not specific enough for Google and can be replaced with a less generic type that more accurately describes the content of each page.
+
+The [Rich Results Test](https://search.google.com/test/rich-results) can be used to validate data prior to a deployment and test a page with embedded data after the deployment. The structured data has to meet Google [the guidelines](https://developers.google.com/search/docs/advanced/structured-data/sd-policies).
 ## What's Next
 Consider the following steps to add the desired functionality:
 ### Full stack build

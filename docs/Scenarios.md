@@ -59,6 +59,11 @@ To finish, remove the breakpoint and stop the running debugging configuration (u
 #### Lint client
 Terminal: `yarn lint`
 ### Backend Usage Scenarios
+The same Express server is used in production and debugging.
+
+This is done to keep the difference between production and debugging environments to the minimum. If the difference is significant then it could be difficult to debug customer issues. You might be unable to even reproduce it.
+
+In some of the debugging scenarios another process, webpack-dev-server, is automatically started in background to facilitate debugging and recompile the client code as you type changes. But importantly the browser you use for debugging 'doesn't know' about that because it 'can see' Express only.
 #### Build backend in production mode
 Open a command prompt in the directory containing the workspace file `crisp-react.code-workspace` .<br/>
 Execute command: `yarn build:prod`.<br/>

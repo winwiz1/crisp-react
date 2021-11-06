@@ -173,7 +173,7 @@ const NameLookupContent: React.FC = _props => {
         description={pageDescription}
       />
       <Container text textAlign="justified">
-        <Header as="h3">Hello from NameLookup</Header>
+        <Header as="h3">Hello from NameLookup component</Header>
         <p>
           <code>NameLookup</code> is used by <code>first.tsx</code> which has been
           set as an 'entry point' of the 'first' script bundle by <code>
@@ -187,6 +187,11 @@ const NameLookupContent: React.FC = _props => {
           queries a cloud service: Name Lookup service in this project or Google
           BigQuery in the sibling Crisp BigQuery project. The credentials (if any)
           required to access the cloud service are held by the backend.
+        </p>
+        }
+        { CF_PAGES && <p>
+          Since there is no backend in Jamstack builds, <code>NameLookup</code> has
+          to query the API endpoint directly.
         </p>
         }
         <Divider horizontal css={cssDivider}>API</Divider>

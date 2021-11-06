@@ -69,7 +69,7 @@ const Description: React.FC = _props => {
         <Divider />
         <p>
           The performance figures could look promising but at the same time prompting a
-          question what will happen when the functionality is extended and the React
+          question what will happen when the functionality is extended and the client
           codebase grows. Some considerations on this subject can be found <a
           href="https://winwiz1.github.io/crisp-react/docs/benchmarks/PERFORMANCE.html#future-considerations"
           target="_blank" rel="noopener noreferrer">here</a>. Additionally, it's important

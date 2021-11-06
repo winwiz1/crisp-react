@@ -26,12 +26,16 @@ import { isServer, getHistory } from "../utils/postprocess/misc";
 import "../css/app.css";
 import "../css/app.less";
 
+// If the first SPA is called 'first' then the regex
+// will match '/first' and '/first.html';
+const regexPath = new RegExp(`^/${SPAs.getRedirectName()}(\.html)?$`);
+
 const First: React.FC = _props => {
 
   const catchAll = () => {
     const path = window.location.pathname.toLowerCase();
 
-    if (path === ("/" + SPAs.getRedirectName())) {
+    if (regexPath.test(path)) {
       return <Overview/>
     }
 

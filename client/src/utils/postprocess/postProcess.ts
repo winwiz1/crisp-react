@@ -86,22 +86,6 @@ Please check the 4-step sequence (provided in the comments at the top of each en
     console.log("Finished SSR post-processing")
   }
 
-  if (process.env.CF_PAGES) {
-    const writeFile = promisify(fs.writeFile);
-    const redirectName = require("../../../config/spa.config").getRedirectName();
-    const stapleName = "index";
-    const redirectFile = path.join(workDir, "_redirects");
-
-    if (redirectName.toLowerCase() !== stapleName) {
-      try {
-        await writeFile(redirectFile, `/ ${redirectName} 301`);
-      } catch (e) {
-        console.error(`Failed to create redirect file, exception: ${e}`);
-        process.exit(1);
-      }
-    }
-  }
-
   try {
     await postProcessCSS();
   } catch (e) {
