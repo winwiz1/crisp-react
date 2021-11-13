@@ -92,7 +92,10 @@ export const ComponentB: React.FC = _props => {
         name={pageName}
         description={pageDescription}
       />
-      <BaseComponent leftComponent={Navigation} rightComponent={Description} />
+      <BaseComponent
+        leftComponent={Navigation}
+        rightComponent={Description}
+      />
     </React.Fragment>
   );
 };

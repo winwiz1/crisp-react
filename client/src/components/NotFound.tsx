@@ -39,6 +39,9 @@ as a replacement for HTML 404 status code.";
 
 export const NotFound: React.FC = _props => {
   return (
-      <BaseComponent leftComponent={Navigation} rightComponent={Description} />
+      <BaseComponent
+        leftComponent={Navigation}
+        rightComponent={Description}
+      />
   );
 };

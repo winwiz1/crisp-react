@@ -22,6 +22,7 @@ import {
   SampleRetrievalResult,
   SampleRequest
 } from "@backend/types/SampleTypes";
+import { perfStart } from "../utils/misc";
 
 export {
   SampleRetrieval,
@@ -79,6 +80,7 @@ export class BackendManager implements IBackendClient {
     };
 
     await fetchAdapter(fetchProps);
+    perfStart("fetch");
   }
 
   private successHandler = (data: any): void => {

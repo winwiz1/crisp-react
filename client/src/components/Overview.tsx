@@ -72,8 +72,12 @@ const Description: React.FC = _props => {
         name={pageName}
         description={pageDescription}
       />
-      <Message css={cssMessage} className={cssStyle.msg}>
-        <Icon css={cssIcon}
+      <Message
+        css={cssMessage}
+        className={cssStyle.msg}
+      >
+        <Icon
+          css={cssIcon}
           name="info circle"
           color="blue"
           size="big"
@@ -119,6 +123,9 @@ const Description: React.FC = _props => {
 
 export const Overview: React.FC = _props => {
   return (
-    <BaseComponent leftComponent={Navigation} rightComponent={Description} />
+    <BaseComponent
+      leftComponent={Navigation}
+      rightComponent={Description}
+    />
   );
 };

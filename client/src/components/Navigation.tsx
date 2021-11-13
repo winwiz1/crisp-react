@@ -10,6 +10,7 @@ import { Menu, Icon } from "semantic-ui-react";
 import * as SPAs from "../../config/spa.config";
 import styles from "../css/navigation.module.css";
 import { isServer } from "../utils/postprocess/misc";
+import { perfStart } from "../utils/misc";
 
 const cssStyle: Record<string, string> = {
   menu: styles["menu"],
@@ -36,6 +37,8 @@ export const Navigation: React.FC = _props => {
     }
   }, []);  // run once upon initial rendering
 
+  const onClickHandler = () => perfStart("click");
+
   return (
     <nav className={cssStyle.menu}>
       <Menu
@@ -51,6 +54,7 @@ export const Navigation: React.FC = _props => {
               header
               as={NavLink}
               exact to={pathArray[0]}
+              onClick={onClickHandler}
             >
               Overview
               <Icon name="file alternate outline" size="large" />
@@ -59,6 +63,7 @@ export const Navigation: React.FC = _props => {
               header
               as={NavLink}
               to={pathArray[1]}
+              onClick={onClickHandler}
             >
               ComponentA
               <Icon name="cube" size="large" />
@@ -67,6 +72,7 @@ export const Navigation: React.FC = _props => {
               header
               as={NavLink}
               to={pathArray[2]}
+              onClick={onClickHandler}
             >
               Lighthouse
               <Icon name="tachometer alternate" size="large" />
@@ -75,6 +81,7 @@ export const Navigation: React.FC = _props => {
               header
               as={NavLink}
               to={pathArray[3]}
+              onClick={onClickHandler}
             >
               NameLookup
               <Icon name="search" size="large" />

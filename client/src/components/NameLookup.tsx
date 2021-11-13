@@ -33,7 +33,11 @@ import {
   isError,
   isCustomError,
 } from "../utils/typeguards";
-import { getTitle, getCanonical } from "../utils/misc";
+import {
+  getTitle,
+  getCanonical,
+  perfEnd
+} from "../utils/misc";
 
 //#region CSS
 
@@ -160,6 +164,10 @@ const NameLookupContent: React.FC = _props => {
       (outcome as SampleRetrievalResult).response.gender;
   }
 
+  React.useEffect(() => {
+    !!outcome && !isOutcomeFailure() && perfEnd();
+  }, [outcome]);
+
   //#region Render
 
   return (
@@ -255,6 +263,9 @@ const NameLookupContent: React.FC = _props => {
 
 export const NameLookup: React.FC = _props => {
   return (
-    <BaseComponent leftComponent={Navigation} rightComponent={NameLookupContent} />
+    <BaseComponent
+      leftComponent={Navigation}
+      rightComponent={NameLookupContent}
+    />
   );
 };

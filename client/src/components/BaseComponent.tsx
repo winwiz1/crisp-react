@@ -12,6 +12,7 @@
  **/
 import * as React from "react";
 import styles from "../css/base-component.module.css";
+import { perfEnd } from "../utils/misc";
 
 const cssStyle: Record<string, string> = {
   container: styles["component_container"],
@@ -27,6 +28,10 @@ interface IBaseComponent {
 export const BaseComponent: React.FC<IBaseComponent> = props => {
   const LeftComponent = props.leftComponent;
   const RightComponent = props.rightComponent;
+
+  React.useEffect(() => {
+    perfEnd();
+  }, []);
 
   return (
     <main className={cssStyle.container}>

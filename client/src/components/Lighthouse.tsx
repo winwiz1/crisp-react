@@ -86,6 +86,9 @@ const Description: React.FC = _props => {
 
 export const Lighthouse: React.FC = _props => {
   return (
-      <BaseComponent leftComponent={Navigation} rightComponent={Description} />
+      <BaseComponent
+        leftComponent={Navigation}
+        rightComponent={Description}
+      />
   );
 };
