@@ -1,13 +1,13 @@
 {
   "name": "crisp-react",
-  "version": "1.2.6",
+  "version": "1.4.0",
   "description": "Boilerplate project with React client and Express backend, both written in Typescript.",
   "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
     "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)"
   ],
   "license": "MIT",
-  "homepage": "https://winwiz1.github.io/crisp-react/",
+  "homepage": "https://github.com/winwiz1/crisp-react/",
   "repository": {
     "type": "git",
     "url": "https://github.com/winwiz1/crisp-react.git"
@@ -47,9 +47,10 @@
     "start:prod": "cd client && yarn build:prod",
     "poststart:prod": "cd server && yarn start:prod",
     "run:prod": "cd server && yarn run:prod",
-    "build:jamstack": "cd client && yarn && yarn build:jamstack"
+    "build:jamstack": "cd client && yarn && yarn build:jamstack",
+    "benchmark:SSR": "cd client && yarn benchmark:SSR"
   },
   "engines" : {
-    "node" : ">=10.17"
+    "node" : ">=12.22.5"
   }
 }

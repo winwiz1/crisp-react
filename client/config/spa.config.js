@@ -12,7 +12,8 @@ Each SPA has:
   fallback behavior required by all SPAs and implemented in webpack-dev-server
   using the 'historyApiFallback' setting. One and only one SPA must have this
   flag set to avoid redirection ambiguity.
-- SSR flag. If set to true, the SPA landing page will be prerendered at the
+- SSR flag. Controls build-time SSR also called prerendering or static
+  generation. If set to true, the SPA landing page will be prerendered at the
   build time e.g. its HTML will be generated and inserted into the <body> of
   the .html file.
   Any SPA can have this flag set. When the flag is not set, the <body>

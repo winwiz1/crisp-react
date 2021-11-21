@@ -137,6 +137,7 @@ Q: I need to add Redux.
 
 A: Have a look at the sibling Crisp BigQuery repository created by cloning and renaming this solution. It uses Redux.
 
+---
 Back to the [README](https://github.com/winwiz1/crisp-react#q--a).
 
 

@@ -7,6 +7,7 @@ import { postProcess as postProcessSSR } from "./postProcessSSR";
 import { postProcess as postProcessCSS } from "./postProcessCSS";
 
 const workDir = "./dist/";
+const workDirExists = fs.existsSync(workDir);
 
 // stackoverflow.com/a/16060619
 function requireUncached(module: string) {
@@ -19,6 +20,14 @@ export async function postProcess(): Promise<void> {
 
   if (ssrSpaNames.length > 0) {
     const getEntrypoints = require("../../../config/spa.config").getEntrypoints;
+    const { performance, PerformanceObserver} = require("perf_hooks");
+    const observer = new PerformanceObserver((items: any) => {
+      items.getEntries().forEach((item:any) => {
+        console.log(`Build-time SSR for SPA '${item.name}' took ${Math.round(item.duration)} msec`);
+      });
+      performance.clearMarks();
+    });
+    observer.observe({entryTypes: ["measure"]});
 
     const performSsr = async (ssrSpaName: any) => {
       type SSRTuple = [string, string];
@@ -66,31 +75,42 @@ Please check the 4-step sequence (provided in the comments at the top of each en
         process.exit(1);
       }
 
-      const writeFile = promisify(fs.writeFile);
+      const perfLiterals = ["start", "end"];
+      performance.mark(perfLiterals[0]);
+      const ssrContent = asString();
+      performance.mark(perfLiterals[1]);
+      performance.measure(ssrSpaName, perfLiterals[0], perfLiterals[1]);
 
-      try {
-        await writeFile(path.join(workDir, tp[0]), asString());
-        await postProcessSSR(workDir, ssrSpaName);
-      } catch (e) {
-        console.error(`Failed to create pre-built SSR file, exception: ${e}`);
-        process.exit(1);
+      if (workDirExists) {
+        try {
+          const writeFile = promisify(fs.writeFile);
+          await writeFile(path.join(workDir, tp[0]), ssrContent);
+          await postProcessSSR(workDir, ssrSpaName);
+        } catch (e) {
+          console.error(`Failed to create pre-built SSR file, exception: ${e}`);
+          process.exit(1);
+        }
       }
     };
 
-    console.log("Starting SSR post-processing");
+    console.log(workDirExists? "Starting SSR post-processing" : "Starting 'renderAsString' benchmarking");
 
     for (const spa of ssrSpaNames) {
       await performSsr(spa);
     }
 
-    console.log("Finished SSR post-processing")
+    console.log(workDirExists? "Finished SSR post-processing" : "Finished 'renderAsString' benchmarking");
   }
 
-  try {
-    await postProcessCSS();
-  } catch (e) {
-    console.error(`Failed to post-process CSS, exception: ${e}`);
-    process.exit(2);
+  if (workDirExists) {
+    try {
+      await postProcessCSS();
+    } catch (e) {
+      console.error(`Failed to post-process CSS, exception: ${e}`);
+      process.exit(2);
+    }
+  } else {
+    await new Promise(resolve => setTimeout(resolve, 100));
   }
 }
 
