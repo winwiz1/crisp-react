@@ -1,13 +1,13 @@
 {
   "name": "crisp-react-client",
-  "version": "1.2.1",
+  "version": "1.4.0",
   "description": "Client for the crisp-react project",
   "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
     "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)"
   ],
   "license": "MIT",
-  "homepage": "https://winwiz1.github.io/crisp-react/",
+  "homepage": "https://github.com/winwiz1/crisp-react/",
   "repository": {
     "type": "git",
     "url": "https://github.com/winwiz1/crisp-react.git"
@@ -39,7 +39,8 @@
     "copy": "copyfiles -f dist/* ../server/build/client/",
     "prettier": "prettier --no-config --write ./dist/*.html",
     "build:jamstack": "webpack --env prod --env jamstack",
-    "postbuild:jamstack": "yarn postbuild:prod"
+    "postbuild:jamstack": "yarn postbuild:prod",
+    "benchmark:SSR": "cross-env TS_NODE_PROJECT=tsconfig.ssr.json node -r ts-node/register -r tsconfig-paths/register src/utils/postprocess/postProcess.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.4.1",
@@ -98,5 +99,8 @@
     "webpack-dev-server": "^4.0.0",
     "webpack-node-externals": "^3.0.0",
     "webpack-subresource-integrity": "5.0.0"
+  },
+  "engines" : {
+    "node" : ">=12.22.5"
   }
 }

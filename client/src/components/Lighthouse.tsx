@@ -70,14 +70,16 @@ const Description: React.FC = _props => {
         <p>
           The performance figures could look promising but at the same time prompting a
           question what will happen when the functionality is extended and the client
-          codebase grows. Some considerations on this subject can be found <a
-          href="https://winwiz1.github.io/crisp-react/docs/benchmarks/PERFORMANCE.html#future-considerations"
-          target="_blank" rel="noopener noreferrer">here</a>. Additionally, it's important
-          to <a href="https://winwiz1.github.io/crisp-react/#custom-domain-and-cdn"
-          target="_blank" rel="noopener noreferrer">ensure</a> CDN caches everything
-          except for API responses thus allowing your webserver(s) to serve static
-          assets to various CDN datacenters around the globe (there could be hundreds
-          of those) rather than to the end users.
+          codebase grows causing the script bundle size to increase. Crisp React addresses
+          this issue by allowing a React application to be split into several SPAs each
+          rendered by its own and smaller bundle. Dynamic imports with lazy loading are
+          complimentary.<br/>Additionally, it's important
+          to ensure a CDN caches everything except for API responses thus allowing your
+          webserver to serve static assets to various CDN datacenters around the
+          globe (there could be hundreds of those) rather than to the end users. The
+          CDN related instructions are provided in the <a
+          href="https://github.com/winwiz1/crisp-react/#readme"
+          target="_blank" rel="noopener noreferrer">README</a>.
         </p>
       </Container>
     </section>
