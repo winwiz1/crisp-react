@@ -84,7 +84,7 @@ const Description: React.FC = _props => {
         />
         This demo webapp was built from <a target="_blank"
         rel="noopener noreferrer"
-        href="https://github.com/winwiz1/crisp-react">Crisp React
+        href="https://github.com/winwiz1/crisp-react#readme">Crisp React
         </a> repository by choosing the <Msg />
       </Message>
       <Header as="h3">
