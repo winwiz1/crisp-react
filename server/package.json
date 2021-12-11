@@ -1,6 +1,6 @@
 {
   "name": "crisp-react-backend",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "description": "Backend for the Crisp React project",
   "author": "winwiz1 <winwiz@gmail.com> (https://github.com/winwiz1/)",
   "contributors": [
@@ -77,5 +77,8 @@
     "ts-jest": "27.0.4",
     "tslib": "2.3.0",
     "typescript": "4.3.5"
+  },
+  "engines" : {
+    "node" : ">=12.22.5"
   }
 }
