@@ -1,6 +1,6 @@
 # Used by Docker and Cloud Run
 
-FROM node:16.13.0-slim as build
+FROM node:16.13.1-slim as build
 
 WORKDIR /crisp-react/server
 COPY ./server/ .
@@ -9,7 +9,7 @@ WORKDIR /crisp-react/client
 COPY ./client/ .
 RUN yarn && yarn build:prod
 
-FROM node:16.13.0-slim as prod
+FROM node:16.13.1-slim as prod
 
 RUN apt-get update -qq && apt-get upgrade -qq \
   && apt-get clean autoclean && apt-get autoremove -y \
