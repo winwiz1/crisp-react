@@ -81,22 +81,6 @@ Reality:<br/>
 There are Jamstack deployments where clients make direct calls to cloud API endpoints because there is no full stack backend. [This](https://jamstack.winwiz1.com) demo website is an example. And there are full stack deployments like [that](https://crisp-react.winwiz1.com) demo website or the [production](https://virusquery.com) site where clients get React app build artifacts like HTML files, script bundles and API responses from the same backend server.
 
 The misconception correctly considers the run-time SSR case with a client downloading API data embedded into HTML that wraps the data around, for instance inside HTML table. That occurs during one download from the SSR backend. Then the misconception mistakenly implies that the other, e.g. non-SSR scenario, amounts to having a Jamstack deployment. A fair consideration would consider the non-SSR case represented by a full stack deployment instead, where the client downloads the same API data but without its HTML wrapping in one single download as well. In which case the full stack backend acts as an API endpoint and aggregates the API calls if necessary while shielding the client from details related to getting data from endpoints exposed by the data layer.
-#### Most resent/upcoming React versions
-streaming => HTTP streming => chunks
-gradual rendering => still need data table under the footer
-server components
-
-In the most recent/upcoming React versions `renderToString` is deemphesised in favor of
-
-
-
-
->  There are attempts to make the rendering task to be more CPU effective. For example, by streaming the response to clients in chunks instead of more CPU demanding and delay prone generating/sending the response in one go. Those attempts do change the matter in degree but not in kind.<br/><br/>
-For example, if the morning rush hour comes and the server has to deliver response data to a raft of new clients connecting over slow connections, then gradual rendering and streaming data in chunks helps a lot. It effectively spreads the otherwise CPU intensive tasks over longer timeframe thus eliminating the peak CPU load. The server can deal with more concurrent clients so its scalability improves and the clients do not face TTFB delay. However if the clients use fast connections, then the run-time benefit shrinks since the data hungry clients demand and are ready to consume the same amount of data over much shorter timeframe.
-
-
-
-
 #### Conclusion
 * The personalisation advantage is significant and there are websites that need it as mentioned at the beginning of [this section](../WhenToUse.md#when-to-use). When the landing page is dynamic, nothing will replace a run-time SSR framework and the deployment it facilitates. However the advantage translates into a more demanding deployment.
 * The scope of this advantage could be limited and include the landing page only. If the landing (or maybe login) page is not dynamic while the other pages are, then there might be no need to use run-time SSR and deal with its challenges or costs. Other technologies such as SPA or build-time SSR (prerendering) could be a better fit.
