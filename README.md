@@ -81,12 +81,17 @@ The following CSS handling approaches can be used:
 
 The CSS handling techniques can be combined in order to maximise advantages of each approach while trying to minimise its downside. More details are available under the [CSS Handling](https://github.com/winwiz1/crisp-react#css-handling) heading.
 ### Enterprise Options
-The options are not implemented to keep the codebase slim but can be added easily to include:
+The options include:
 * Intellectual Property protection,
 * RBAC augmentation,
-* Website partitioning for development in parallel by several teams or developers.
+* Website partitioning for development in parallel by several teams or developers,
+* Maintenance self-sufficiency.
 
- The first two options are [based](docs/WhenToUse.md#case-enterprise-requirements) on making the script bundle download conditional. This functionality can be added for both Jamstack and full stack builds by utilising solutions like [Auth0](https://auth0.com)  or [PassportJS](https://www.npmjs.com/package/passport). The last option uses a SPA as a unit of planning, development and acceptance.
+ The first two options are [based](docs/WhenToUse.md#case-enterprise-requirements) on making the script bundle download conditional. This functionality is not implemented to keep the codebase slim but can be added for both Jamstack and full stack builds by utilising solutions like [Auth0](https://auth0.com)  or [PassportJS](https://www.npmjs.com/package/passport).
+
+The third option uses a SPA as a unit of planning, development and acceptance. For example, you can have a Login SPA, Main SPA, Reporting SPA, Audit SPA, Admin SPA, etc.
+
+The last option is based on [Simplicity](#simplicity) and means that when a dependency is updated, for example to fix a security vulnerability, you don't have to wait for an external maintainer to include the updated version into Crisp React. You can execute `cd server; yarn upgrade xxx --latest` on the cloned repository yourself.
 ### Seamless Debugging.
 Debug a minified/obfuscated, compressed production bundle and put breakpoints in its TypeScript code using both VS Code and Chrome DevTools. Development build debugging: put breakpoints in the client and backend code and debug both simultaneously using a single instance of VS Code. The specific instructions are available under the [Scenarios](#scenarios) heading.
 
@@ -185,7 +190,7 @@ Install `yarn` if not already installed: `npm install yarn -g`
   </details>
 </div>
 
-The section can be concluded by optionally renaming the solution. Rename the top-level directory from `crisp-react` to `your-project` and set the `SPAs.appTitle` variable in the [`spa.config.js`](https://github.com/winwiz1/crisp-react/blob/master/client/config/spa.config.js) file accordingly. Ignore the rest of the file for a moment, it's covered in depth in the [SPA Configuration](#spa-configuration) section.
+The section can be concluded by optionally renaming the solution. Rename the top-level directory from `crisp-react` to `your-project` and set the `SPAs.appTitle` variable in the [`spa.config.js`](client/config/spa.config.js) file accordingly. Ignore the rest of the file for a moment, it's covered in depth in the [SPA Configuration](#spa-configuration) section.
 ### Jamstack
 Use the configuration page presented by Cloudflare Pages to let Cloudflare build and deploy the solution. The details are provided under the [Cloudflare Pages](#cloudflare-pages) heading.
 ## Features
@@ -194,7 +199,7 @@ The optional splitting of a React application into multiple SPAs (each rendered 
 
 Every SPA has a landing page displayed during initial rendering by the component included into the SPA. In webpack terminology such a component is called entry point. An SPA (and its bundle) is comprised of this component, the components it imports and their dependencies. Let's see how Crisp React defines the SPAs.
 #### The SPA Configuration Block
-The client subproject builds an application with SPAs defined by the SPA Configuration block in the [`spa.config.js`](https://github.com/winwiz1/crisp-react/blob/master/client/config/spa.config.js) file:
+The client subproject builds an application with SPAs defined by the SPA Configuration block in the [`spa.config.js`](client/config/spa.config.js#L47-L64) file:
 ```js
 /****************** Start SPA Configuration ******************/
   var SPAs = [
@@ -216,7 +221,7 @@ The client subproject builds an application with SPAs defined by the SPA Configu
 ```
 Each SPA is defined using 4 pieces of data: name, entry point (e.g. the landing page component) and two boolean flags. Ignore the flags for a moment. There is also an `appTitle`, it provides the application-wide default setting for the `<title>` tag in the `<head>` section of all pages. The title can be easily overwritten as needed.
 
-SPA's name "first" is used to define the SPA's landing page e.g. `/first.html` and name the bundle that renders the SPA: `first<hash>.js`. More information about all the configuration data pieces is provided in the [configuration file](https://github.com/winwiz1/crisp-react/blob/master/client/config/spa.config.js) comments. The file is copied during the backend build from the client subproject and used to configure the client, the backend and the unit tests.
+SPA's name "first" is used to define the SPA's landing page e.g. `/first.html` and name the bundle that renders the SPA: `first<hash>.js`. More information about all the configuration data pieces is provided in the [configuration file](client/config/spa.config.js) comments. The file is copied during the backend build from the client subproject and used to configure the client, the backend and the unit tests.
 #### Modifications
 To reconfigure the application to have a separate SPA for login and another one for the rest of the application, change the SPA Configuration block as follows:
 ```js
@@ -238,7 +243,7 @@ To reconfigure the application to have a separate SPA for login and another one 
   SPAs.appTitle = "DemoApp";
 /****************** End SPA Configuration ******************/
 ```
-and then follow the instructions provided in the [configuration file](https://github.com/winwiz1/crisp-react/blob/master/client/config/spa.config.js) comments.
+and then follow the instructions provided in the configuration file comments.
 
 Since any SPA is comprised of the landing page component (entry point) and its imports, the coding to support the SPA reconfiguration can start by making `login.tsx` render the login page: either directly or maybe with the help of an imported component that will ask for user credentials. Another component could render a page asking for alternative credentials e.g. biometrics or ask for multifactor authentication (MFA).
 
@@ -315,7 +320,7 @@ You might prefer to simplify Jamstack deployments by having a single SPA called 
 /****************** End single SPA Configuration ******************/
 ```
 
-The SPA configuration block ensures the automatically generated HTML file is called `index.html`. It makes integration with some vendors more straightforward. However this simplification is optional and Jamstack build supports multiple SPAs as demonstrated in the Cloudflare Pages example below.
+This SPA configuration block is a simplified version of the [default one](client/config/spa.config.js#L47-L64). It ensures the automatically generated HTML file is called `index.html` and makes integration with some vendors more straightforward. However this simplification is optional, Jamstack build supports multiple SPAs as demonstrated in the Cloudflare Pages example below.
 
 The following command is used to build a Jamstack client:
 ```
@@ -371,10 +376,10 @@ You can rollback to any of the previous deployments anytime. Those are still ava
 If you have the SPA configuration block as suggested at the beginning of this section, then getting metrics for the new website is only a few clicks away with the cloud instance of Lighthouse ran by Google and available at [this page](https://web.dev/measure/). The metrics should be similar to `jamstack.winwiz1.com`:
 
 <div align="center">
-  <img alt="Jamstack build - Lighthouse scores" src="docs/benchmarks/jamstack.png" width="40%" />
+  <img alt="Online Lighthouse scores" src="docs/benchmarks/online.png" width="40%" />
 </div>
 
-> The report generated by web.dev has "CPU/Memory Power" metric at the bottom. It reflects the power of the hardware used by Lighthouse to emulate Moto G4. This metric affects the performance score. Cloud instance of Lighthouse at web.dev runs on a shared cloud VM and the metric reflects the current workload. It varies from time to time.
+> The report generated by web.dev has "CPU/Memory Power" metric at the bottom. It reflects the power of the hardware used by Lighthouse to emulate a mid-range :iphone: phone, currently Moto G4. This metric affects the performance score. Cloud instance of Lighthouse at web.dev runs on a shared cloud VM and the metric additionally depends on the current workload. It varies from time to time.
 
 In case the SPA configuration block is different, the metrics can be obtained after completing the [SEO](#seo) section.
 
@@ -664,8 +669,12 @@ The last 3 steps will have to be repeated for all the pages of each SPA.
 #### Follow-up
 You can use the "URL Inspection" menu to monitor if the page was indexed. It can take from a few days to a couple of weeks for the page to be added to Google index.  At which time the response will state: "URL is on Google". When that happens, you can double-check that the page was indexed by performing Google search for `site:<your-domain>.com`. The result should list the indexed page(s) similar to this [search](https://www.google.com/search?q=site%3Acrisp-react.winwiz1.com).
 
-Finally, it will take up to another week for the indexed pages to appear in the indexing report under the GSC "Coverage" menu.
-
+Finally, it will take up to another week for the indexed pages to appear in the indexing report under the GSC "Coverage" menu:
+|SPA Website|GSC Screenshot|
+|:--|:--:|
+|[`crisp-react.winwiz1.com`](https://crisp-react.winwiz1.com/)|[Link](docs/screenshots/indexing/demo-fullstack-coverage.png)|
+|[`jamstack.winwiz1.com`](https://jamstack.winwiz1.com/)|[Link](docs/screenshots/indexing/demo-jamstack-coverage.png)|
+|[`virusquery.com`](https://virusquery.com)|[Link](docs/screenshots/indexing/production-coverage.png)|
 ### Structured Data
 The following options to embed [Structured Data](https://developers.google.com/search/docs/advanced/structured-data/intro-structured-data) into the HTML `<head>` element are available and can be used independently or in conjunction with each other:
 * Append a static piece of structured data to the [`head-snippet`](https://github.com/winwiz1/crisp-react/blob/master/client/src/entrypoints/head-snippet.html) file. The data is visible in a browser using the "View page source" menu. This is how the structured data type `SoftwareApplication` was added to the [production](https://virusquery.com) website.
