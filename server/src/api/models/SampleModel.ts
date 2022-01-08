@@ -3,12 +3,13 @@
   Communicates with cloud service.
   Performs asynchronous API requests.
 */
-import nodeFetch from "node-fetch";
+import nodeFetch from "../../utils/node-fetch";
 import * as  NodeCache from "node-cache";
 import { logger } from "../../utils/logger";
 import { CustomError } from "../../utils/error";
 import {
    SampleRetrievalData,
+   isSampleRetrievalData,
    ISampleData,
    SampleRequest,
    SampleRetrieval,
@@ -139,8 +140,13 @@ export class SampleModel implements ISampleFetcher {
     try {
       const url = "https://api.genderize.io/?name=" + request.Name;
       const response = await nodeFetch(url);
-      const data: SampleRetrievalData = await response.json();
+      const responseData = await response.json();
 
+      if (!isSampleRetrievalData(responseData)) {
+        throw new TypeError("Invalid data received from cloud API endpoint");
+      }
+
+      const data = responseData as SampleRetrievalData;
       this.m_result = new SampleRetrievalResult(data);
       this.adjustDataUsage(request.ClientAddress);
     } catch (err) {

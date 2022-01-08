@@ -2,7 +2,7 @@
   The class SampleController adds and handles Express API route.
 */
 import * as express from "express";
-import * as RateLimit from "express-rate-limit";
+const RateLimit = require("express-rate-limit");
 import { SampleModel, SampleModelConfig } from "../models/SampleModel";
 import {
   SampleRequest,

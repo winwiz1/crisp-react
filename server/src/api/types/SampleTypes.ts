@@ -11,6 +11,22 @@ export class SampleRetrievalData {
   readonly count?: number;
 }
 
+export function isSampleRetrievalData(obj: unknown): obj is SampleRetrievalData {
+  if (obj instanceof Object === false) {
+    return false;
+  }
+
+  const objInstance = obj as object;
+
+  return keyIsInObj<SampleRetrievalData>("name", objInstance) &&
+         keyIsInObj<SampleRetrievalData>("gender", objInstance) &&
+         keyIsInObj<SampleRetrievalData>("probability", objInstance);
+}
+
+function keyIsInObj<T extends object>(key: PropertyKey, obj: T): key is keyof T {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
+
 // API response. Contains the 'main' piece of data
 // and auxillary response data which in this project is none.
 // See the sibling Crisp BigQuery project for more realistic sample.

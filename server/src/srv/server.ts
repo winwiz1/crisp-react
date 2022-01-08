@@ -7,8 +7,8 @@
  */
 import * as path from "path";
 import * as express from "express";
-import nodeFetch from "node-fetch";
-import * as helmet from "helmet";
+import nodeFetch from "../utils/node-fetch";
+const helmet = require("helmet");
 import * as nocache from "nocache";
 import * as expressStaticGzip from "express-static-gzip";
 import { ServerResponse } from "http";
@@ -166,12 +166,19 @@ class Server {
 
     nodeFetch(devUrl)
       .then(resp => {
+        if (!resp.ok) {
+          throw new Error(`Failed to get ${devUrl} from dev server`);
+        }
+        const respStream = resp.body as NodeJS.ReadableStream;
         const contentType = resp.headers.get("content-type") || "application/json";
+
         res.setHeader("Content-Type", contentType);
+
         if (page.startsWith("/static/")) {
           res.setHeader("Cache-Control", "max-age=31536000");
         }
-        resp.body.pipe(res);
+
+        respStream.pipe(res);
       })
       .catch(err => {
         const msg = `Failed to send ${devUrl} from dev-webserver due to error: ${err}`;
