@@ -23,8 +23,8 @@ COPY --from=build /crisp-react/client/config/ /crisp-react/server/config/
 RUN yarn && yarn compile
 
 COPY --from=build /crisp-react/client/dist/ /crisp-react/server/build/client/static/
-RUN find /crisp-react -type d -exec chmod 755 {} \;
-RUN find /crisp-react -type f -exec chmod 644 {} \;
+RUN find /crisp-react -type d -not -perm 755 -exec chmod 755 {} \;
+RUN find /crisp-react -type f -not -perm 644 -exec chmod 644 {} \;
 
 EXPOSE 3000
 ENV NODE_ENV=production
