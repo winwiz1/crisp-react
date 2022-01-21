@@ -304,7 +304,7 @@ The repository is integrated with [Travis CI](https://travis-ci.com) and [Heroku
 ## Usage - Jamstack
 Jamstack deployments do not use the Express backend. Static React files are served to clients by a server supplied by Jamstack provider. Therefore all Jamstack deployments are vendor-specific.
 
-You might prefer to simplify Jamstack deployments by having a single SPA called "index". This is achieved by having the following SPA configuration block:
+You might prefer to simplify deployments by having a single SPA called "index". This is achieved by having the following SPA configuration block:
 
 ```js
 /****************** Start single SPA Configuration ******************/
@@ -331,7 +331,7 @@ After the command finishes, the build artifacts are located in the `client/dist/
 Use the `yarn dev` and `yarn lint` commands executed from the `client/` directory to debug and lint Jamstack client.
 
 ### Cloudflare Pages
-If you have the SPA configuration block as suggested at the beginning of this section, then a new website will be built and deployed to `*.pages.dev` domain after the steps listed below are completed. The follow-up [SEO](#seo) section is optional.
+If you have the SPA configuration block as shown at the beginning of this section, then a new website will be built and deployed to `*.pages.dev` domain after the steps listed below are completed. The follow-up [SEO](#seo) section is optional.
 
 If your SPA configuration block is different, then the newly built and deployed website will not work until the [SEO](#seo) section is completed.
 
@@ -364,10 +364,10 @@ If your SPA configuration block is different, then the newly built and deployed 
 
     Optionally, you can customize the "Project name" field. It defaults to the GitHub repository name, but it does not need to match. The "Project name" is used to create a unique `*.pages.dev` subdomain. If the name is unique, it will be used as is, otherwise it will be altered a bit to ensure uniqueness. The resulting subdomain will be referred to as 'per-project subdomain' e.g. `<per-project>.pages.dev`.
 
-    After completing the configuration, click on the "Save and Deploy" button. You will see the deployment pipeline in progress. When it finishes, a website similar to [this](https://jamstack.winwiz1.com) can be found on the per-project subdomain. If there is no SPA named "index", you will have to navigate to "/your-spa-name". In addition, you will have the new Project visible under the top level 'Pages' menu in Cloudflare dashboard.
+    After completing the configuration, click on the "Save and Deploy" button. You will see the deployment pipeline in progress. When it finishes, a website similar to [this](https://jamstack.winwiz1.com) can be found on the per-project subdomain. If there is no SPA named "index", you will need to navigate to "/your-spa-name". In addition, you will have the new Project visible under the top level 'Pages' menu in Cloudflare dashboard.
 
 5. Adding a domain that you own.<br/>
-It is recommended not to use the 'Custom Domain' tab available for your new Project. Follow the steps described under the [SEO](#seo) heading instead.
+If you have the SPA configuration block as shown at the beginning of this section, then add a domain by following the [instructions](https://developers.cloudflare.com/pages/get-started#adding-a-custom-domain). Otherwise follow the steps described under the [SEO](#seo) heading instead.
 
 Each subsequent push into the repository will trigger the pipeline. If it finishes successfully, a new website deployment is created and made available on both per-project and per-deployment subdomains. The latter comes in the form of `<per-deployment>.<per-project>.pages.dev`.
 
@@ -641,6 +641,12 @@ Both confirmation and acceptance will be obtained by using [Google URL Inspectio
 - Creating an original content that meets Google requirements (e.g. [avoid duplicate](https://developers.google.com/search/docs/advanced/guidelines/duplicate-content) content etc.) and adding it to your website.
 
 ### Groundwork
+This sub-section uses Cloudflare Workers to achieve SEO for a React app that was split into more than one SPA.
+
+Regardless of the build type (full stack or Jamstack), there is no need to use Workers if you have one SPA only and your SPA customisation block is identical to the one shown at the beginning of [that](#usage---jamstack) section.
+
+Therefore use Workers as described below if you already have more than one SPA or are planning to have several SPAs in the future. Otherwise skip this sub-section and proceed to the [next](#requesting-to-be-indexed) one.
+
 #### Full Stack Build
 * Create a Cloudflare Worker (in simple terms it's a cloud function) by visiting [workers.new](https://workers.new) and replace the auto-generated code with the content of [this](https://github.com/winwiz1/crisp-react/blob/master/deployments/cloudflare/worker-fullstack.js) file. Modify the Worker Customisation block at the top of the code by following suggestions in the comments and click on the "Save and Deploy" button.
 * Unmap the worker from the `*.workers.dev` domain it was automatically deployed to.  Map it to your custom domain or subdomain instead to ensure the Worker is invoked to handle each request. For example, the Worker for the full stack demo [website](https://crisp-react.winwiz1.com) was mapped to the path `crisp-react.winwiz1.com/*`.
