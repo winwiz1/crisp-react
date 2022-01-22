@@ -48,7 +48,7 @@
     "http-proxy-middleware": "^2.0.1",
     "nocache": "^3.0.1",
     "node-cache": "^5.1.2",
-    "node-fetch": "^3.1.0",
+    "node-fetch": "^3.1.1",
     "serve-favicon": "^2.5.0",
     "winston": "3.3.3"
   },
