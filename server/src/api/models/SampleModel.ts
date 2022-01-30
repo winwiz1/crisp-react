@@ -156,7 +156,9 @@ export class SampleModel implements ISampleFetcher {
         ">"
       );
       logger.error({ message: `API server call failed, error: ${errorMsg}` });
-      this.m_result = new Error(SampleModel.s_errMsg);
+      this.m_result = new Error(SampleModel.s_errMsg,
+                                //@ts-ignore
+                                { ...(err instanceof Error && {cause: err}) });
     }
   }
 
