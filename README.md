@@ -43,7 +43,7 @@ The performance is achieved by:
 
 This topic is covered further in the [separate section](docs/benchmarks/PERFORMANCE.md#performance). It provides more insight into the performance related issues along with benchmarking results.
 ### Full Stack and Jamstack Builds
-The solution provides full stack deployments with several cloud vendors yet again avoids vendor lock-in by reusing the same Docker container. This is complimented by Jamstack deployments that aim for simplicity and speedy production release. All deployments achieve high test scores from reputable online testing tools like [web.dev/measure](https://web.dev/measure) and [webpagetest.org](https://webpagetest.org).
+The solution provides full stack deployments with several cloud vendors yet again avoids vendor lock-in by reusing the same Docker container. This is complemented by Jamstack deployments that aim for simplicity and speedy production release. All deployments achieve high test scores from reputable online testing tools like [web.dev/measure](https://web.dev/measure) and [webpagetest.org](https://webpagetest.org).
 
 <table width=100%>
   <tr>
@@ -625,13 +625,12 @@ Verify that integration with Cloudflare was successful by checking the page `htt
 ## SEO
 This topic has been debated at extraordinary length in countless articles and videos. In this section we are going to touch mostly on one facet: SPA and SEO.
 
-> This section uses Cloudflare Workers. Cloudflare Free Plan offers unlimited CDN bandwidth while being literally packed with other goodies and freebies that translate into a truly outstanding value offered by the Plan. However Workers are not included into it and come with a separate [Workers Plan](https://developers.cloudflare.com/workers/platform/pricing). It does have a free option but there is no offer that is both free and unlimited. Basically there is a choice between having a free option with 100,000 daily limit on the Workers invocation count and switching to a paid Workers Plan. Any Workers Plan is fully compatible with Cloudflare Free Plan and its unlimited CDN bandwidth.<br/><br/>:heavy_exclamation_mark: If you are on a paid Workers plan and are concerned about incurring charges as a result of Level 7 DDoS attack, consider asking Cloudflare Support about possible mitigations. Also you might want to set the [DDoS rule](https://developers.cloudflare.com/ddos-protection/managed-rulesets/http/configure-dashboard) called `HTTP requests causing a high request rate to origin` to `Block` or other action with `High` sensitivity.
+> This section uses Cloudflare Workers. Cloudflare Free Plan offers unlimited CDN bandwidth while being literally packed with other goodies and freebies that translate into a truly outstanding value offered by the Plan. However Workers are not included into it and come with a separate [Workers Plan](https://developers.cloudflare.com/workers/platform/pricing). It does have a free option but there is no offer that is both free and unlimited. Basically there is a choice between having a free option with 100,000 daily limit on the Workers invocation count and switching to a paid Workers Plan. Any Workers Plan is fully compatible with Cloudflare Free Plan and its unlimited CDN bandwidth.<br/><br/>:heavy_exclamation_mark: If you are on a paid Workers plan and are concerned about incurring charges as a result of Level 7 DDoS attack, consider asking Cloudflare Support about possible mitigations. Also you might want to set the [DDoS rule](https://developers.cloudflare.com/ddos-protection/managed-rulesets/http/configure-dashboard) called `HTTP requests causing a high request rate to origin` to `Block` (or other action) with sensitivity set to `High`.
 
 ### Goals
 Claims that SPA is bad for SEO are common while proof and evidence are scarce. Let's reverse this trend by providing a specific technical advice on how to get Google to:
  - Confirm that each SPA page can be indexed,
  - Accept a request to index each SPA page.
-
 Both confirmation and acceptance will be obtained by using [Google URL Inspection Tool](https://support.google.com/webmasters/answer/9012289?hl=en) which is a part of [Google Search Console](https://search.google.com/search-console/about) (GSC). The tool will be used to Inspect a live URL (that points to a SPA page) and request it to be indexed.
 
 ### Prerequisites
@@ -658,7 +657,7 @@ Therefore use Workers as described below if you already have more than one SPA o
     | `AAAA` | `subdomain` | `100::` |
 
     Replace `subdomain` with either a subdomain name e.g. `jamstack` to deploy to `jamstack.<your-domain>.com` or apex e.g. `@` if you prefer to use the root domain.  Check the "Proxy status" of the record is set to "Proxied".
-    > The "Proxied" status ensures the DNS record won't become public. Cloudflare will create another public DNS record that ensures the requests for `subdomain` are routed to Cloudflare datacenters. Once handled there, the requests would have been dropped since the address `100::` falls under the discard prefix. But in reality the requests will be handled by the Worker we are about to create at the next step.
+    > The "Proxied" status ensures the DNS record won't become public. Cloudflare will create another public DNS record that ensures the requests for `subdomain` are routed to Cloudflare datacenters. Once handled there, the requests would have been dropped since the address `100::` is used to discard traffic. But in reality the requests will be handled by the Worker we are about to create at the next step.
 * Create a Cloudflare Worker by visiting [workers.new](https://workers.new) and replace the auto-generated code with the content of [this](https://github.com/winwiz1/crisp-react/blob/master/deployments/cloudflare/worker-jamstack.js) file. Modify the Worker Customisation block at the top of the code by following the suggestions in the comments and click on the "Save and Deploy" button.
 * Unmap the Worker from the `*.workers.dev` domain it was automatically deployed to. Map it to your custom domain or subdomain instead to ensure the Worker is invoked to handle each request. For example, the Worker for the Jamstack demo [website](https://jamstack.winwiz1.com) was mapped to the path `jamstack.winwiz1.com/*`.
 

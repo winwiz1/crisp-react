@@ -84,7 +84,7 @@ The misconception correctly considers the run-time SSR case with a client downlo
 #### Conclusion
 * The personalisation advantage is significant and there are websites that need it as mentioned at the beginning of [this section](../WhenToUse.md#when-to-use). When the landing page is dynamic, nothing will replace a run-time SSR framework and the deployment it facilitates. However the advantage translates into a more demanding deployment.
 * The scope of this advantage could be limited and include the landing page only. If the landing (or maybe login) page is not dynamic while the other pages are, then there might be no need to use run-time SSR and deal with its challenges or costs. Other technologies such as SPA or build-time SSR (prerendering) could be a better fit.
-* If a website is static (e.g. a portfolio website) so that its content is largely known at the build time and the ongoing changes can be reflected via website rebuilds, then run-time SSR is unlikely to be the optimal choice since its costs are becoming hard to justify. Unless the complimentary functionality brought in by opinionated SSR frameworks is important while the downside is not.
+* If a website is static (e.g. a portfolio website) so that its content is largely known at the build time and the ongoing changes can be reflected via website rebuilds, then run-time SSR is unlikely to be the optimal choice since its costs are becoming hard to justify. Unless the complementary functionality brought in by opinionated SSR frameworks is important while the downside is not.
 
 ### SPA / CSR
 #### Disadvantages
