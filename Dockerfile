@@ -1,4 +1,4 @@
-FROM node:16.13.1-slim as client
+FROM node:16.14.0-slim as client
 
 WORKDIR /crisp-react/server
 COPY ./server/ .
@@ -7,14 +7,14 @@ WORKDIR /crisp-react/client
 COPY ./client/ .
 RUN yarn && yarn build:prod
 
-FROM node:16.13.1-slim as server
+FROM node:16.14.0-slim as server
 WORKDIR /crisp-react/server
 COPY ./server/ .
 COPY --from=client /crisp-react/client/config/ /crisp-react/server/config/
 RUN yarn && yarn compile
 COPY --from=client /crisp-react/client/dist/ /crisp-react/server/build/client/static/
 
-FROM node:16.13.1-slim as prod
+FROM node:16.14.0-slim as prod
 RUN apt-get update -qq && apt-get upgrade -qq \
   && apt-get clean autoclean && apt-get autoremove -y \
   && rm -rf \

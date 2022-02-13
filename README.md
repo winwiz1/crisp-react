@@ -360,7 +360,7 @@ If your SPA configuration block is different, then the newly built and deployed 
 
     | Environment variable | Value |
     | :-------------------- | :----- |
-    | NODE_VERSION | `16.13.1` |
+    | NODE_VERSION | `16.14.0` |
 
     Optionally, you can customize the "Project name" field. It defaults to the GitHub repository name, but it does not need to match. The "Project name" is used to create a unique `*.pages.dev` subdomain. If the name is unique, it will be used as is, otherwise it will be altered a bit to ensure uniqueness. The resulting subdomain will be referred to as 'per-project subdomain' e.g. `<per-project>.pages.dev`.
 
