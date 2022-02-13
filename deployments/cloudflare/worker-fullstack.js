@@ -31,7 +31,7 @@ const spaPaths = [
   "/second",
 ];
 
-********* End Worker Customisation *********/
+/********* End Worker Customisation *********/
 
 const bots = [
   "googlebot",
