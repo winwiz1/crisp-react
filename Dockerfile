@@ -25,7 +25,7 @@ COPY ./server/package.json ./server/yarn.lock ./
 COPY --from=server /crisp-react/server/build/ ./build/
 COPY --from=server /crisp-react/server/pub/ ./pub/
 COPY --from=server /crisp-react/server/config/ ./config/
-RUN yarn install --production=true
+RUN yarn install --production=true --frozen-lockfile && yarn cache clean --all
 RUN find /crisp-react -type d -not -perm 755 -exec chmod 755 {} \;
 RUN find /crisp-react -type f -not -perm 644 -exec chmod 644 {} \;
 
