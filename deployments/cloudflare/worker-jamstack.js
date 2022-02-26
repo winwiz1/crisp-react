@@ -94,6 +94,11 @@ class ElementHandler {
   }
 }
 
+const rewriter = new HTMLRewriter().on(
+  "div[id='app-root']",
+  new ElementHandler()
+);
+
 function getRedirectPath(path) {
   if (path in redirects) {
     return redirects[path];
@@ -144,10 +149,7 @@ async function handleRequest(req) {
     (bots.some(bot => userAgent.indexOf(bot) !== -1) ||
     !spaPaths.includes(path))) {
     const res = await fetch(urlToFetch, req);
-    return new HTMLRewriter().on(
-      "div[id='app-root']",
-      new ElementHandler()
-    ).transform(res);
+    return rewriter.transform(res);
   } else {
     return fetch(urlToFetch, req);
   }
