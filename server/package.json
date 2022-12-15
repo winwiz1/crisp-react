@@ -41,7 +41,7 @@
     "run:prod": "echo-cli Starting the backend... && cross-env NODE_ENV=production node ./build/srv/main.js"
   },
   "dependencies": {
-    "express": "4.17.2",
+    "express": "4.17.3",
     "express-rate-limit": "^6.1.0",
     "express-static-gzip": "^2.1.1",
     "helmet": "^5.0.1",
